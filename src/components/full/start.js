@@ -75,10 +75,11 @@ class Start extends Emit {
 
             this.html.find('.imdbb-cq').remove()
 
-            let el = $('<div class="full-start__rate imdbb-cq"><div>' + t + '</div><div class="source--name">' + d + '</div></div>')
+            let el = $('<div class="imdbb-cq">' + t + (d ? ' ' + d : '') + '</div>')
             let im = this.html.find('.rate--imdb')
 
-            if(im.length) el.insertAfter(im)
+            if(this.html.find('.full-start-new__rate-line').length) this.html.find('.full-start-new__rate-line').append(el)
+            else if(im.length) el.insertAfter(im)
             else this.html.find('.full-start-new__rate-line').append(el)
         }
 
