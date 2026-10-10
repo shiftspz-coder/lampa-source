@@ -240,3 +240,7 @@ body.imdbb-compact .full-start-new__buttons .button--subscribe{ display: none !i
 body.imdbb-compact .full-start-new__buttons .button--play, body.imdbb-compact .full-start-new__buttons .button--play.focus{ opacity: 1 !important; filter: none !important; }
 body.imdbb-compact .full-start-new__buttons .button--play *{ color: #1e1f21 !important; opacity: 1 !important; -webkit-text-fill-color: #1e1f21 !important; }
 body.imdbb-compact .full-start-new__buttons .button--play svg{ fill: #1e1f21 !important; stroke: #1e1f21 !important; }
+
+/* imdbb-layout-b4 */
+body.imdbb-compact .full-start-new{ min-height: calc(100vh - 4.5em) !important; padding-bottom: 0 !important; }
+body.imdbb-compact .full-start-new__body{ align-items: flex-start !important; padding-top: 1em; }
