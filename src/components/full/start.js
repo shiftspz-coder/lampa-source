@@ -20,6 +20,9 @@ import Translations from './start/translations'
 import Bookmarks from './start/bookmarks'
 import Buttons from './start/buttons'
 
+const QKEY = 'imdbb_q1'
+const DUB = '<span style="filter:brightness(0) invert(1)">\uD83D\uDDE3\uFE0F</span>'
+
 class Start extends Emit {
     constructor(data) {
         super()
@@ -48,6 +51,87 @@ class Start extends Emit {
         this.emit('init')
     }
 
+
+    qualityChip(){
+        let card = this.card
+        let kind = card.first_air_date || card.number_of_seasons !== undefined ? 'tv' : 'movie'
+        let key  = kind + ':' + card.id
+
+        let show = (v)=>{
+            if(!v || !v.q) return
+
+            let t = v.q === '1080' ? 'FHD' : v.q
+            let d = ''
+
+            if(v.q !== 'TS' && v.dub){
+                if(typeof v.dub === 'object'){
+                    let s = Object.keys(v.dub).map(Number).sort(function(a, b){ return a - b }).pop()
+                    let n = v.dub[s]
+
+                    d = DUB + (n >= 99 ? '' : n)
+                }
+                else d = DUB
+            }
+
+            this.html.find('.imdbb-cq').remove()
+
+            let el = $('<div class="full-start__rate imdbb-cq"><div>' + t + '</div><div class="source--name">' + d + '</div></div>')
+            let im = this.html.find('.rate--imdb')
+
+            if(im.length) el.insertAfter(im)
+            else this.html.find('.full-start-new__rate-line').append(el)
+        }
+
+        let store = null
+
+        try{ store = JSON.parse(localStorage.getItem(QKEY) || '{}') }
+        catch(e){ store = {} }
+
+        let c = store[key]
+
+        if(c && c.t + c.l > Date.now()){
+            show(c.v)
+
+            return
+        }
+
+        let proxy = ''
+
+        try{ proxy = localStorage.getItem('imdb_proxy') || '' }
+        catch(e){}
+
+        if(!proxy) return
+
+        let title = card.title || card.name || ''
+        let orig  = card.original_title || card.original_name || ''
+        let year  = ((card.release_date || card.first_air_date || '') + '').slice(0, 4)
+        let x     = new XMLHttpRequest()
+
+        x.open('GET', proxy + '?title=' + encodeURIComponent(title) + '&year=' + year + '&orig=' + encodeURIComponent(orig) + '&kind=' + kind, true)
+        x.timeout = 30000
+        x.onload = ()=>{
+            let v = null
+
+            try{ v = JSON.parse(x.responseText) }
+            catch(e){}
+
+            if(!v || typeof v !== 'object') return
+
+            let val = {q: v.q || null, dub: v.dub || null}
+
+            try{
+                let s = JSON.parse(localStorage.getItem(QKEY) || '{}')
+
+                s[key] = {v: val, t: Date.now(), l: val.q === 'TS' ? 3600e3 : (val.q ? 6 * 3600e3 : 3 * 3600e3)}
+
+                localStorage.setItem(QKEY, JSON.stringify(s))
+            }
+            catch(e){}
+
+            show(val)
+        }
+        x.send()
+    }
 
     create(){
         let genres      = (this.card.genres || ['---']).slice(0,3).map(a => Utils.capitalizeFirstLetter(a.name)).join(', ')
@@ -129,6 +213,8 @@ class Start extends Emit {
                 this.html.find('.rate--imdb').removeClass('hide').find('> div').eq(0).text(r >= 10 ? 10 : r.toFixed(1))
             })
         }
+
+        this.qualityChip()
 
         if(this.card.genres){
             genres = this.card.genres.slice(0,5).map((a)=>{
