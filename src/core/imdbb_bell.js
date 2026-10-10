@@ -187,14 +187,19 @@ function check(force){
     step()
 }
 
-function test(){
-    let Lp = L()
-    let card = (Lp.Favorite.get({type: 'book'}) || [])[0]
+function cleanTest(){
+    try{
+        let lp = L().Notice.classes.lampa
 
-    if(!card) return Lp.Noty.show('Закладок нет')
+        if(!lp || !lp.db) return
 
-    notify(card, 'test' + Date.now(), 'Новое качество', ['Качество: TS → FHD', dtext(1)], {r: 2, d: 1})
-    Lp.Noty.show('Тестовое уведомление добавлено')
+        let bad = (lp.notices || []).filter(function(n){ return n && typeof n.id === 'string' && n.id.indexOf('imdbb:test') === 0 })
+
+        if(!bad.length) return
+
+        Promise.all(bad.map(function(n){ return lp.db.deleteData('all', n.id) })).then(function(){ lp.update() }).catch(function(){})
+    }
+    catch(e){}
 }
 
 function only(){
@@ -236,13 +241,6 @@ function init(){
             param: {name: 'imdbb_bell', type: 'trigger', default: true},
             field: {name: 'Колокольчик: качество и дубляж', description: 'Уведомления о закладках (проверка при открытии приложения)'}
         })
-
-        Lp.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'imdbb_bell_test', type: 'button'},
-            field: {name: 'Тестовое уведомление', description: 'Добавить пробную запись в колокольчик'},
-            onChange: test
-        })
     }
     catch(e){}
 
@@ -258,6 +256,9 @@ function init(){
         }
 
         p()
+
+        setTimeout(cleanTest, 4000)
+        setTimeout(cleanTest, 12000)
 
         setTimeout(function(){ check(false) }, 8000)
 
