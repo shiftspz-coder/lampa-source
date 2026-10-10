@@ -216,7 +216,7 @@ class Start extends Emit {
         if(countries.length) meta.push(countries[0])
         if(this.card.runtime > 0){
             let rt = Utils.secondsToTime(this.card.runtime * 60, true)
-            meta.push(rt); info.push('<span class="imdbb-dup">' + rt + '</span>')
+            meta.push((()=>{ let r = this.card.runtime; return (r >= 60 ? Math.floor(r / 60) + ' ч ' : '') + (r % 60 ? (r % 60) + ' мин' : '') })()); info.push('<span class="imdbb-dup">' + rt + '</span>')
         }
 
         seasons && info.push('<span>' + Lang.translate('title_seasons') + ': ' + seasons + '</span>')
@@ -292,7 +292,7 @@ class Start extends Emit {
         let imdbbDet = this.html.find('.full-start-new__details'), imdbbSp = '<span class="full-start-new__split">●</span>'
         imdbbDet.html(info.join(imdbbSp))
         imdbbDet.after(imdbbDet.clone().addClass('imdbb-details-c').html(info.filter((x)=>x.indexOf('imdbb-dup')<0).join(imdbbSp)))
-        meta.forEach((t)=>{ $('<div class="imdbb-meta"></div>').text(t).appendTo(this.html.find('.full-start-new__rate-line')) })
+        meta.length && $('<div class="imdbb-metaline"></div>').text(meta.join(' · ')).insertAfter(this.html.find('.full-start-new__title'))
         let imdbbFav = $('<div class="imdbb-meta imdbb-fav"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z" fill="currentColor"/></svg></div>').appendTo(this.html.find('.full-start-new__rate-line'))
         let imdbbFavUpd = ()=>{ try{ imdbbFav.toggleClass('on', !!window.Lampa.Favorite.check(this.card).book) }catch(e){} }
         imdbbFavUpd()
@@ -310,6 +310,45 @@ class Start extends Emit {
         if(window.localStorage.getItem('imdbb_no_more') !== 'false') this.html.find('.button--options').remove()
         if(window.lampa_settings.read_only) this.html.find('.button--play').remove()
 
+        try{
+            let pp = this.card.poster_path || this.card.backdrop_path
+            if(pp){
+                let im = new Image()
+                im.crossOrigin = 'anonymous'
+                im.onload = ()=>{
+                    try{
+                        let W = 32, H = 48, cv = document.createElement('canvas')
+                        cv.width = W; cv.height = H
+                        let cx = cv.getContext('2d')
+                        cx.drawImage(im, 0, 0, W, H)
+                        let px = cx.getImageData(0, 0, W, H).data, bins = {}
+                        for(let i = 0; i < px.length; i += 4){
+                            let r = px[i] / 255, g = px[i+1] / 255, b = px[i+2] / 255
+                            let mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, l = (mx + mn) / 2
+                            if(d < 0.12 || l < 0.15 || l > 0.9) continue
+                            let s = d / (1 - Math.abs(2 * l - 1))
+                            let h = mx == r ? ((g - b) / d + (g < b ? 6 : 0)) : mx == g ? ((b - r) / d + 2) : ((r - g) / d + 4)
+                            h = h * 60
+                            let k = Math.floor(h / 20) % 18
+                            let w = s * (1 - Math.abs(2 * l - 1)) + 0.05
+                            let o = bins[k] || (bins[k] = {w: 0, h: 0, s: 0})
+                            o.w += w; o.h += h * w; o.s += s * w
+                        }
+                        let best = null
+                        Object.keys(bins).forEach((k)=>{ if(!best || bins[k].w > best.w) best = bins[k] })
+                        if(!best) return
+                        let hh = Math.round(best.h / best.w)
+                        let ss = Math.min(78, Math.max(55, Math.round(best.s / best.w * 100)))
+                        let ll = (hh > 40 && hh < 190) ? 33 : 46
+                        this.html[0].style.setProperty('--imdbb-accent', 'hsl(' + hh + ', ' + ss + '%, ' + ll + '%)')
+                        this.html[0].style.setProperty('--imdbb-accent-soft', 'hsla(' + hh + ', ' + ss + '%, ' + ll + '%, 0.38)')
+                    }
+                    catch(e){}
+                }
+                im.src = window.Lampa.TMDB.image('t/p/w154' + pp)
+            }
+        }
+        catch(e){}
         this.emit('create')
     }
 
