@@ -345,3 +345,8 @@ html body.imdbb-compact .full-start-new__body{ min-height: 0 !important; align-i
 html body.imdbb-compact .full-start-new__right{ min-height: 0 !important; justify-content: flex-end !important; }
 html body.imdbb-compact .full-start-new__right > *{ flex-shrink: 0; }
 html body.imdbb-compact .imdbb-ov{ margin-top: 1em !important; }
+
+/* imdbb-layout-b19 */
+html body.imdbb-compact .full-start-new__rate-line{ margin-bottom: 0 !important; }
+html body.imdbb-compact .full-start-new__details{ margin: 0 !important; }
+html body.imdbb-compact .imdbb-ov{ margin-top: 1.2em !important; margin-bottom: 1.2em !important; }
