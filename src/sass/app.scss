@@ -209,7 +209,6 @@ body.imdbb-compact .imdbb-descr .items-line__body{ margin-top: 0 !important; pad
 body.imdbb-compact .imdbb-descr .full-descr{ padding-top: 0 !important; }
 
 /* imdbb-watch */
-body.imdbb-compact .full-start-new__buttons .button--book{ display: none !important; }
 body.imdbb-compact .full-start-new__buttons .button--play{ background: transparent !important; box-shadow: none !important; border-radius: 0 !important; color: rgba(255,255,255,.7) !important; border-bottom: 2px solid transparent !important; padding-left: .3em !important; padding-right: .3em !important; margin-left: 0 !important; }
 body.imdbb-compact .full-start-new__buttons .button--play.focus{ background: transparent !important; color: #fff !important; border-bottom-color: #fff !important; }
 .imdbb-meta.imdbb-fav:not(.on){ display: none !important; }
@@ -272,3 +271,28 @@ body.imdbb-compact .imdbb-ov{ font-size: 1.3em !important; line-height: 1.4 !imp
 body.imdbb-compact .full-start-new__buttons .button--play:not(.focus){ background-color: rgba(30,31,33,.55) !important; box-shadow: inset 0 0 0 1px rgba(255,255,255,.28) !important; color: #fff !important; }
 body.imdbb-compact .full-start-new__buttons .button--play:not(.focus) *{ color: #fff !important; -webkit-text-fill-color: #fff !important; }
 body.imdbb-compact .full-start-new__buttons .button--play:not(.focus) svg{ fill: #fff !important; stroke: #fff !important; }
+/* imdbb-layout-b12 */
+body.imdbb-compact .full-start-new__buttons{
+  flex-wrap: wrap; row-gap: .6em;
+  .button--play{ order: 1; }
+  .button--book{ order: 2; }
+  .button--reaction{ order: 3; }
+  .full-start-new__reactions{ order: 4; margin: 0 0 0 1em !important; min-height: 0 !important; flex-wrap: nowrap; align-items: center; > div{ padding: 0 .5em; } }
+  .button--options{ order: 5; }
+  .imdbb-bud{ order: 9; }
+  .button--book, .button--reaction{
+    border: 0 !important; border-radius: 999px !important;
+    background-color: rgba(30,31,33,.55) !important; background-image: none !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.28) !important;
+    color: #fff !important; margin: 0 0 0 .8em !important;
+    padding: .6em 1.6em .6em 1.2em !important; transition: box-shadow .2s;
+    span{ display: inline !important; opacity: 1 !important; color: #fff !important; -webkit-text-fill-color: #fff !important; }
+    svg path{ stroke: currentColor !important; }
+    &.focus{
+      background-color: #fff !important; color: #1e1f21 !important;
+      box-shadow: 0 0 0 .22em rgba(255,255,255,.35) !important;
+      span{ color: #1e1f21 !important; -webkit-text-fill-color: #1e1f21 !important; }
+    }
+  }
+  .button--reaction svg{ fill: currentColor !important; }
+}
