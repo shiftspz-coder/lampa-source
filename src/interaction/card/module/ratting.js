@@ -37,7 +37,8 @@ function css(){
     let st = document.createElement('style')
 
     st.id = 'imdbb-css'
-    st.textContent = '.imdbb-dub{filter:brightness(0) invert(1)}' +
+    st.textContent = '.imdbb-dub{display:inline-block;filter:none}' +
+        '.imdbb-q svg{width:1.1em!important;height:1.1em!important;vertical-align:-.2em!important}' +
         '.card__type{left:.5em!important;top:.5em!important;right:auto!important;background:rgba(0,0,0,.62)!important;color:#fff!important;font-weight:700!important;font-size:.9em!important;line-height:1.3!important;padding:.05em .45em!important;border-radius:.4em!important;text-transform:none!important}' +
         '.card__view:has(.imdbb-q) .card__type{top:2.3em!important}' +
         '.imdbb-ep{position:absolute;left:.5em;top:2.3em;z-index:2;background:rgba(0,0,0,.62);color:#fff;font-weight:700;font-size:.9em;line-height:1.3;padding:.05em .45em;border-radius:.4em;white-space:nowrap}' +
