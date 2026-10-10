@@ -335,14 +335,13 @@ body.imdbb-compact .full-start-new__reactions .reaction--voted .reaction__count{
 body.imdbb-compact .imdbb-p{ border-radius: .8em; }
 body.imdbb-compact .imdbb-p.focus .imdbb-av{ box-shadow: 0 0 0 .22em #fff; }
 
-/* imdbb-layout-b16 */
-html body.imdbb-compact, html body.imdbb-compact .full-start-new{ --imdbb-up: 1em !important; }
-html body.imdbb-compact .full-start-new{ margin-top: -1em !important; height: calc(100vh - 3.5em) !important; min-height: 0 !important; }
-html body.imdbb-compact .full-start-new__body{ min-height: 0 !important; }
-html body.imdbb-compact .full-start-new__right{ min-height: 0 !important; }
-html body.imdbb-compact .full-start-new__right > *{ flex-shrink: 0; }
-html body.imdbb-compact .full-start-new__right::before{ content: ''; display: block; flex: 0 1 5.55em; min-height: 0; }
-
 /* imdbb-layout-b18 */
 .full-start-new__rate-line .rate--imdb > div:first-child{ color: var(--imdbb-btn,#f5c518) !important; }
 body.imdbb-compact .full-start-new__reactions .reaction--voted .reaction__count{ color: var(--imdbb-btn,#f5c518) !important; }
+
+/* imdbb-layout-b17 */
+html body.imdbb-compact .full-start-new{ margin-top: -1em !important; height: calc(100vh - 3.55em) !important; min-height: 0 !important; }
+html body.imdbb-compact .full-start-new__body{ min-height: 0 !important; align-items: stretch !important; }
+html body.imdbb-compact .full-start-new__right{ min-height: 0 !important; justify-content: flex-end !important; }
+html body.imdbb-compact .full-start-new__right > *{ flex-shrink: 0; }
+html body.imdbb-compact .imdbb-ov{ margin-top: 1em !important; }
