@@ -294,7 +294,7 @@ class Start extends Emit {
         imdbbDet.after(imdbbDet.clone().addClass('imdbb-details-c').html(info.filter((x)=>x.indexOf('imdbb-dup')<0).join(imdbbSp)))
         ;window.__imdbbFix1 = 1;(()=>{ let rl = this.html.find('.full-start-new__rate-line'), bt = this.html.find('.full-start-new__buttons'), gl = (this.card.genres || []).slice(0,3).map((a)=>Utils.capitalizeFirstLetter(a.name)).join(', '), parts = [year, countries[0], this.card.runtime > 0 ? Utils.secondsToTime(this.card.runtime * 60, true) : '', gl].filter(Boolean); parts.forEach((x)=>{ $('<div class="imdbb-meta"></div>').text(x).appendTo(rl) }); this.card.budget > 0 && $('<div class="imdbb-bud"><span>Бюджет</span><span></span></div>').appendTo(bt).find('span').eq(1).text('$ ' + Utils.numberWithSpaces(this.card.budget)); $('<div class="imdbb-ov"></div>').text(this.card.overview || '').insertBefore(bt) })();window.__imdbbPpl = 1;
         try{
-            let pr = (this.data && this.data.persons) || {}, dir = (pr.crew || []).filter((x)=>x.job === 'Director')[0], cast = (pr.cast || []).slice(0, 3)
+            let pr = (this.data && this.data.persons) || {}, dir = (pr.crew || []).filter((x)=>x.job === 'Director')[0], cast = (pr.cast || []).slice(0, 8)
             let list = (dir ? [[dir, 'Режиссёр']] : []).concat(cast.map((x)=>[x, x.character || 'Актёр'])), box = $('<div class="imdbb-ppl"></div>')
             list.forEach((it, i)=>{
                 let o = it[0], av = $('<div class="imdbb-av"></div>')
