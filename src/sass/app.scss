@@ -233,3 +233,10 @@ body.imdbb-compact .full-start-new__buttons .button--play{ background: #fff !imp
 body.imdbb-compact .full-start-new__buttons .button--play.focus{ background: #fff !important; color: #1e1f21 !important; box-shadow: 0 0 0 .22em rgba(255,255,255,.35) !important; }
 body.imdbb-compact .full-start-new__buttons .button--play span{ display: inline !important; opacity: 1 !important; color: #1e1f21 !important; }
 @media (max-height: 520px) and (pointer: coarse){ body.imdbb-compact .imdbb-ov{ display: -webkit-box !important; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; } }
+
+/* imdbb-layout-b3 */
+body.imdbb-compact .full-start-new{ min-height: calc(100vh - 8em); padding-bottom: 2.7em !important; }
+body.imdbb-compact .full-start-new__buttons .button--subscribe{ display: none !important; }
+body.imdbb-compact .full-start-new__buttons .button--play, body.imdbb-compact .full-start-new__buttons .button--play.focus{ opacity: 1 !important; filter: none !important; }
+body.imdbb-compact .full-start-new__buttons .button--play *{ color: #1e1f21 !important; opacity: 1 !important; -webkit-text-fill-color: #1e1f21 !important; }
+body.imdbb-compact .full-start-new__buttons .button--play svg{ fill: #1e1f21 !important; stroke: #1e1f21 !important; }
