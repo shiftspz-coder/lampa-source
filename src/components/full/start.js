@@ -212,6 +212,8 @@ class Start extends Emit {
 
         let compact = document.body.classList.contains('imdbb-compact')
         let meta = []
+        if(year) meta.push(year)
+        if(countries.length) meta.push(countries[0])
         if(this.card.runtime > 0){
             let rt = Utils.secondsToTime(this.card.runtime * 60, true)
             meta.push(rt); info.push('<span class="imdbb-dup">' + rt + '</span>')
