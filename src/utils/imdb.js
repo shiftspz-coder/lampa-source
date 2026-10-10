@@ -161,4 +161,22 @@ function rating(m, cb){
     })
 }
 
-export default {rating}
+function cached(m){
+    if(!m || !m.id) return null
+
+    let id = m.imdb_id
+
+    if(!id){
+        let c = getc('id:' + kindOf(m) + ':' + m.id)
+
+        id = c ? c.v : null
+    }
+
+    if(!id) return null
+
+    let r = getc('r:' + id)
+
+    return r && r.v > 0 ? r.v : null
+}
+
+export default {rating, cached}
