@@ -47,7 +47,7 @@ function css(){
 }
 
 function badge(r){
-    let tag = 'background:#F5C518;color:#000;font-weight:700;font-size:.75em;padding:0 .35em;border-radius:.3em;margin-right:.4em'
+    let tag = 'color:#fff;opacity:.65;font-weight:700;font-size:.75em;margin-right:.4em'
     let box = 'width:auto;white-space:nowrap;background:rgba(0,0,0,.62)'
 
     return $('<div class="card__vote" style="' + box + '"><span style="' + tag + '">IMDb</span><span>' + (r >= 10 ? '10' : r.toFixed(1)) + '</span></div>')
