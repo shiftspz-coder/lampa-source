@@ -2,11 +2,41 @@ import Utils from '../../../utils/utils'
 import Template from '../../template'
 import IMDb from '../../../utils/imdb'
 
+function findView(self, id){
+    let h = self.html
+
+    if(h && h.length){
+        let v = h.find('.card__view')
+
+        if(v.length) return v
+    }
+
+    let list = document.querySelectorAll('.card')
+
+    for(let i = 0; i < list.length; i++){
+        let d = list[i].card_data || $(list[i]).data('card')
+
+        if(d && d.id === id){
+            let v = $(list[i]).find('.card__view')
+
+            if(v.length) return v
+        }
+    }
+
+    return null
+}
+
 export default {
     onCreate: function(){
-        let D = window.__imdbdbg = window.__imdbdbg || {c: 0, cb: 0, put: 0, last: '', err: '', dbg: ''}
+        let D = window.__imdbdbg = window.__imdbdbg || {c: 0, cb: 0, put: 0, fb: 0, last: '', err: '', s: ''}
 
         D.c++
+
+        if(!D.s){
+            let h = this.html
+
+            D.s = h ? (h.length + '|' + (h[0] ? h[0].className : '-') + '|view:' + h.find('.card__view').length) : 'html none'
+        }
 
         if(this.data.cub_hundred_fire){
             let vote = parseFloat((this.data.cub_hundred_rating || this.data.vote_average || 0) + '').toFixed(1)
@@ -19,6 +49,7 @@ export default {
         }
 
         let self = this
+        let id = this.data.id
 
         IMDb.rating(this.data, function(r){
             try{
@@ -33,18 +64,18 @@ export default {
 
                 let put = function(){
                     let h = self.html
-                    let view = h && h.find ? h.find('.card__view') : []
+                    let direct = h && h.length && h.find('.card__view').length
+                    let view = findView(self, id)
 
-                    if(h && !view.length && h.hasClass && h.hasClass('card__view')) view = h
-
-                    if(!view.length){
+                    if(!view){
                         if(++tries < 20) return setTimeout(put, 250)
 
                         D.err = 'no view'
-                        D.dbg = h && h[0] ? (h[0].className + '|ch:' + h.children().length + '|conn:' + h[0].isConnected) : 'html none'
 
                         return
                     }
+
+                    if(!direct) D.fb++
 
                     if(view.find('.card__vote').length) return
 
