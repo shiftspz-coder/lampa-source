@@ -17,14 +17,30 @@ export default {
         let html = this.html
 
         IMDb.rating(this.data, function(r){
-            let view = html.find('.card__view')
+            r = parseFloat(r)
 
-            if(!r || !view.length || view.find('.card__vote').length) return
+            if(!(r > 0)) return
 
-            let tag = 'background:#F5C518;color:#000;font-weight:700;font-size:.75em;padding:0 .35em;border-radius:.3em;margin-right:.4em'
-            let box = 'width:auto;white-space:nowrap;background:rgba(0,0,0,.62)'
+            let tries = 0
 
-            view.append($('<div class="card__vote" style="' + box + '"><span style="' + tag + '">IMDb</span><span>' + (r >= 10 ? 10 : r.toFixed(1)) + '</span></div>'))
+            let put = function(){
+                let view = html.find('.card__view')
+
+                if(!view.length){
+                    if(++tries < 20) setTimeout(put, 250)
+
+                    return
+                }
+
+                if(view.find('.card__vote').length) return
+
+                let tag = 'background:#F5C518;color:#000;font-weight:700;font-size:.75em;padding:0 .35em;border-radius:.3em;margin-right:.4em'
+                let box = 'width:auto;white-space:nowrap;background:rgba(0,0,0,.62)'
+
+                view.append($('<div class="card__vote" style="' + box + '"><span style="' + tag + '">IMDb</span><span>' + (r >= 10 ? '10' : r.toFixed(1)) + '</span></div>'))
+            }
+
+            put()
         })
     }
 }
