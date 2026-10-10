@@ -296,3 +296,11 @@ body.imdbb-compact .full-start-new__buttons{
   }
   .button--reaction svg{ fill: currentColor !important; }
 }
+/* imdbb-layout-b13 */
+body.imdbb-compact .full-start-new__rate-line > [data-imdbb-first]{ border-left: 0 !important; }
+body.imdbb-compact .full-start-new__rate-line > [data-imdbb-first]::before{ display: none !important; }
+body.imdbb-compact .full-start-new__body{ align-items: stretch !important; }
+body.imdbb-compact .full-start-new__right{ display: flex; flex-direction: column; align-items: flex-start; padding-bottom: 2em; }
+body.imdbb-compact .imdbb-ov{ margin-top: auto !important; align-self: stretch; }
+body.imdbb-compact .imdbb-ppl{ margin-top: 1.6em !important; }
+body.imdbb-compact .imdbb-pn, body.imdbb-compact .imdbb-pr{ text-shadow: 0 1px 4px rgba(0,0,0,.75); }
