@@ -9,31 +9,38 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: sans-serif;
 }
 .welcome__box{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+.welcome__box svg{
+    width: 104px !important;
+    height: 104px !important;
+    flex: none;
+    display: block;
+}
 .welcome__name{
     margin-top: 10px;
     font-size: 26px;
+    line-height: 1.17;
     font-weight: 500;
     color: #fff;
-    letter-spacing: .5px;
 }
 .welcome__tag{
     margin-top: 4px;
     font-size: 14px;
+    line-height: 1.17;
     color: #8a8d90;
 }
 .welcome__bar{
     position: relative;
     width: 110px;
-    height: 3px;
+    height: 1px;
     margin-top: 18px;
     background: #3a3d3f;
-    border-radius: 2px;
     overflow: hidden;
 }
 .welcome__bar:after{
@@ -41,10 +48,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 3px;
+    height: 1px;
     width: 40%;
     background: #fff;
-    border-radius: 2px;
     animation: welcome-bar 1.2s ease-in-out infinite;
 }
 @keyframes welcome-bar{

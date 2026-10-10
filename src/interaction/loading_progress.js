@@ -8,9 +8,9 @@ let destroyed = false
  * @returns {void}
  */
 function init(){
-    html = $(`<div style="position: fixed; left: 0; top: 50%; right: 0; z-index: 101; text-align: center; padding-top: 6em; padding-top: 26vh;">
-        <div style="font-size: 1.5em; line-height: 1.6" class="lp-step"></div>
-        <div style="font-size: 0.9em; opacity: 0.5" class="lp-status"></div>
+    html = $(`<div style="position: fixed; left: 0; top: 50%; right: 0; z-index: 101; text-align: center; padding-top: 6em; padding-top: 112px;">
+        <div style="font-size: 1.1em; line-height: 1.6" class="lp-step"></div>
+        <div style="font-size: 0.8em; opacity: 0.4" class="lp-status"></div>
     </div>`)
 
     $('body').append(html)
