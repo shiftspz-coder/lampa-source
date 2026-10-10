@@ -135,7 +135,9 @@ function init(){
                 catch(e){}
 
                 document.body.dataset.imdbbTv = tv ? '1' : '0'
-                document.body.classList.toggle('imdbb-compact', on && tv)
+                let land = false
+                try{ land = window.innerWidth > window.innerHeight }catch(e){}
+                document.body.classList.toggle('imdbb-compact', on && (tv || land))
             }
             catch(e){}
         }
@@ -143,12 +145,14 @@ function init(){
         L.SettingsApi.addParam({
             component: 'imdbb',
             param: {name: 'imdbb_compact', type: 'trigger', default: true},
-            field: {name: 'Компактная карточка (только ТВ)', description: 'Без постера; время и жанры в строке рейтингов. На телефоне не действует'},
+            field: {name: 'Компактная карточка (ТВ и горизонтальный экран)', description: 'Без постера; время и жанры в строке рейтингов. На телефоне работает в горизонтальном положении'},
             onChange: function(){ cmp() }
         })
 
         cmp()
         setTimeout(cmp, 1000)
+        window.addEventListener('resize', cmp)
+        window.addEventListener('orientationchange', function(){ setTimeout(cmp, 300) })
 
         try{ L.Storage.listener.follow('change', function(e){ if(e && e.name === 'imdbb_compact') cmp() }) }
         catch(e){}

@@ -194,3 +194,8 @@ body.imdbb-compact .full-start-new__details:empty{ display: none; }
   font-size: 1.12em;
   white-space: nowrap;
 }
+
+/* imdbb-compact-dual */
+body:not(.imdbb-compact) .full-start-new__rate-line > .imdbb-meta{ display: none !important; }
+body:not(.imdbb-compact) .full-start-new__details.imdbb-details-c{ display: none !important; }
+body.imdbb-compact .full-start-new__details:not(.imdbb-details-c){ display: none !important; }

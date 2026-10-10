@@ -214,7 +214,7 @@ class Start extends Emit {
         let meta = []
         if(this.card.runtime > 0){
             let rt = Utils.secondsToTime(this.card.runtime * 60, true)
-            compact ? meta.push(rt) : info.push('<span>' + rt + '</span>')
+            meta.push(rt); info.push('<span class="imdbb-dup">' + rt + '</span>')
         }
 
         seasons && info.push('<span>' + Lang.translate('title_seasons') + ': ' + seasons + '</span>')
@@ -258,8 +258,8 @@ class Start extends Emit {
                 return Utils.capitalizeFirstLetter(a.name)
             }).join(' | ')
 
-            if(compact) meta.push(this.card.genres.slice(0,3).map((a)=>Utils.capitalizeFirstLetter(a.name)).join(', '))
-            else info.push('<span>' + genres + '</span>')
+            meta.push(this.card.genres.slice(0,3).map((a)=>Utils.capitalizeFirstLetter(a.name)).join(', '))
+            info.push('<span class="imdbb-dup">' + genres + '</span>')
         }
 
         if(quality){
@@ -287,7 +287,9 @@ class Start extends Emit {
         })
         
         this.html.find('.full-start-new__head').toggleClass('hide',!head.length).html(head.join(', '))
-        this.html.find('.full-start-new__details').html(info.join('<span class="full-start-new__split">●</span>'))
+        let imdbbDet = this.html.find('.full-start-new__details'), imdbbSp = '<span class="full-start-new__split">●</span>'
+        imdbbDet.html(info.join(imdbbSp))
+        imdbbDet.after(imdbbDet.clone().addClass('imdbb-details-c').html(info.filter((x)=>x.indexOf('imdbb-dup')<0).join(imdbbSp)))
         meta.forEach((t)=>{ $('<div class="imdbb-meta"></div>').text(t).appendTo(this.html.find('.full-start-new__rate-line')) })
 
         if(window.lampa_settings.read_only) this.html.find('.button--play').remove()
