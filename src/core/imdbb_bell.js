@@ -220,7 +220,7 @@ function only(){
 
     lp.items = function(){ return items().filter(mine) }
     lp.count = function(){ return (lp.notices || []).filter(function(n){ return mine(n) && n.time > lp.time }).length }
-    lp.name = 'IMDb+'
+    lp.name = 'MoovieS'
 
     N.drawCount()
 
