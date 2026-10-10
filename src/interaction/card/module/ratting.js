@@ -353,6 +353,14 @@ function start(){
     schedule()
 }
 
+export function qcached(m){
+    if(!m || !m.id) return null
+
+    let c = qget(kindOf(m) + ':' + m.id)
+
+    return c && c.v && c.v.q ? c.v.q : null
+}
+
 export default {
     onCreate: function(){
         start()
