@@ -217,17 +217,19 @@ body.imdbb-compact .full-start-new__buttons .button--play.focus{ background: tra
 body.imdbb-compact .head__action.open--broadcast{ display: none !important; }
 body.imdbb-compact .head__time{ margin-left: 1.4em !important; }
 
-/* imdbb-layout-b */
-.imdbb-gen, .imdbb-ov, .imdbb-bud{ display: none; }
-body.imdbb-compact .imdbb-gen{ display: block; font-size: 1.12em; color: rgba(255,255,255,.8); margin: .2em 0 1em; }
-body.imdbb-compact .imdbb-ov{ display: block; margin-top: 1.1em; line-height: 1.5; opacity: .8; }
-.imdbb-nodescr .imdbb-ov{ display: block !important; }
+/* imdbb-layout-b2 */
+.imdbb-ov, .imdbb-bud{ display: none; }
+body.imdbb-compact .full-start-new__head{ display: none !important; }
 body.imdbb-compact .imdbb-descr{ display: none !important; }
+body.imdbb-compact .full-start-new{ display: flex; flex-direction: column; min-height: calc(100vh - 6em); padding-bottom: 1.2em !important; }
+body.imdbb-compact .full-start-new__body{ display: flex; flex: 1; align-items: flex-end; }
+body.imdbb-compact .full-start-new__right{ width: 100%; }
+body.imdbb-compact .imdbb-ov{ display: block !important; margin: .7em 0 1.2em; font-size: 1.15em; line-height: 1.5; opacity: .8; }
 body.imdbb-compact .full-start-new__reactions{ min-height: 0 !important; margin: 0 !important; }
 body.imdbb-compact .full-start-new__buttons{ display: flex; align-items: center; margin: 0 !important; }
 body.imdbb-compact .imdbb-bud{ display: flex; flex-direction: column; justify-content: center; margin-left: 1.4em; padding-left: 1.4em; border-left: 1px solid rgba(255,255,255,.25); font-size: 1.1em; line-height: 1.3; }
 .imdbb-bud span:first-child{ font-size: .8em; opacity: .55; }
 body.imdbb-compact .full-start-new__buttons .button--play{ background: #fff !important; color: #1e1f21 !important; border: 0 !important; border-radius: 999px !important; box-shadow: none !important; padding: .6em 1.6em .6em 1.2em !important; margin: 0 !important; transition: box-shadow .2s; }
 body.imdbb-compact .full-start-new__buttons .button--play.focus{ background: #fff !important; color: #1e1f21 !important; box-shadow: 0 0 0 .22em rgba(255,255,255,.35) !important; }
-body.imdbb-compact .full-start-new__buttons .button--play span{ display: inline !important; }
+body.imdbb-compact .full-start-new__buttons .button--play span{ display: inline !important; opacity: 1 !important; color: #1e1f21 !important; }
 @media (max-height: 520px) and (pointer: coarse){ body.imdbb-compact .imdbb-ov{ display: -webkit-box !important; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; } }

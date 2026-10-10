@@ -215,7 +215,7 @@ function component(object){
                 else this.html.find('.full-start__background').remove()
 
                 // Создаем все компоненты
-if(document.body.classList.contains('imdbb-compact')){ this.rows = this.rows.filter((r)=>r !== 'description'); this.html.addClass('imdbb-nodescr') }
+if(document.body.classList.contains('imdbb-compact')){ this.rows = this.rows.filter((r)=>r !== 'description' && !(Array.isArray(r) && r[0] === 'discuss')); this.html.addClass('imdbb-nodescr') }
                 this.build(this.rows.slice(0, this.view))
 
                 // Обновляем расписание
