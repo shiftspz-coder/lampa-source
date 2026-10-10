@@ -149,6 +149,18 @@ function init(){
             onChange: function(){ cmp() }
         })
 
+        L.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'imdbb_no_tr', type: 'trigger', default: true},
+            field: {name: 'Скрыть трейлеры и Shots', description: 'Убирает трейлеры из меню «Смотреть» и отключает плагин Shots (Shots: после перезапуска приложения)'}
+        })
+
+        L.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'imdbb_no_more', type: 'trigger', default: true},
+            field: {name: 'Скрыть кнопку «Ещё»', description: 'Кнопка с тремя точками в карточке (действует при следующем открытии карточки)'}
+        })
+
         cmp()
         setTimeout(cmp, 1000)
         window.addEventListener('resize', cmp)

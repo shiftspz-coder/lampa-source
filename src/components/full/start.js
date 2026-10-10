@@ -292,6 +292,8 @@ class Start extends Emit {
         imdbbDet.after(imdbbDet.clone().addClass('imdbb-details-c').html(info.filter((x)=>x.indexOf('imdbb-dup')<0).join(imdbbSp)))
         meta.forEach((t)=>{ $('<div class="imdbb-meta"></div>').text(t).appendTo(this.html.find('.full-start-new__rate-line')) })
 
+        if(window.localStorage.getItem('imdbb_no_tr') !== 'false') this.html.find('.view--trailer').remove()
+        if(window.localStorage.getItem('imdbb_no_more') !== 'false') this.html.find('.button--options').remove()
         if(window.lampa_settings.read_only) this.html.find('.button--play').remove()
 
         this.emit('create')
