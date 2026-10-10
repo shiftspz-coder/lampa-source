@@ -291,6 +291,18 @@ class Start extends Emit {
         imdbbDet.html(info.join(imdbbSp))
         imdbbDet.after(imdbbDet.clone().addClass('imdbb-details-c').html(info.filter((x)=>x.indexOf('imdbb-dup')<0).join(imdbbSp)))
         meta.forEach((t)=>{ $('<div class="imdbb-meta"></div>').text(t).appendTo(this.html.find('.full-start-new__rate-line')) })
+        let imdbbFav = $('<div class="imdbb-meta imdbb-fav"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z" fill="currentColor"/></svg></div>').appendTo(this.html.find('.full-start-new__rate-line'))
+        let imdbbFavUpd = ()=>{ try{ imdbbFav.toggleClass('on', !!window.Lampa.Favorite.check(this.card).book) }catch(e){} }
+        imdbbFavUpd()
+        this.html.on('hover:long', '.button--play', ()=>{
+            if(!document.body.classList.contains('imdbb-compact')) return
+            try{
+                window.Lampa.Favorite.toggle('book', this.card)
+                imdbbFavUpd()
+                window.Lampa.Noty.show(window.Lampa.Favorite.check(this.card).book ? 'Добавлено в закладки' : 'Убрано из закладок')
+            }
+            catch(e){}
+        })
 
         if(window.localStorage.getItem('imdbb_no_tr') !== 'false') this.html.find('.view--trailer').remove()
         if(window.localStorage.getItem('imdbb_no_more') !== 'false') this.html.find('.button--options').remove()

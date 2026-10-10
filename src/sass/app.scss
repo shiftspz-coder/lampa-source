@@ -207,3 +207,12 @@ body.imdbb-compact .full-start-new{ padding-bottom: 0 !important; }
 body.imdbb-compact .imdbb-descr{ margin-top: 0 !important; padding-top: 0 !important; }
 body.imdbb-compact .imdbb-descr .items-line__body{ margin-top: 0 !important; padding-top: 0 !important; }
 body.imdbb-compact .imdbb-descr .full-descr{ padding-top: 0 !important; }
+
+/* imdbb-watch */
+body.imdbb-compact .full-start-new__buttons .button--book{ display: none !important; }
+body.imdbb-compact .full-start-new__buttons .button--play{ background: transparent !important; box-shadow: none !important; border-radius: 0 !important; color: rgba(255,255,255,.7) !important; border-bottom: 2px solid transparent !important; padding-left: .3em !important; padding-right: .3em !important; margin-left: 0 !important; }
+body.imdbb-compact .full-start-new__buttons .button--play.focus{ background: transparent !important; color: #fff !important; border-bottom-color: #fff !important; }
+.imdbb-meta.imdbb-fav:not(.on){ display: none !important; }
+.imdbb-fav svg{ width: 1em !important; height: 1em !important; }
+body.imdbb-compact .head__action.open--broadcast{ display: none !important; }
+body.imdbb-compact .head__time{ margin-left: 1.4em !important; }
