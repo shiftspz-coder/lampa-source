@@ -96,7 +96,8 @@ function init(){
  * @returns {void}
  */
 function title(title){
-    html.find('.head__title').text(title || '')
+    title = (title || '').replace(/ - (TMDB|CUB|KP|SISI)$/i, ' - MoovieS')
+    html.find('.head__title').text(title)
 }
 
 /**
