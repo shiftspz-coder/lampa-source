@@ -126,7 +126,16 @@ function init(){
         let cmp = function(){
             try{
                 let v = L.Storage.get('imdbb_compact', 'true')
-                document.body.classList.toggle('imdbb-compact', !(v === false || v === 'false'))
+                let on = !(v === false || v === 'false')
+                let tv = false
+
+                try{
+                    tv = !!(L.Platform && (L.Platform.tv() || (L.Platform.screen('tv') && !/mobile/i.test(navigator.userAgent))))
+                }
+                catch(e){}
+
+                document.body.dataset.imdbbTv = tv ? '1' : '0'
+                document.body.classList.toggle('imdbb-compact', on && tv)
             }
             catch(e){}
         }
@@ -134,7 +143,7 @@ function init(){
         L.SettingsApi.addParam({
             component: 'imdbb',
             param: {name: 'imdbb_compact', type: 'trigger', default: true},
-            field: {name: 'Компактная карточка', description: 'Без постера; время и жанры в строке рейтингов'},
+            field: {name: 'Компактная карточка (только ТВ)', description: 'Без постера; время и жанры в строке рейтингов. На телефоне не действует'},
             onChange: function(){ cmp() }
         })
 
