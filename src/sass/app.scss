@@ -342,3 +342,7 @@ html body.imdbb-compact .full-start-new__body{ min-height: 0 !important; }
 html body.imdbb-compact .full-start-new__right{ min-height: 0 !important; }
 html body.imdbb-compact .full-start-new__right > *{ flex-shrink: 0; }
 html body.imdbb-compact .full-start-new__right::before{ content: ''; display: block; flex: 0 1 5.55em; min-height: 0; }
+
+/* imdbb-layout-b18 */
+.full-start-new__rate-line .rate--imdb > div:first-child{ color: var(--imdbb-btn,#f5c518) !important; }
+body.imdbb-compact .full-start-new__reactions .reaction--voted .reaction__count{ color: var(--imdbb-btn,#f5c518) !important; }
