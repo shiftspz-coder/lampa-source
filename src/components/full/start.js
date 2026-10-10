@@ -356,7 +356,7 @@ class Start extends Emit {
                         let ss = Math.min(78, Math.max(55, Math.round(best.s / best.w * 100)))
                         let ll = (hh > 40 && hh < 190) ? 33 : 46
                         this.html[0].style.setProperty('--imdbb-accent', 'hsl(' + hh + ', ' + ss + '%, ' + ll + '%)')
-                        this.html[0].style.setProperty('--imdbb-accent-soft', 'hsla(' + hh + ', ' + ss + '%, ' + ll + '%, 0.38)')
+                        this.html[0].style.setProperty('--imdbb-accent-soft', 'hsla(' + hh + ', ' + ss + '%, ' + ll + '%, 0.38)');this.html[0].style.setProperty('--imdbb-btn', 'hsl(' + hh + ', ' + Math.min(+ss, 70) + '%, ' + Math.max(22, Math.min(+ll, 38)) + '%)');this.html[0].style.setProperty('--imdbb-on', '#fff')
                     }
                     catch(e){}
                 }
