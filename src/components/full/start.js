@@ -21,7 +21,7 @@ import Bookmarks from './start/bookmarks'
 import Buttons from './start/buttons'
 
 const QKEY = 'imdbb_q1'
-const DUB = '<span style="filter:brightness(0) invert(1)">\uD83D\uDDE3\uFE0F</span>'
+const DUB = '<span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.15em"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></span>'
 
 class Start extends Emit {
     constructor(data) {
@@ -68,7 +68,7 @@ class Start extends Emit {
                     let s = Object.keys(v.dub).map(Number).sort(function(a, b){ return a - b }).pop()
                     let n = v.dub[s]
 
-                    d = DUB + (n >= 99 ? '' : n)
+                    d = DUB + (n >= 99 ? '' : ' ' + n)
                 }
                 else d = DUB
             }
