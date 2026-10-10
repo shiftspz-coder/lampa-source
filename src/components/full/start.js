@@ -301,7 +301,7 @@ class Start extends Emit {
                 if(o.profile_path) av.css('background-image', 'url(' + window.Lampa.TMDB.image('t/p/w185' + o.profile_path) + ')')
                 else av.text((o.name || '?').split(' ').map((w)=>w[0]).slice(0, 2).join(''))
                 if(dir && i === 1) box.append('<div class="imdbb-psep"></div>')
-                box.append($('<div class="imdbb-p"></div>').append(av).append($('<div class="imdbb-pn"></div>').text(o.name || '')).append($('<div class="imdbb-pr"></div>').text(it[1])))
+                box.append($('<div class="imdbb-p selector"></div>').on('hover:enter', ()=>{ try{ Lampa.Activity.push({url: '', title: Lampa.Lang.translate('title_person'), component: 'actor', id: o.id, source: 'tmdb'}) }catch(e){} }).append(av).append($('<div class="imdbb-pn"></div>').text(o.name || '')).append($('<div class="imdbb-pr"></div>').text(it[1])))
             })
             list.length && box.insertAfter(this.html.find('.full-start-new__buttons'))
         }

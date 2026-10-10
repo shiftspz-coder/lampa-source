@@ -321,3 +321,16 @@ body.imdbb-compact .full-start-new__buttons{
   }
   .button--play.focus svg{ fill: var(--imdbb-on, #1e1f21) !important; stroke: var(--imdbb-on, #1e1f21) !important; }
 }
+
+/* imdbb-layout-b15 */
+html body.imdbb-compact, html body.imdbb-compact .full-start-new{ --imdbb-up: -2.5em !important; }
+body.imdbb-compact .full-start-new__buttons{ flex-wrap: nowrap !important; align-items: center; }
+body.imdbb-compact .full-start-new__buttons .button--play, body.imdbb-compact .full-start-new__buttons .button--book, body.imdbb-compact .full-start-new__buttons .button--reaction{ margin-right: .6em !important; flex-shrink: 0; }
+body.imdbb-compact .imdbb-bud{ flex-shrink: 0; white-space: nowrap; }
+body.imdbb-compact .full-start-new__reactions{ gap: .4em; flex-shrink: 0; flex-wrap: nowrap !important; }
+body.imdbb-compact .full-start-new__reactions .reaction{ background: none !important; padding: .2em !important; margin: 0 !important; border-radius: 0 !important; }
+body.imdbb-compact .full-start-new__reactions .reaction__icon{ width: 1.5em !important; height: 1.5em !important; }
+body.imdbb-compact .full-start-new__reactions .reaction__count{ padding: 0 0 0 .3em !important; font-size: 1.1em; }
+body.imdbb-compact .full-start-new__reactions .reaction--voted .reaction__count{ color: #f5c518; }
+body.imdbb-compact .imdbb-p{ border-radius: .8em; }
+body.imdbb-compact .imdbb-p.focus .imdbb-av{ box-shadow: 0 0 0 .22em #fff; }
