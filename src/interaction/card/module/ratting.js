@@ -4,7 +4,7 @@ import IMDb from '../../../utils/imdb'
 
 export default {
     onCreate: function(){
-        let D = window.__imdbdbg = window.__imdbdbg || {c: 0, cb: 0, put: 0, last: '', err: ''}
+        let D = window.__imdbdbg = window.__imdbdbg || {c: 0, cb: 0, put: 0, last: '', err: '', dbg: ''}
 
         D.c++
 
@@ -18,45 +18,47 @@ export default {
             return
         }
 
-        let html = this.html
+        let self = this
 
-        try{
-            IMDb.rating(this.data, function(r){
-                try{
-                    D.cb++
-                    D.last = (typeof r) + ':' + r
+        IMDb.rating(this.data, function(r){
+            try{
+                D.cb++
+                D.last = (typeof r) + ':' + r
 
-                    r = parseFloat(r)
+                r = parseFloat(r)
 
-                    if(!(r > 0)) return
+                if(!(r > 0)) return
 
-                    let tries = 0
+                let tries = 0
 
-                    let put = function(){
-                        let view = html.find('.card__view')
+                let put = function(){
+                    let h = self.html
+                    let view = h && h.find ? h.find('.card__view') : []
 
-                        if(!view.length){
-                            if(++tries < 20) setTimeout(put, 250)
-                            else D.err = 'no view'
+                    if(h && !view.length && h.hasClass && h.hasClass('card__view')) view = h
 
-                            return
-                        }
+                    if(!view.length){
+                        if(++tries < 20) return setTimeout(put, 250)
 
-                        if(view.find('.card__vote').length) return
+                        D.err = 'no view'
+                        D.dbg = h && h[0] ? (h[0].className + '|ch:' + h.children().length + '|conn:' + h[0].isConnected) : 'html none'
 
-                        let tag = 'background:#F5C518;color:#000;font-weight:700;font-size:.75em;padding:0 .35em;border-radius:.3em;margin-right:.4em'
-                        let box = 'width:auto;white-space:nowrap;background:rgba(0,0,0,.62)'
-
-                        view.append($('<div class="card__vote" style="' + box + '"><span style="' + tag + '">IMDb</span><span>' + (r >= 10 ? '10' : r.toFixed(1)) + '</span></div>'))
-
-                        D.put++
+                        return
                     }
 
-                    put()
+                    if(view.find('.card__vote').length) return
+
+                    let tag = 'background:#F5C518;color:#000;font-weight:700;font-size:.75em;padding:0 .35em;border-radius:.3em;margin-right:.4em'
+                    let box = 'width:auto;white-space:nowrap;background:rgba(0,0,0,.62)'
+
+                    view.append($('<div class="card__vote" style="' + box + '"><span style="' + tag + '">IMDb</span><span>' + (r >= 10 ? '10' : r.toFixed(1)) + '</span></div>'))
+
+                    D.put++
                 }
-                catch(e){ D.err = 'cb:' + e.message }
-            })
-        }
-        catch(e){ D.err = 'rating:' + e.message }
+
+                put()
+            }
+            catch(e){ D.err = 'cb:' + e.message }
+        })
     }
 }
