@@ -5,6 +5,49 @@
     right: 0;
     bottom: 0;
     z-index: 100;
-    background: $bg_color url(../img/welcome.jpg) no-repeat 50% 50%;
-    background-size: cover;
+    background: #1e1f21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.welcome__box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.welcome__name{
+    margin-top: 10px;
+    font-size: 26px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: .5px;
+}
+.welcome__tag{
+    margin-top: 4px;
+    font-size: 14px;
+    color: #8a8d90;
+}
+.welcome__bar{
+    position: relative;
+    width: 110px;
+    height: 3px;
+    margin-top: 18px;
+    background: #3a3d3f;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.welcome__bar:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 40%;
+    background: #fff;
+    border-radius: 2px;
+    animation: welcome-bar 1.2s ease-in-out infinite;
+}
+@keyframes welcome-bar{
+    0%{ left: -40%; }
+    100%{ left: 100%; }
 }
