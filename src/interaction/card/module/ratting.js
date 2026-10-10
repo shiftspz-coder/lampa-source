@@ -4,6 +4,10 @@ import IMDb from '../../../utils/imdb'
 
 export default {
     onCreate: function(){
+        let D = window.__imdbdbg = window.__imdbdbg || {c: 0, cb: 0, put: 0, last: '', err: ''}
+
+        D.c++
+
         if(this.data.cub_hundred_fire){
             let vote = parseFloat((this.data.cub_hundred_rating || this.data.vote_average || 0) + '').toFixed(1)
 
@@ -16,31 +20,43 @@ export default {
 
         let html = this.html
 
-        IMDb.rating(this.data, function(r){
-            r = parseFloat(r)
+        try{
+            IMDb.rating(this.data, function(r){
+                try{
+                    D.cb++
+                    D.last = (typeof r) + ':' + r
 
-            if(!(r > 0)) return
+                    r = parseFloat(r)
 
-            let tries = 0
+                    if(!(r > 0)) return
 
-            let put = function(){
-                let view = html.find('.card__view')
+                    let tries = 0
 
-                if(!view.length){
-                    if(++tries < 20) setTimeout(put, 250)
+                    let put = function(){
+                        let view = html.find('.card__view')
 
-                    return
+                        if(!view.length){
+                            if(++tries < 20) setTimeout(put, 250)
+                            else D.err = 'no view'
+
+                            return
+                        }
+
+                        if(view.find('.card__vote').length) return
+
+                        let tag = 'background:#F5C518;color:#000;font-weight:700;font-size:.75em;padding:0 .35em;border-radius:.3em;margin-right:.4em'
+                        let box = 'width:auto;white-space:nowrap;background:rgba(0,0,0,.62)'
+
+                        view.append($('<div class="card__vote" style="' + box + '"><span style="' + tag + '">IMDb</span><span>' + (r >= 10 ? '10' : r.toFixed(1)) + '</span></div>'))
+
+                        D.put++
+                    }
+
+                    put()
                 }
-
-                if(view.find('.card__vote').length) return
-
-                let tag = 'background:#F5C518;color:#000;font-weight:700;font-size:.75em;padding:0 .35em;border-radius:.3em;margin-right:.4em'
-                let box = 'width:auto;white-space:nowrap;background:rgba(0,0,0,.62)'
-
-                view.append($('<div class="card__vote" style="' + box + '"><span style="' + tag + '">IMDb</span><span>' + (r >= 10 ? '10' : r.toFixed(1)) + '</span></div>'))
-            }
-
-            put()
-        })
+                catch(e){ D.err = 'cb:' + e.message }
+            })
+        }
+        catch(e){ D.err = 'rating:' + e.message }
     }
 }
