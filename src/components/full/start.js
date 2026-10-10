@@ -178,6 +178,37 @@ class Start extends Emit {
 
         if(!this.card.tagline && this.card.title.length > 25) this.html.find('.full-start-new__title').addClass('twolines')
 
+        let logoOff = window.Lampa.Storage.get('logo_card', 'true')
+
+        if(!(logoOff === false || logoOff === 'false') && this.card.id){
+            let L = window.Lampa
+            let lt = this.html.find('.full-start-new__title')
+            let lg = this.html.find('.full--tagline')
+            let lang = L.Storage.get('language', 'ru')
+            let back = function(){ lt.css('visibility', ''); lg.css('visibility', '') }
+            let url = L.TMDB.api((this.card.name ? 'tv' : 'movie') + '/' + this.card.id + '/images?api_key=' + L.TMDB.key() + '&include_image_language=' + lang + ',en,null')
+
+            lt.css('visibility', 'hidden')
+            lg.css('visibility', 'hidden')
+
+            $.get(url, function(r){
+                let all = r && r.logos ? r.logos : []
+                let pick = all.filter(function(x){ return x.iso_639_1 === lang })[0] || all.filter(function(x){ return x.iso_639_1 === 'en' })[0] || all[0]
+
+                if(!pick || !pick.file_path) return back()
+
+                let st = window.innerWidth > 585 ? 'margin-top:0.3em;margin-bottom:0.1em;max-height:1.8em;max-width:100%;' : 'margin-top:0.3em;margin-bottom:0.1em;max-height:2.8em;max-width:100%;'
+                let img = $('<img style="' + st + '" />')
+
+                img.on('load', function(){
+                    lt.removeClass('twolines').html('').append(img).css('visibility', '')
+                    lg.hide()
+                })
+                img.on('error', back)
+                img.attr('src', L.TMDB.image('t/p/w500' + pick.file_path.replace('.svg', '.png')))
+            }).fail(back)
+        }
+
         this.card.runtime > 0 && info.push('<span>' + Utils.secondsToTime(this.card.runtime * 60, true)+'</span>')
 
         seasons && info.push('<span>' + Lang.translate('title_seasons') + ': ' + seasons + '</span>')
