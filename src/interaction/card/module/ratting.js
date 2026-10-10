@@ -4,9 +4,12 @@ import IMDb from '../../../utils/imdb'
 
 const rates = {}
 const QKEY = 'imdbb_q1'
+const EKEY = 'imdbb_ep_f1'
+const ETTL = 6 * 3600e3
 const MAXQ = 3
 const DUB = '<span class="imdbb-dub">\uD83D\uDDE3\uFE0F</span>'
 const pend = {}
+const epend = {}
 
 let timer = null
 let started = false
@@ -14,6 +17,10 @@ let qcache = null
 let qsave = null
 let queue = []
 let active = 0
+let ecache = null
+let esave = null
+let equeue = []
+let eactive = 0
 
 function kindOf(m){
     return m.media_type === 'tv' || (m.name && !m.title) || m.first_air_date ? 'tv' : 'movie'
@@ -32,7 +39,9 @@ function css(){
     st.id = 'imdbb-css'
     st.textContent = '.imdbb-dub{filter:brightness(0) invert(1)}' +
         '.card__type{left:.5em!important;top:.5em!important;right:auto!important;background:rgba(0,0,0,.62)!important;color:#fff!important;font-weight:700!important;font-size:.9em!important;line-height:1.3!important;padding:.05em .45em!important;border-radius:.4em!important;text-transform:none!important}' +
-        '.card__view:has(.imdbb-q) .card__type{top:2.3em!important}'
+        '.card__view:has(.imdbb-q) .card__type{top:2.3em!important}' +
+        '.imdbb-ep{position:absolute;left:.5em;top:2.3em;z-index:2;background:rgba(0,0,0,.62);color:#fff;font-weight:700;font-size:.9em;line-height:1.3;padding:.05em .45em;border-radius:.4em;white-space:nowrap}' +
+        '.card__view:has(.imdbb-q) .imdbb-ep{top:4.1em}'
 
     document.head.appendChild(st)
 }
@@ -126,6 +135,122 @@ function qnext(){
     x.send()
 }
 
+function eload(){
+    if(ecache) return ecache
+
+    try{ ecache = JSON.parse(localStorage.getItem(EKEY) || '{}') }
+    catch(e){ ecache = {} }
+
+    return ecache
+}
+
+function esaveLater(){
+    clearTimeout(esave)
+
+    esave = setTimeout(function(){
+        try{
+            let k = Object.keys(ecache)
+
+            if(k.length > 1000){
+                k.sort(function(a, b){ return ecache[a].t - ecache[b].t })
+                    .slice(0, k.length - 1000)
+                    .forEach(function(x){ delete ecache[x] })
+            }
+
+            localStorage.setItem(EKEY, JSON.stringify(ecache))
+        }
+        catch(e){}
+    }, 1000)
+}
+
+function eget(id){
+    let c = eload()[id]
+
+    return c && Date.now() - c.t < ETTL ? c : null
+}
+
+function ebuild(d){
+    if(d.status === 'Ended' || d.status === 'Canceled') return 'Завершён'
+
+    let l = d.last_episode_to_air
+
+    if(!l) return ''
+
+    let n = 0
+    let ss = d.seasons || []
+
+    for(let i = 0; i < ss.length; i++){
+        if(ss[i].season_number === l.season_number) n = ss[i].episode_count || 0
+    }
+
+    return 'S' + l.season_number + ' · E' + l.episode_number + (n >= l.episode_number ? ' из ' + n : '')
+}
+
+function enext(){
+    if(eactive >= 3 || !equeue.length) return
+    if(!window.Lampa || !window.Lampa.TMDB) return
+
+    let id = equeue.shift()
+    let x = new XMLHttpRequest()
+    let fin = false
+
+    eactive++
+
+    let end = function(ok, s){
+        if(fin) return
+
+        fin = true
+        eactive--
+
+        if(ok){
+            eload()[id] = {t: Date.now(), s: s}
+
+            delete epend[id]
+
+            esaveLater()
+        }
+        else setTimeout(function(){ delete epend[id] }, 60000)
+
+        setTimeout(run, 50)
+        setTimeout(enext, 50)
+    }
+
+    x.open('GET', window.Lampa.TMDB.api('tv/' + id + '?api_key=' + window.Lampa.TMDB.key() + '&language=ru'), true)
+    x.timeout = 30000
+    x.onload = function(){
+        let d = null
+
+        try{ d = JSON.parse(x.responseText) }
+        catch(e){}
+
+        if(d && d.id) end(true, ebuild(d))
+        else end(false)
+    }
+    x.onerror = x.ontimeout = function(){ end(false) }
+    x.send()
+}
+
+function epPaint(el, view, d){
+    let c = eget(d.id)
+
+    if(c){
+        let ex = view.find('.imdbb-ep')
+
+        if(!c.s) ex.remove()
+        else if(ex.length){
+            if(ex.text() !== c.s) ex.text(c.s)
+        }
+        else view.append($('<div class="imdbb-ep"></div>').text(c.s))
+    }
+    else if(!epend[d.id] && visible(el)){
+        epend[d.id] = 1
+
+        equeue.push(d.id)
+
+        enext()
+    }
+}
+
 function label(v){
     if(!v || !v.q) return ''
 
@@ -194,6 +319,8 @@ function run(){
 
                 qnext()
             }
+
+            if(kind === 'tv') epPaint(el, view, d)
         }
 
         let types = document.querySelectorAll('.card__type')
