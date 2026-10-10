@@ -24,6 +24,7 @@ class Descriptiopn extends Emit{
     
     create(){
         this.html = Template.get('items_line',{title: Lang.translate('full_detail')})
+        this.html.addClass('imdbb-descr')
 
         let media     = this.card.name ? 'tv' : 'movie'
         let countries = TMDB.parseCountries(this.card)

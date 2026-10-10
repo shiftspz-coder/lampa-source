@@ -199,3 +199,11 @@ body.imdbb-compact .full-start-new__details:empty{ display: none; }
 body:not(.imdbb-compact) .full-start-new__rate-line > .imdbb-meta{ display: none !important; }
 body:not(.imdbb-compact) .full-start-new__details.imdbb-details-c{ display: none !important; }
 body.imdbb-compact .full-start-new__details:not(.imdbb-details-c){ display: none !important; }
+
+/* imdbb-descr */
+body.imdbb-compact .imdbb-descr .items-line__head,
+body.imdbb-compact .imdbb-descr .items-line__title{ display: none !important; }
+body.imdbb-compact .full-start-new{ padding-bottom: 0 !important; }
+body.imdbb-compact .imdbb-descr{ margin-top: 0 !important; padding-top: 0 !important; }
+body.imdbb-compact .imdbb-descr .items-line__body{ margin-top: 0 !important; padding-top: 0 !important; }
+body.imdbb-compact .imdbb-descr .full-descr{ padding-top: 0 !important; }
