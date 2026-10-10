@@ -210,7 +210,12 @@ class Start extends Emit {
             }).fail(back)
         }
 
-        this.card.runtime > 0 && info.push('<span>' + Utils.secondsToTime(this.card.runtime * 60, true)+'</span>')
+        let compact = document.body.classList.contains('imdbb-compact')
+        let meta = []
+        if(this.card.runtime > 0){
+            let rt = Utils.secondsToTime(this.card.runtime * 60, true)
+            compact ? meta.push(rt) : info.push('<span>' + rt + '</span>')
+        }
 
         seasons && info.push('<span>' + Lang.translate('title_seasons') + ': ' + seasons + '</span>')
 
@@ -253,7 +258,8 @@ class Start extends Emit {
                 return Utils.capitalizeFirstLetter(a.name)
             }).join(' | ')
 
-            info.push('<span>' + genres + '</span>')
+            if(compact) meta.push(this.card.genres.slice(0,3).map((a)=>Utils.capitalizeFirstLetter(a.name)).join(', '))
+            else info.push('<span>' + genres + '</span>')
         }
 
         if(quality){
@@ -282,6 +288,7 @@ class Start extends Emit {
         
         this.html.find('.full-start-new__head').toggleClass('hide',!head.length).html(head.join(', '))
         this.html.find('.full-start-new__details').html(info.join('<span class="full-start-new__split">●</span>'))
+        meta.forEach((t)=>{ $('<div class="imdbb-meta"></div>').text(t).appendTo(this.html.find('.full-start-new__rate-line')) })
 
         if(window.lampa_settings.read_only) this.html.find('.button--play').remove()
 

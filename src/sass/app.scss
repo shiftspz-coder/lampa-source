@@ -179,3 +179,18 @@ $media_xs: 400px;
   flex-shrink: 0;
   vertical-align: 0 !important;
 }
+
+/* imdbb-compact */
+body.imdbb-compact .full-start-new__left{ display: none !important; }
+body.imdbb-compact .full-start-new__description{ width: 100%; }
+body.imdbb-compact .full-start-new__details:empty{ display: none; }
+.full-start-new__rate-line > .imdbb-meta{
+  order: 4;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  padding: 0 .8em;
+  color: #fff;
+  font-size: 1.12em;
+  white-space: nowrap;
+}

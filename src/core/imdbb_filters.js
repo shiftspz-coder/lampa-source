@@ -123,6 +123,27 @@ function init(){
             field: {name: 'Логотип вместо названия', description: 'На карточке фильма'}
         })
 
+        let cmp = function(){
+            try{
+                let v = L.Storage.get('imdbb_compact', 'true')
+                document.body.classList.toggle('imdbb-compact', !(v === false || v === 'false'))
+            }
+            catch(e){}
+        }
+
+        L.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'imdbb_compact', type: 'trigger', default: true},
+            field: {name: 'Компактная карточка', description: 'Без постера; время и жанры в строке рейтингов'},
+            onChange: function(){ cmp() }
+        })
+
+        cmp()
+        setTimeout(cmp, 1000)
+
+        try{ L.Storage.listener.follow('change', function(e){ if(e && e.name === 'imdbb_compact') cmp() }) }
+        catch(e){}
+
         L.Listener.follow('request_secuses', function(e){
             try{
                 let u = e && e.params && e.params.url
