@@ -8,6 +8,7 @@ import Lang from '../../core/lang'
 import Emit from '../../utils/emit'
 import TMDB from '../../core/api/sources/tmdb'
 import Permit from '../../core/account/permit'
+import IMDb from '../../utils/imdb'
 
 import Options from './start/options'
 import Torrents from './start/torrents'
@@ -115,6 +116,18 @@ class Start extends Emit {
 
         if(this.card.kp_rating && parseFloat(this.card.kp_rating) > 0){
             this.html.find('.rate--kp').removeClass('hide').find('> div').eq(0).text(parseFloat(this.card.kp_rating) >= 10 ? 10 : this.card.kp_rating)
+        }
+
+        this.html.find('.rate--tmdb, .full-start__status').addClass('hide')
+
+        if(!(parseFloat(this.card.imdb_rating) > 0)){
+            IMDb.rating(this.card, (r)=>{
+                r = parseFloat(r)
+
+                if(!(r > 0)) return
+
+                this.html.find('.rate--imdb').removeClass('hide').find('> div').eq(0).text(r >= 10 ? 10 : r.toFixed(1))
+            })
         }
 
         if(this.card.genres){
