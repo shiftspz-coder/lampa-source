@@ -1,164 +1,62 @@
-const KEY = 'imdb_rating_cache1'
-const TTL = 3 * 24 * 3600 * 1000
-const TTL_ID = 30 * 24 * 3600 * 1000
-const TTL_MISS = 24 * 3600 * 1000
-const MAX_ACTIVE = 5
-const MAX_ENTRIES = 2000
+import Utils from '../../../utils/utils'
+import Template from '../../template'
+import IMDb from '../../../utils/imdb'
 
-let cache = null
-let timer = null
-let queue = []
-let active = 0
-let waiting = {}
+export default {
+    onCreate: function(){
+        let D = window.__imdbdbg = window.__imdbdbg || {c: 0, cb: 0, put: 0, last: '', err: ''}
 
-function proxy(){
-    try{ return localStorage.getItem('imdb_proxy') || '' }
-    catch(e){ return '' }
-}
+        D.c++
 
-function load(){
-    if(cache) return cache
+        if(this.data.cub_hundred_fire){
+            let vote = parseFloat((this.data.cub_hundred_rating || this.data.vote_average || 0) + '').toFixed(1)
 
-    try{ cache = JSON.parse(localStorage.getItem(KEY) || '{}') }
-    catch(e){ cache = {} }
-
-    return cache
-}
-
-function save(){
-    clearTimeout(timer)
-
-    timer = setTimeout(function(){
-        try{
-            let keys = Object.keys(cache)
-
-            if(keys.length > MAX_ENTRIES){
-                keys.sort(function(a, b){ return cache[a].t - cache[b].t })
-                    .slice(0, keys.length - MAX_ENTRIES)
-                    .forEach(function(k){ delete cache[k] })
+            if(vote > 0){
+                this.html.find('.card__view').append(Template.elem('div', {class: 'card__vote', text: Utils.bigNumberToShort(this.data.cub_hundred_fire)}))
             }
 
-            localStorage.setItem(KEY, JSON.stringify(cache))
+            return
         }
-        catch(e){}
-    }, 1000)
-}
 
-function getc(k){
-    let c = load()[k]
+        let html = this.html
 
-    return c && c.t + c.l > Date.now() ? c : null
-}
+        try{
+            IMDb.rating(this.data, function(r){
+                try{
+                    D.cb++
+                    D.last = (typeof r) + ':' + r
 
-function setc(k, v, l){
-    load()[k] = {v: v, t: Date.now(), l: l}
+                    r = parseFloat(r)
 
-    save()
-}
+                    if(!(r > 0)) return
 
-function next(){
-    if(active >= MAX_ACTIVE || !queue.length) return
+                    let tries = 0
 
-    let job = queue.shift()
-    let x = new XMLHttpRequest()
-    let finished = false
+                    let put = function(){
+                        let view = html.find('.card__view')
 
-    active++
+                        if(!view.length){
+                            if(++tries < 20) setTimeout(put, 250)
+                            else D.err = 'no view'
 
-    let end = function(data){
-        if(finished) return
+                            return
+                        }
 
-        finished = true
-        active--
+                        if(view.find('.card__vote').length) return
 
-        job.cb(data)
+                        let tag = 'background:#F5C518;color:#000;font-weight:700;font-size:.75em;padding:0 .35em;border-radius:.3em;margin-right:.4em'
+                        let box = 'width:auto;white-space:nowrap;background:rgba(0,0,0,.62)'
 
-        setTimeout(next, 30)
+                        view.append($('<div class="card__vote" style="' + box + '"><span style="' + tag + '">IMDb</span><span>' + (r >= 10 ? '10' : r.toFixed(1)) + '</span></div>'))
+
+                        D.put++
+                    }
+
+                    put()
+                }
+                catch(e){ D.err = 'cb:' + e.message }
+            })
+        }
+        catch(e){ D.err = 'rating:' + e.message }
     }
-
-    x.open('GET', job.url, true)
-    x.timeout = 15000
-    x.onload = function(){
-        let d = null
-
-        try{ d = JSON.parse(x.responseText) }
-        catch(e){}
-
-        end(d)
-    }
-    x.onerror = x.ontimeout = function(){ end(null) }
-    x.send()
 }
-
-function request(url, cb){
-    queue.push({url: url, cb: cb})
-
-    next()
-}
-
-function kindOf(m){
-    return m.media_type === 'tv' || (m.name && !m.title) || m.first_air_date ? 'tv' : 'movie'
-}
-
-function imdbId(m, cb){
-    if(m.imdb_id) return cb(m.imdb_id)
-
-    let L = window.Lampa
-    let kind = kindOf(m)
-    let k = 'id:' + kind + ':' + m.id
-    let c = getc(k)
-
-    if(c) return cb(c.v)
-    if(!L || !L.TMDB) return cb(null)
-
-    request(L.TMDB.api(kind + '/' + m.id + '/external_ids?api_key=' + L.TMDB.key()), function(d){
-        let id = d && d.imdb_id ? d.imdb_id : null
-
-        if(d) setc(k, id, id ? TTL_ID : TTL_MISS)
-
-        cb(id)
-    })
-}
-
-function rating(m, cb){
-    if(!m || !m.id) return cb(null)
-
-    let key = kindOf(m) + ':' + m.id
-
-    if(waiting[key]) return waiting[key].push(cb)
-
-    waiting[key] = [cb]
-
-    let finish = function(r){
-        let list = waiting[key]
-
-        delete waiting[key]
-
-        list.forEach(function(f){ f(r) })
-    }
-
-    imdbId(m, function(id){
-        if(!id) return finish(null)
-
-        let k = 'r:' + id
-        let c = getc(k)
-
-        if(c) return finish(c.v)
-
-        let p = proxy()
-
-        if(!p) return finish(null)
-
-        request(p + '?i=' + id, function(d){
-            let r = d && d.imdbRating ? parseFloat(d.imdbRating) : 0
-
-            r = r > 0 ? r : null
-
-            if(d) setc(k, r, r ? TTL : TTL_MISS)
-
-            finish(r)
-        })
-    })
-}
-
-export default {rating}
