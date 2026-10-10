@@ -197,6 +197,36 @@ function test(){
     Lp.Noty.show('Тестовое уведомление добавлено')
 }
 
+function only(){
+    let N = L().Notice
+
+    if(!N || !N.classes || !N.classes.lampa) return false
+    if(N.imdbbOnly) return true
+
+    let lp = N.classes.lampa
+    let cub = N.classes.cub
+    let mine = function(n){ return n && n.from === 'imdbb' }
+    let items = lp.items.bind(lp)
+
+    N.imdbbOnly = true
+
+    if(cub){
+        let get = N.get.bind(N)
+
+        N.get = function(name){ return name === 'cub' ? cub : get(name) }
+
+        delete N.classes.cub
+    }
+
+    lp.items = function(){ return items().filter(mine) }
+    lp.count = function(){ return (lp.notices || []).filter(function(n){ return mine(n) && n.time > lp.time }).length }
+    lp.name = 'IMDb+'
+
+    N.drawCount()
+
+    return true
+}
+
 function init(){
     let Lp = L()
 
@@ -217,6 +247,18 @@ function init(){
     catch(e){}
 
     let start = function(){
+        let tries = 0
+        let p = function(){
+            let done = false
+
+            try{ done = only() }
+            catch(e){}
+
+            if(!done && tries++ < 20) setTimeout(p, 500)
+        }
+
+        p()
+
         setTimeout(function(){ check(false) }, 8000)
 
         document.addEventListener('visibilitychange', function(){
