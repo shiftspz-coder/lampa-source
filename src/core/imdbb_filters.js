@@ -117,6 +117,12 @@ function init(){
             })
         })
 
+        L.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'logo_card', type: 'trigger', default: true},
+            field: {name: 'Логотип вместо названия', description: 'На карточке фильма'}
+        })
+
         L.Listener.follow('request_secuses', function(e){
             try{
                 let u = e && e.params && e.params.url
