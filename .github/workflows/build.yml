@@ -1,0 +1,55 @@
+name: build
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - name: Добавить задачу ci
+        run: |
+          cat >> gulpfile.js <<'EOF'
+
+          function merge_ci() {
+            return rollup({
+              input: srcFolder + 'app.js',
+              plugins: [babel({ babelHelpers: 'bundled', presets: ['@babel/preset-env'] }), commonjs, nodeResolve, worker()],
+              output: { format: 'iife', sourcemap: false },
+              onwarn: function () { return; }
+            })
+            .pipe(source('app.js'))
+            .pipe(buffer())
+            .pipe(replace(/return kIsNodeJS/g, 'return false'))
+            .pipe(dest(dstFolder));
+          }
+          function sass_ci() {
+            return src(srcFolder + '/sass/*.scss')
+              .pipe(sass.sync().on('error', sass.logError))
+              .pipe(autoprefixer(['last 100 versions', '> 1%', 'ie 8', 'ie 7', 'ios 6', 'android 4'], { cascade: true }))
+              .pipe(dest(pubFolder + '/css'));
+          }
+          exports.ci = series(merge_ci, sass_ci, lang_task, exports.pack_github);
+          EOF
+      - name: Сборка
+        run: npx gulp ci
+      - name: Проверка
+        run: |
+          ls -la build/github/lampa | head -30
+          test -s build/github/lampa/app.min.js
+          test -s build/github/lampa/index.html
+          test -d build/github/lampa/css
+      - name: Архив и релиз
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tar -czf lampa-build.tar.gz -C build/github/lampa .
+          gh release delete latest -y --cleanup-tag || true
+          gh release create latest lampa-build.tar.gz --title latest --notes "auto build"
