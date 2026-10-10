@@ -1,0 +1,231 @@
+const KEY = 'imdbb_bell1'
+const RANK = {'TS': 1, '1080': 2, '4K': 3}
+const RN = {1: 'TS', 2: 'FHD', 3: '4K'}
+const EVERY = 20 * 60 * 1000
+
+let running = false
+
+function L(){
+    return window.Lampa
+}
+
+function on(){
+    let v = L().Storage.get('imdbb_bell', 'true')
+
+    return !(v === false || v === 'false')
+}
+
+function proxy(){
+    try{ return localStorage.getItem('imdb_proxy') || '' }
+    catch(e){ return '' }
+}
+
+function load(){
+    try{
+        let s = JSON.parse(localStorage.getItem(KEY) || '{}')
+
+        return {t: s.t || 0, items: s.items || {}}
+    }
+    catch(e){ return {t: 0, items: {}} }
+}
+
+function save(s){
+    try{ localStorage.setItem(KEY, JSON.stringify(s)) }
+    catch(e){}
+}
+
+function kindOf(m){
+    return m.media_type === 'tv' || (m.name && !m.title) || m.first_air_date ? 'tv' : 'movie'
+}
+
+function dcode(d){
+    if(!d) return 0
+    if(typeof d !== 'object') return 1
+
+    let ks = Object.keys(d).map(Number).filter(function(n){ return n > 0 })
+
+    if(!ks.length) return 1
+
+    let s = Math.max.apply(null, ks)
+
+    return s * 100 + Math.min(parseInt(d[s]) || 0, 99)
+}
+
+function dtext(c){
+    if(c < 100) return '🗣️ Появился дубляж'
+
+    let s = Math.floor(c / 100), n = c % 100
+
+    return n >= 99 ? '🗣️ Дубляж: S' + s + ' полностью' : '🗣️ Дубляж: S' + s + ' · E' + n
+}
+
+function fetchQ(card, cb){
+    let p = proxy()
+
+    if(!p) return cb(null)
+
+    let title = card.title || card.name || ''
+    let orig = card.original_title || card.original_name || ''
+    let year = ((card.release_date || card.first_air_date || '') + '').slice(0, 4)
+    let x = new XMLHttpRequest()
+
+    x.open('GET', p + '?title=' + encodeURIComponent(title) + '&year=' + year + '&orig=' + encodeURIComponent(orig) + '&kind=' + kindOf(card), true)
+    x.timeout = 30000
+    x.onload = function(){
+        let v = null
+
+        try{ v = JSON.parse(x.responseText) }
+        catch(e){}
+
+        cb(v && typeof v === 'object' ? {q: v.q || null, dub: v.dub || null} : null)
+    }
+    x.onerror = x.ontimeout = function(){ cb(null) }
+    x.send()
+}
+
+function cardFor(card){
+    let c = Object.assign({}, card)
+
+    if(kindOf(c) === 'tv' && !c.number_of_seasons && !c.seasons) c.number_of_seasons = 1
+
+    return c
+}
+
+function notify(card, key, title, parts, cur){
+    let year = ((card.release_date || card.first_air_date || '') + '').slice(0, 4)
+    let name = (card.title || card.name || '') + (year ? ' (' + year + ')' : '')
+
+    try{
+        L().Notice.pushNotice('lampa', {
+            id: 'imdbb:' + key + ':' + cur.r + ':' + cur.d,
+            from: 'imdbb',
+            time: Date.now(),
+            title: title,
+            text: name + '<br>' + parts.join('<br>'),
+            poster: card.poster_path,
+            card: cardFor(card)
+        })
+    }
+    catch(e){}
+}
+
+function handle(card, snap, items, done){
+    let key = kindOf(card) + ':' + card.id
+    let old = snap.items[key]
+
+    fetchQ(card, function(v){
+        if(!v){
+            if(old) items[key] = old
+
+            return done()
+        }
+
+        let nr = RANK[v.q] || 0
+        let nd = dcode(v.dub)
+        let cur = {r: Math.max(nr, old ? old.r : 0), d: Math.max(nd, old ? old.d : 0)}
+
+        items[key] = cur
+
+        if(old){
+            let up = nr > old.r
+            let dn = nd > old.d
+            let parts = []
+
+            if(up) parts.push(old.r ? 'Качество: ' + RN[old.r] + ' → ' + RN[nr] : 'Качество: ' + RN[nr])
+            if(dn) parts.push(dtext(nd))
+
+            if(parts.length) notify(card, key, up && dn ? 'Новое качество и дубляж' : up ? 'Новое качество' : 'Дубляж', parts, cur)
+        }
+
+        done()
+    })
+}
+
+function check(force){
+    if(running || !on()) return
+
+    let Lp = L()
+
+    if(!Lp.Favorite || !Lp.Notice || !proxy()) return
+
+    let snap = load()
+
+    if(!force && Date.now() - snap.t < EVERY) return
+
+    let list = []
+
+    try{ list = (Lp.Favorite.get({type: 'book'}) || []).slice(0, 100) }
+    catch(e){ return }
+
+    running = true
+
+    let items = {}
+    let i = 0
+    let active = 0
+    let step = function(){
+        while(active < 3 && i < list.length){
+            let card = list[i++]
+
+            if(!card || !card.id) continue
+
+            active++
+
+            handle(card, snap, items, function(){
+                active--
+                step()
+            })
+        }
+
+        if(active === 0 && i >= list.length && running){
+            running = false
+            snap.items = items
+            snap.t = Date.now()
+            save(snap)
+        }
+    }
+
+    step()
+}
+
+function test(){
+    let Lp = L()
+    let card = (Lp.Favorite.get({type: 'book'}) || [])[0]
+
+    if(!card) return Lp.Noty.show('Закладок нет')
+
+    notify(card, 'test' + Date.now(), 'Новое качество', ['Качество: TS → FHD', dtext(1)], {r: 2, d: 1})
+    Lp.Noty.show('Тестовое уведомление добавлено')
+}
+
+function init(){
+    let Lp = L()
+
+    try{
+        Lp.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'imdbb_bell', type: 'trigger', default: true},
+            field: {name: 'Колокольчик: качество и дубляж', description: 'Уведомления о закладках (проверка при открытии приложения)'}
+        })
+
+        Lp.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'imdbb_bell_test', type: 'button'},
+            field: {name: 'Тестовое уведомление', description: 'Добавить пробную запись в колокольчик'},
+            onChange: test
+        })
+    }
+    catch(e){}
+
+    let start = function(){
+        setTimeout(function(){ check(false) }, 8000)
+
+        document.addEventListener('visibilitychange', function(){
+            if(!document.hidden) setTimeout(function(){ check(false) }, 1500)
+        })
+    }
+
+    if(window.appready) start()
+    else Lp.Listener.follow('app', function(e){ if(e.type === 'ready') start() })
+}
+
+export default {init, check}
