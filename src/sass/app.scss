@@ -359,3 +359,6 @@ html body.imdbb-compact .imdbb-ov{ margin-top: 1.2em !important; margin-bottom: 
 /* imdbb-layout-b23 */
 body.imdbb-compact .imdbb-ppl{ position: relative; width: calc(100% + .8em); box-sizing: border-box; overflow: hidden; padding: .4em; margin: 1.2em -.4em -.4em -.4em !important; scroll-behavior: smooth; }
 body.imdbb-compact .imdbb-ppl > *{ flex: 0 0 auto; }
+
+/* imdbb-layout-b24 */
+body.imdbb-compact .full-start-new__tagline{ display: block !important; max-width: 100%; min-width: 0; margin: .5em 0 .3em !important; padding: 0 0 0 .6em !important; border-left: 2px solid rgba(255,255,255,.4); border-radius: 0; font-size: 1.15em !important; font-style: normal !important; line-height: 1.3; color: rgba(255,255,255,.8) !important; opacity: 1 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
