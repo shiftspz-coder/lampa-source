@@ -167,12 +167,6 @@ function init(){
             field: {name: 'Скрыть кнопку «Ещё»', description: 'Кнопка с тремя точками в карточке (действует при следующем открытии карточки)'}
         })
 
-        L.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'imdbb_ep_card', type: 'trigger', default: true},
-            field: {name: 'Серия и статус на постере', description: 'Плашка «S2 · E4 из 10» или «Завершён» на карточках в рядах. В блоке информации эти данные остаются.'}
-        })
-
         cmp()
         setTimeout(cmp, 1000)
         window.addEventListener('resize', cmp)

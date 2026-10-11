@@ -424,8 +424,7 @@ body.imdbb-compact .full-start-new__title + .full-start-new__rate-line{margin-to
 .imdbb-search-wide .card.imdbb-wc .card__view{padding-bottom:56.25%; border-radius:.6em; overflow:visible!important}
 .imdbb-search-wide .card.imdbb-wc .card__img{object-fit:cover; border-radius:.6em}
 .imdbb-search-wide .card.imdbb-wc .card__title{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.imdbb-home.imdbb-nobadge .card__vote,.imdbb-home.imdbb-nobadge .imdbb-q{display:none!important}
-.imdbb-home.imdbb-nobadge .imdbb-hero__s{display:none!important}
+.imdbb-home.imdbb-nobadge .card__vote,.imdbb-home.imdbb-nobadge .imdbb-q,.imdbb-home.imdbb-nobadge .card__type,.imdbb-home.imdbb-nobadge .imdbb-ep{display:none!important}
 
 /* imdbb-layout-c12 */
 body.imdbb-compact{--imdbb-c12:1}
