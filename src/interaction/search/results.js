@@ -132,6 +132,19 @@ function Results(source){
             })
         }
 
+        try{
+            let nbf = window.Lampa.Storage.get('imdbb_f_nobd', 'false')
+
+            if((nbf === true || nbf === 'true') && document.body.classList.contains('imdbb-search-wide')){
+                data.results = data.results.filter((m)=>{
+                    if(!m || m.profile_path || m.media_type === 'person' || m.known_for) return true
+
+                    return !!(m.backdrop_path && (m.release_date || m.first_air_date))
+                })
+            }
+        }
+        catch(e){}
+
         let line = Utils.createInstance(Line, data, {
             ...source.params,
             module: LineModule.only('Items', 'Create', 'More')

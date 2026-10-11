@@ -173,6 +173,17 @@ function init(){
             field: {name: 'Логотипы на карточках в ряду', description: 'Временно для проверки трёх вариантов. Только главная. Без логотипа показывается название.'}
         })
 
+        L.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'imdbb_f_nobd', type: 'trigger', default: false},
+            field: {name: 'Поиск: скрывать карточки без кадра', description: 'В поиске остаются только широкие карточки, у которых есть кадр. Действует при следующем поиске'}
+        })
+        L.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'imdbb_card_nobd', type: 'select', values: {off: 'Как сейчас', a: 'А: постер обрезан по центру', b: 'Б: постер целиком на фоне'}, default: 'off'},
+            field: {name: 'Поиск: карточки без кадра', description: 'Как показывать широкие карточки, если нет кадра. Действует при следующем поиске. При включённом фильтре выше таких карточек нет'}
+        })
+
         cmp()
         setTimeout(cmp, 1000)
         window.addEventListener('resize', cmp)
