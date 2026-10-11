@@ -98,6 +98,31 @@ function probe(h){
     catch(e){}
 }
 
+function probe2(h){
+    try{
+        if(localStorage.getItem('imdbb_probe2') === 'done') return
+        let st = h.querySelector('.imdbb-stub')
+        let fs = h.querySelector('.full-start-new')
+        if(!st || !fs) return
+        let f = function(root, sel, name){
+            let out = []
+            Array.prototype.slice.call(root.querySelectorAll(sel)).forEach(function(e){
+                let r = e.getBoundingClientRect()
+                if(r.width < 2 || r.height < 2) return
+                if(e.children.length > 1 && e.querySelector(sel)) return
+                out.push(((e.textContent || '').trim().slice(0, 5) || '?') + ' w' + Math.round(r.width) + ' f' + Math.round(parseFloat(getComputedStyle(e).fontSize)) + ' x' + Math.round(r.left))
+            })
+            return name + ': ' + out.join(' | ')
+        }
+        localStorage.setItem('imdbb_probe2', 'done')
+        window.Lampa.Noty.show(f(st, '.imdbb-hero__meta > span', 'ЗАГОТОВКА'), {time: 30000})
+        setTimeout(function(){
+            window.Lampa.Noty.show(f(fs, '.full-start-new__rate-line > *, .imdbb-meta > *', 'КАРТОЧКА'), {time: 30000})
+        }, 400)
+    }
+    catch(e){}
+}
+
 function cal(h){
     try{
         let s = h.querySelector('.imdbb-stub')
@@ -142,7 +167,7 @@ function show(comp, object){
         h.__stubT = setInterval(function(){
             n++
             let fs = h.querySelector('.full-start-new')
-            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ probe(h); cal(h) } hide(comp) }
+            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ probe(h); probe2(h); cal(h) } hide(comp) }
         }, 120)
     }
     catch(e){ console.warn('imdbb_stub', e.message) }
