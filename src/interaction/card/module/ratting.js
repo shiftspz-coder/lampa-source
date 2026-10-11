@@ -231,7 +231,14 @@ function enext(){
     x.send()
 }
 
+function epOff(){
+    try{ let v = window.Lampa.Storage.get('imdbb_ep_card', 'true'); return v === false || v === 'false' }
+    catch(e){ return false }
+}
+
 function epPaint(el, view, d){
+    if(epOff()){ view.find('.imdbb-ep').remove(); return }
+
     let c = eget(d.id)
 
     if(c){

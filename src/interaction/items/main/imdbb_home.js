@@ -97,6 +97,7 @@ export default function(main){
                 let st = (info.status === 'Ended' || info.status === 'Canceled') ? 'Завершён' : 'Идёт'
                 sl = 'Сезоны: ' + info.number_of_seasons + ' • Серии: ' + (info.number_of_episodes || '') + ' • ' + st
             }
+            if(!sl && info && kind !== 'tv' && info.budget > 0) sl = 'Бюджет $ ' + String(info.budget).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
             q('.imdbb-hero__s').textContent = sl
             q('.imdbb-hero__d').textContent = (info && info.overview) || d.overview || ''
         }
