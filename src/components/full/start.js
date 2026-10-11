@@ -1,3 +1,4 @@
+import {lgcached, lgput} from '../../interaction/card/module/ratting'
 import Template from '../../interaction/template'
 import Controller from '../../core/controller'
 import Utils from '../../utils/utils'
@@ -21,6 +22,18 @@ import Bookmarks from './start/bookmarks'
 import Buttons from './start/buttons'
 
 const QKEY = 'imdbb_q1'
+
+function gate(h, k){
+    let e = h && h[0]
+
+    if(!e) return
+
+    e.__w = e.__w || {}
+
+    if(k) e.__w[k] = 1
+
+    if(!k || (e.__w.l && e.__w.r && e.__w.q)) h.removeClass('imdbb-fwait')
+}
 const DUB = '<span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.15em"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></span>'
 
 class Start extends Emit {
@@ -92,6 +105,7 @@ class Start extends Emit {
 
         if(c && c.t + c.l > Date.now()){
             show(c.v)
+            gate(this.html, 'q')
 
             return
         }
@@ -101,7 +115,7 @@ class Start extends Emit {
         try{ proxy = localStorage.getItem('imdb_proxy') || '' }
         catch(e){}
 
-        if(!proxy) return
+        if(!proxy){ gate(this.html, 'q'); return }
 
         let title = card.title || card.name || ''
         let orig  = card.original_title || card.original_name || ''
@@ -116,7 +130,7 @@ class Start extends Emit {
             try{ v = JSON.parse(x.responseText) }
             catch(e){}
 
-            if(!v || typeof v !== 'object') return
+            if(!v || typeof v !== 'object'){ gate(this.html, 'q'); return }
 
             let val = {q: v.q || null, dub: v.dub || null}
 
@@ -130,7 +144,9 @@ class Start extends Emit {
             catch(e){}
 
             show(val)
+            gate(this.html, 'q')
         }
+        x.onerror = x.ontimeout = ()=>{ gate(this.html, 'q') }
         x.send()
     }
 
@@ -180,6 +196,13 @@ class Start extends Emit {
 
         if(!this.card.tagline && this.card.title.length > 25) this.html.find('.full-start-new__title').addClass('twolines')
 
+        let ibw = this.html
+
+        if(document.body.classList.contains('imdbb-compact')){
+            ibw.addClass('imdbb-fwait')
+            setTimeout(function(){ gate(ibw) }, 1000)
+        }
+
         let logoOff = window.Lampa.Storage.get('logo_card', 'true')
 
         if(!(logoOff === false || logoOff === 'false') && this.card.id){
@@ -187,15 +210,22 @@ class Start extends Emit {
             let lt = this.html.find('.full-start-new__title')
             let lg = this.html.find('.full--tagline')
             let lang = L.Storage.get('language', 'ru')
-            let back = function(){ lt.css('visibility', ''); lg.css('visibility', '') }
+            let ibh = this.html
+            let ibc = this.card
+            let ibl = lgcached(ibc)
+            let back = function(){ lt.css('visibility', ''); lg.css('visibility', ''); gate(ibh, 'l') }
             let url = L.TMDB.api((this.card.name ? 'tv' : 'movie') + '/' + this.card.id + '/images?api_key=' + L.TMDB.key() + '&include_image_language=' + lang + ',en,null')
 
             lt.css('visibility', 'hidden')
             lg.css('visibility', 'hidden')
 
-            $.get(url, function(r){
+            let getter = ibl ? function(ok){ ok({logos: ibl.p ? [{iso_639_1: lang, file_path: ibl.p}] : []}) } : function(ok, bad){ $.get(url, ok).fail(bad) }
+
+            getter(function(r){
                 let all = r && r.logos ? r.logos : []
                 let pick = all.filter(function(x){ return x.iso_639_1 === lang })[0] || all.filter(function(x){ return x.iso_639_1 === 'en' })[0] || all[0]
+
+                if(!ibl) lgput(ibc, pick && pick.file_path ? pick.file_path.replace('.svg', '.png') : '')
 
                 if(!pick || !pick.file_path) return back()
 
@@ -205,11 +235,14 @@ class Start extends Emit {
                 img.on('load', function(){
                     lt.removeClass('twolines').html('').append(img).css('visibility', '')
                     lg.css('visibility', '')
+                    gate(ibh, 'l')
                 })
                 img.on('error', back)
                 img.attr('src', L.TMDB.image('t/p/w500' + pick.file_path.replace('.svg', '.png')))
-            }).fail(back)
+            }, back)
         }
+
+        if(logoOff === false || logoOff === 'false' || !this.card.id) gate(this.html, 'l')
 
         let compact = document.body.classList.contains('imdbb-compact')
         let meta = []
@@ -247,12 +280,15 @@ class Start extends Emit {
         if(!(parseFloat(this.card.imdb_rating) > 0)){
             IMDb.rating(this.card, (r)=>{
                 r = parseFloat(r)
+                gate(this.html, 'r')
 
                 if(!(r > 0)) return
 
                 this.html.find('.rate--imdb').removeClass('hide').find('> div').eq(0).text(r >= 10 ? 10 : r.toFixed(1))
             })
         }
+
+        if(parseFloat(this.card.imdb_rating) > 0) gate(this.html, 'r')
 
         this.qualityChip()
 

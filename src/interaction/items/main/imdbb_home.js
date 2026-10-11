@@ -1,5 +1,68 @@
 import {lgcached, lgput} from '../../card/module/ratting'
 
+const HKEY = 'imdbb_hd1'
+const HTTL = 7 * 864e5
+let hdisk = null
+let hsave
+
+function hload(){
+    if(hdisk) return hdisk
+
+    try{ hdisk = JSON.parse(localStorage.getItem(HKEY) || '{}') }
+    catch(e){ hdisk = {} }
+
+    return hdisk
+}
+
+function hget(k){
+    let c = hload()[k]
+
+    return c && c.t + HTTL > Date.now() ? c.i : null
+}
+
+function hput(k, j, ct){
+    try{
+        let ls = (j.images && j.images.logos) || []
+        let pick = ls.filter(function(x){ return x.iso_639_1 === 'ru' })[0] || ls.filter(function(x){ return x.iso_639_1 === 'en' })[0] || ls[0]
+        let pc = j.production_countries && j.production_countries[0] ? [{iso_3166_1: j.production_countries[0].iso_3166_1}] : []
+
+        hload()[k] = {t: Date.now(), i: {
+            id: j.id,
+            tagline: j.tagline || '',
+            release_date: j.release_date,
+            first_air_date: j.first_air_date,
+            production_countries: pc,
+            origin_country: j.origin_country && j.origin_country[0] ? [j.origin_country[0]] : [],
+            genres: (j.genres || []).slice(0, 3).map(function(x){ return {name: x.name} }),
+            status: j.status,
+            number_of_seasons: j.number_of_seasons,
+            number_of_episodes: j.number_of_episodes,
+            budget: j.budget,
+            overview: j.overview || '',
+            images: {logos: pick ? [{iso_639_1: pick.iso_639_1, file_path: pick.file_path}] : []},
+            _cert: ct || ''
+        }}
+
+        clearTimeout(hsave)
+
+        hsave = setTimeout(function(){
+            try{
+                let ks = Object.keys(hdisk)
+
+                if(ks.length > 600){
+                    ks.sort(function(a, b){ return hdisk[a].t - hdisk[b].t })
+                        .slice(0, ks.length - 600)
+                        .forEach(function(x){ delete hdisk[x] })
+                }
+
+                localStorage.setItem(HKEY, JSON.stringify(hdisk))
+            }
+            catch(e){}
+        }, 1000)
+    }
+    catch(e){}
+}
+
 export default function(main){
     try{
         let o = main.object || {}
@@ -27,6 +90,7 @@ export default function(main){
 
         let cert = function(info, kind){
             try{
+                if(info && info._cert !== undefined) return info._cert
                 if(kind === 'tv'){
                     let r = (info.content_ratings.results || []).filter(function(x){ return x.iso_3166_1 === 'RU' })[0]
                     return r ? r.rating : ''
@@ -124,12 +188,37 @@ export default function(main){
             if(d.episode_number !== undefined || d.still_path !== undefined) return /* imdbb_ep_guard */
             let k = ckey(d)
             if(cache[k]) return cb(cache[k])
+            let hc = hget(k)
+            if(hc){ cache[k] = hc; return cb(hc) }
             let kind = kindOf(d)
             let app = kind === 'tv' ? 'images,content_ratings' : 'images,release_dates'
             let url = L.TMDB.api(kind + '/' + d.id + '?api_key=' + L.TMDB.key() + '&language=ru&append_to_response=' + app + '&include_image_language=ru,en,null')
             fetch(url).then(function(r){ return r.json() }).then(function(j){
-                if(j && j.id){ cache[k] = j; cb(j) }
+                if(j && j.id){ cache[k] = j; hput(k, j, cert(j, kind)); cb(j) }
             }).catch(function(){})
+        }
+
+        let pf = {}
+        let prefetch = function(el){
+            try{
+                if(!el) return
+                let box = el.closest('.items-line') || el.parentNode
+                let all = Array.prototype.slice.call(box.querySelectorAll('.card'))
+                let ix = all.indexOf(el)
+                if(ix < 0) return
+                let list = all.slice(ix + 1, ix + 4)
+                if(ix > 0) list.push(all[ix - 1])
+                list.forEach(function(x, n){
+                    let d2 = x.card_data || (window.$ ? window.$(x).data('card') : null)
+                    if(!d2 || !d2.id || !(d2.title || d2.name)) return
+                    if(d2.episode_number !== undefined || d2.still_path !== undefined) return
+                    let k2 = ckey(d2)
+                    if(cache[k2] || pf[k2] || hget(k2)) return
+                    pf[k2] = 1
+                    setTimeout(function(){ load(d2, function(){}) }, 500 + n * 350)
+                })
+            }
+            catch(e){}
         }
 
         let upd = function(card, d){
@@ -138,7 +227,13 @@ export default function(main){
             try{ el = card.render(true) }catch(e){}
             cur = d
             curEl = el
-            render(d, cache[ckey(d)] || null, el, true)
+            let kk = ckey(d)
+            let ci = cache[kk] || hget(kk)
+            if(ci) cache[kk] = ci
+            let ep = d.episode_number !== undefined || d.still_path !== undefined
+            let wait = !ci && !ep
+            hero.classList.toggle('imdbb-hero--wait', wait)
+            render(d, ci || null, el, wait)
             clearTimeout(timer)
             clearTimeout(timer2)
             timer = setTimeout(function(){
@@ -147,8 +242,9 @@ export default function(main){
                     if(d.backdrop_path && L.Background) L.Background.change(L.TMDB.image('t/p/w1280' + d.backdrop_path))
                 }
                 catch(e){}
-                load(d, function(info){ if(cur === d) render(d, info, curEl) })
-                timer2 = setTimeout(function(){ if(cur === d) render(d, cache[ckey(d)] || null, curEl) }, 1800)
+                load(d, function(info){ if(cur === d){ render(d, info, curEl); hero.classList.remove('imdbb-hero--wait') } })
+                prefetch(curEl)
+                timer2 = setTimeout(function(){ if(cur === d){ render(d, cache[ckey(d)] || null, curEl); hero.classList.remove('imdbb-hero--wait') } }, 1800)
             }, 250)
         }
 
