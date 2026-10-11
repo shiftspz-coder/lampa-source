@@ -10,6 +10,7 @@ export default function(main){
         hero.className = 'imdbb-hero'
         hero.innerHTML = '<div class="imdbb-hero__logo"></div><div class="imdbb-hero__tag"></div><div class="imdbb-hero__meta"></div><div class="imdbb-hero__s"></div><div class="imdbb-hero__d"></div>'
         main.html.classList.add('imdbb-home')
+        main.html.classList.toggle('imdbb-nobadge', localStorage.getItem('imdbb_hide_badges') === 'true')
         main.html.insertBefore(hero, main.html.firstChild)
 
         let q = function(s){ return hero.querySelector(s) }

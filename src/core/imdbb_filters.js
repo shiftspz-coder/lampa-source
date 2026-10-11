@@ -126,6 +126,7 @@ function init(){
         L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_infinite', type: 'trigger', default: true}, field: {name: 'Бесконечные карточки', description: 'Ряды подгружаются до конца вместо кнопки «Ещё»'}})
 
         L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_wide', type: 'trigger', default: true}, field: {name: 'Горизонтальные карточки и блок информации', description: 'Главная на ТВ и в горизонтали, применяется при открытии главной'}})
+        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_hide_badges', type: 'trigger', default: false}, field: {name: 'Скрыть качество и IMDb на карточках главной', description: 'Они уже есть в блоке информации. Применяется при открытии главной'}})
 
 
         let cmp = function(){

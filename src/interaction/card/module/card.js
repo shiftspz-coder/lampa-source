@@ -8,7 +8,8 @@ export default {
         this.getPosterPath = ()=>{
             let src = ''
                 
-            if((this.params.style.name == 'wide' || (this.html && this.html.closest && this.html.closest('.imdbb-home'))) && this.data.backdrop_path) src = TMDB.img(this.data.backdrop_path, 'w780')
+            if(document.body.classList.contains('imdbb-search-wide') && this.data.backdrop_path && (this.data.release_date || this.data.first_air_date)){ src = TMDB.img(this.data.backdrop_path, 'w780'); try{ (this.html.classList ? this.html : this.html[0]).classList.add('imdbb-wc') }catch(e){} }
+            else if((this.params.style.name == 'wide' || (this.html && this.html.closest && this.html.closest('.imdbb-home'))) && this.data.backdrop_path) src = TMDB.img(this.data.backdrop_path, 'w780')
             else if(this.params.style.name == 'collection' && this.data.backdrop_path) src = TMDB.img(this.data.backdrop_path, 'w500')
             else if(this.data.poster_path)  src = TMDB.img(this.data.poster_path)
             else if(this.data.profile_path) src = TMDB.img(this.data.profile_path)

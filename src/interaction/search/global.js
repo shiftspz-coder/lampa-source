@@ -36,6 +36,7 @@ function open(use_params = {}){
 
     $('body').toggleClass('ambience--enable',true)
     $('body').toggleClass('search--open',true)
+    $('body').toggleClass('imdbb-search-wide', document.body.classList.contains('imdbb-compact') && localStorage.getItem('imdbb_wide') !== 'false')
 
     create()
     toggle()
@@ -200,6 +201,7 @@ function destroy(){
 
     $('body').toggleClass('ambience--enable',false)
     $('body').toggleClass('search--open',false)
+    $('body').toggleClass('imdbb-search-wide',false)
 
     if(params.onBack) params.onBack()
     else Controller.toggle('content')
