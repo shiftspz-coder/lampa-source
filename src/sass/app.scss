@@ -367,3 +367,20 @@ body.imdbb-compact .full-start-new__tagline{ display: block !important; max-widt
 body.imdbb-compact .full-start-new__title{ margin-bottom: 0 !important; }
 body.imdbb-compact .full-start-new__title img{ display: block !important; margin-top: 0 !important; margin-bottom: 0 !important; }
 body.imdbb-compact .full-start-new__tagline{ margin: .31em 0 .973em !important; }
+/* imdbb-layout-c1 */
+.imdbb-home{--imdbb-row:14em; position:relative; height:calc(100vh - 3.55em); overflow:hidden}
+.imdbb-home>.imdbb-hero{position:absolute; left:0; right:0; top:0; bottom:var(--imdbb-row); padding:0 3em .6em 3em; display:flex; flex-direction:column; justify-content:flex-end; pointer-events:none; text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.imdbb-hero__t{font-size:2.6em; font-weight:700; line-height:1.1}
+.imdbb-hero__m{margin-top:.5em; font-size:1.2em; color:#f5c518}
+.imdbb-hero__d{margin-top:.5em; max-width:62%; font-size:1.3em; line-height:1.4; color:rgba(255,255,255,.92); display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
+.imdbb-home>.scroll{position:absolute; left:0; right:0; bottom:0; height:var(--imdbb-row)}
+.imdbb-home>.scroll.scroll--mask{-webkit-mask-image:none; mask-image:none}
+.imdbb-home .items-line{padding-bottom:0; height:var(--imdbb-row); box-sizing:border-box}
+.imdbb-home .card{position:relative; width:16em}
+.imdbb-home .card__view{padding-bottom:56.25%; border-radius:.6em; overflow:hidden}
+.imdbb-home .card__img{object-fit:cover}
+.imdbb-home .card__age{display:none}
+.imdbb-home .card__title{position:absolute; left:0; right:0; bottom:0; z-index:2; margin:0; height:2em; line-height:2em; padding:0 3.8em 0 .6em; font-size:1.1em; background:rgba(0,0,0,.65); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-radius:0 0 .6em .6em}
+.imdbb-home .card__vote{top:auto!important; bottom:0!important; right:0!important; left:auto!important; z-index:3; height:2em; line-height:2em; padding:0 .6em!important; background:transparent!important; color:#f5c518!important; font-size:1.1em}
+.imdbb-home .card__vote span:first-child:not(:last-child){display:none}
+.imdbb-home .imdbb-ep{top:auto!important; bottom:2.4em!important}

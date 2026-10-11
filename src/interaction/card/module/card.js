@@ -8,7 +8,7 @@ export default {
         this.getPosterPath = ()=>{
             let src = ''
                 
-            if(this.params.style.name == 'wide' && this.data.backdrop_path) src = TMDB.img(this.data.backdrop_path, 'w780')
+            if((this.params.style.name == 'wide' || (this.html && this.html.closest && this.html.closest('.imdbb-home'))) && this.data.backdrop_path) src = TMDB.img(this.data.backdrop_path, 'w780')
             else if(this.params.style.name == 'collection' && this.data.backdrop_path) src = TMDB.img(this.data.backdrop_path, 'w500')
             else if(this.data.poster_path)  src = TMDB.img(this.data.poster_path)
             else if(this.data.profile_path) src = TMDB.img(this.data.profile_path)
