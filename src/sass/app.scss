@@ -457,3 +457,9 @@ html body.imdbb-search-wide .card.imdbb-nb-b .card__img{object-fit:contain!impor
 
 /* imdbb-budl */
 html body.imdbb-compact .imdbb-budl{white-space:nowrap}
+
+/* imdbb-layout-d1 */
+html body.imdbb-compact .full-start-new__details.imdbb-details-c{ min-height: 0 !important; margin-top: .764em !important; }
+html body.imdbb-compact .imdbb-ov{ margin-top: .619em !important; }
+html body.imdbb-compact .full-start-new__title, html body.imdbb-compact .full-start-new__title.twolines{ font-size: 2.8em !important; line-height: 1.1 !important; }
+html body.imdbb-compact .full-start-new__title img{ max-height: 2.5em !important; max-width: 8.571em !important; }
