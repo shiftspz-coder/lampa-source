@@ -404,8 +404,12 @@ body.imdbb-compact .full-start-new__tagline{ margin: .31em 0 .973em !important; 
 .imdbb-hero__fav{display:inline-flex; align-items:center; color:#fff}
 .imdbb-hero__fav svg{width:1em!important; height:1em!important}
 
-/* imdbb-layout-c8 */
-.imdbb-home{--imdbb-c8:1}
-.imdbb-home .card.focus .card__view::after{border-color:var(--imdbb-ring,#fff)!important}
-.imdbb-hero__r{color:var(--imdbb-btn,#f5c518)!important}
+/* imdbb-layout-c9 */
+.imdbb-home{--imdbb-c9:1}
+.imdbb-hero__r{color:#f5c518!important}
 .full-start-new__rate-line .rate--imdb > div{color:var(--imdbb-btn,#f5c518)!important; opacity:1!important; font-variant-numeric:tabular-nums}
+.imdbb-hero__d{max-width:none!important}
+.imdbb-hero__tag:empty + .imdbb-hero__meta{margin-top:.7em}
+.imdbb-home .items-line__title .full-person__photo{display:none!important}
+.imdbb-home .items-line__title .full-person{margin:0!important; padding:0!important; height:auto!important; min-height:0!important}
+.imdbb-home .items-line__title .full-person__body{margin:0!important; padding:0!important}

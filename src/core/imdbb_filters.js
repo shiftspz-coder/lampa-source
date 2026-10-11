@@ -127,7 +127,6 @@ function init(){
 
         L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_wide', type: 'trigger', default: true}, field: {name: 'Горизонтальные карточки и блок информации', description: 'Главная на ТВ и в горизонтали, применяется при открытии главной'}})
 
-        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_scroll', type: 'select', values: {'1': '1. Фокус в первом слоте', '2': '2. Фокус бежит (Netflix)'}, default: '1'}, field: {name: 'Скролл ряда', description: 'Временный выбор, чтобы сравнить'}})
 
         let cmp = function(){
             try{
