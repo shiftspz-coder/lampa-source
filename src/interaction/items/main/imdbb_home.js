@@ -1,6 +1,6 @@
 import {lgcached, lgput} from '../../card/module/ratting'
 
-const HKEY = 'imdbb_hd1'
+const HKEY = 'imdbb_hd2'
 const HTTL = 7 * 864e5
 let hdisk = null
 let hsave
@@ -38,6 +38,7 @@ function hput(k, j, ct){
             number_of_seasons: j.number_of_seasons,
             number_of_episodes: j.number_of_episodes,
             budget: j.budget,
+            runtime: j.runtime || 0,
             overview: j.overview || '',
             images: {logos: pick ? [{iso_639_1: pick.iso_639_1, file_path: pick.file_path}] : []},
             _cert: ct || ''
@@ -170,7 +171,8 @@ export default function(main){
             if(info){
                 let c = (info.production_countries && info.production_countries[0] && info.production_countries[0].iso_3166_1) || (info.origin_country && info.origin_country[0]) || ''
                 if(c) parts.push('<span>' + esc(MAP[c] || c) + '</span>')
-                let g = (info.genres || []).slice(0, 3).map(function(x){ return x.name }).join(', ')
+                if(info.runtime > 0){ let rm = info.runtime; parts.push('<span>' + ('0' + Math.floor(rm / 60)).slice(-2) + ':' + ('0' + (rm % 60)).slice(-2) + '</span>') }
+                let g = (info.genres || []).slice(0, 3).map(function(x){ let n = x.name + ''; return n.charAt(0).toUpperCase() + n.slice(1) }).join(', ')
                 if(g) parts.push('<span>' + esc(g) + '</span>')
             }
             q('.imdbb-hero__meta').innerHTML = parts.join('')
