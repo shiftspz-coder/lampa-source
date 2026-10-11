@@ -433,3 +433,9 @@ body.imdbb-compact .full-start-new__rate-line .rate--imdb > div{font-size:inheri
 body .imdbb-q,body .imdbb-hero__q,body.imdbb-compact .full-start-new__rate-line .imdbb-cq{display:inline-flex!important; align-items:center!important; gap:.25em!important}
 body .imdbb-q svg,body .imdbb-hero__q svg,body .imdbb-cq svg{vertical-align:middle!important; margin:0!important; flex:none!important}
 body .imdbb-dub{display:inline-flex!important; align-items:center!important}
+
+/* imdbb-lgsearch */
+body.imdbb-search-wide.imdbb-lg-a .card.imdbb-wc.imdbb-lgd .card__title,
+body.imdbb-search-wide.imdbb-lg-a .card.imdbb-wc.imdbb-lgd .card__age,
+body.imdbb-search-wide.imdbb-lg-b .card.imdbb-wc.imdbb-lgd .card__title,
+body.imdbb-search-wide.imdbb-lg-b .card.imdbb-wc.imdbb-lgd .card__age{display:none!important}

@@ -46,7 +46,6 @@ function css(){
         '.imdbb-lgw{display:none;position:absolute;left:0;right:0;top:0;bottom:0;z-index:2;pointer-events:none;border-radius:.6em}' +
         'body.imdbb-lg-a .imdbb-lgw,body.imdbb-lg-b .imdbb-lgw,body.imdbb-lg-c .imdbb-lgw{display:block}' +
         'body.imdbb-lg-c .card:not(.focus) .imdbb-lgw{display:none}' +
-        'body.imdbb-lg-a .imdbb-lgw::before,body.imdbb-lg-c .imdbb-lgw::before{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:rgba(0,0,0,.45);border-radius:0 0 .6em .6em}' +
         '.imdbb-lgi{position:absolute;max-width:55%;max-height:2.4em;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.85))}' +
         '.imdbb-lgt{position:absolute;max-width:55%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#fff;font-weight:700;font-size:.95em;text-shadow:0 1px 3px rgba(0,0,0,.85)}' +
         'body.imdbb-lg-a .imdbb-lgi,body.imdbb-lg-c .imdbb-lgi,body.imdbb-lg-a .imdbb-lgt,body.imdbb-lg-c .imdbb-lgt{left:.6em;bottom:.5em}' +
@@ -443,7 +442,10 @@ function lgPaint(el, view, d, kind){
     let m = lgMode()
     let ex = view.find('.imdbb-lgw')
 
-    if(m === 'off' || !el.closest('.imdbb-home')){
+    let ok = $(el).closest('.imdbb-home').length || $(el).hasClass('imdbb-wc')
+
+    if(m === 'off' || !ok){
+        $(el).removeClass('imdbb-lgd')
         ex.remove()
         return
     }
@@ -463,6 +465,8 @@ function lgPaint(el, view, d, kind){
 
     let name = d.title || d.name || ''
     let sig = c.p || ('T:' + name)
+
+    $(el).addClass('imdbb-lgd')
 
     if(ex.length && ex.attr('data-s') === sig) return
 
