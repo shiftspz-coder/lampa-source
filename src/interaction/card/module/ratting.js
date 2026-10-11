@@ -42,7 +42,16 @@ function css(){
         '.card__type{left:.5em!important;top:.5em!important;right:auto!important;background:rgba(0,0,0,.62)!important;color:#fff!important;font-weight:700!important;font-size:.9em!important;line-height:1.3!important;padding:.05em .45em!important;border-radius:.4em!important;text-transform:none!important}' +
         '.card__view:has(.imdbb-q) .card__type{top:2.3em!important}' +
         '.imdbb-ep{position:absolute;left:.5em;top:2.3em;z-index:2;background:rgba(0,0,0,.62);color:#fff;font-weight:700;font-size:.9em;line-height:1.3;padding:.05em .45em;border-radius:.4em;white-space:nowrap}' +
-        '.card__view:has(.imdbb-q) .imdbb-ep{top:4.1em}'
+        '.card__view:has(.imdbb-q) .imdbb-ep{top:4.1em}' +
+        '.imdbb-lgw{display:none;position:absolute;left:0;right:0;top:0;bottom:0;z-index:2;pointer-events:none;border-radius:.6em}' +
+        'body.imdbb-lg-a .imdbb-lgw,body.imdbb-lg-b .imdbb-lgw,body.imdbb-lg-c .imdbb-lgw{display:block}' +
+        'body.imdbb-lg-c .card:not(.focus) .imdbb-lgw{display:none}' +
+        'body.imdbb-lg-a .imdbb-lgw::before,body.imdbb-lg-c .imdbb-lgw::before{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:rgba(0,0,0,.45);border-radius:0 0 .6em .6em}' +
+        '.imdbb-lgi{position:absolute;max-width:55%;max-height:2.4em;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.85))}' +
+        '.imdbb-lgt{position:absolute;max-width:55%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#fff;font-weight:700;font-size:.95em;text-shadow:0 1px 3px rgba(0,0,0,.85)}' +
+        'body.imdbb-lg-a .imdbb-lgi,body.imdbb-lg-c .imdbb-lgi,body.imdbb-lg-a .imdbb-lgt,body.imdbb-lg-c .imdbb-lgt{left:.6em;bottom:.5em}' +
+        'body.imdbb-lg-b .imdbb-lgi{left:50%;top:50%;transform:translate(-50%,-50%);max-width:62%;max-height:3.6em}' +
+        'body.imdbb-lg-b .imdbb-lgt{left:50%;top:50%;transform:translate(-50%,-50%);max-width:70%;font-size:1.1em;text-align:center}'
 
     document.head.appendChild(st)
 }
@@ -322,6 +331,8 @@ function run(){
             }
 
             if(kind === 'tv') epPaint(el, view, d)
+
+            lgPaint(el, view, d, kind)
         }
 
         let types = document.querySelectorAll('.card__type')
@@ -331,6 +342,138 @@ function run(){
         }
     }
     catch(e){}
+}
+
+const LKEY = 'imdbb_lg1'
+const LTTL = 7 * 864e5
+let lcache = null
+let lsave = null
+let lq = []
+let lact = 0
+const lpend = {}
+
+function lload(){
+    if(lcache) return lcache
+
+    try{ lcache = JSON.parse(localStorage.getItem(LKEY) || '{}') }
+    catch(e){ lcache = {} }
+
+    return lcache
+}
+
+function lsaveLater(){
+    clearTimeout(lsave)
+
+    lsave = setTimeout(function(){
+        try{
+            let k = Object.keys(lcache)
+
+            if(k.length > 1500){
+                k.sort(function(a, b){ return lcache[a].t - lcache[b].t })
+                    .slice(0, k.length - 1500)
+                    .forEach(function(x){ delete lcache[x] })
+            }
+
+            localStorage.setItem(LKEY, JSON.stringify(lcache))
+        }
+        catch(e){}
+    }, 1000)
+}
+
+function lget(k){
+    let c = lload()[k]
+
+    return c && c.t + LTTL > Date.now() ? c : null
+}
+
+function lgMode(){
+    let m = 'a'
+
+    try{ m = window.Lampa.Storage.get('imdbb_logo_mode', 'a') }
+    catch(e){}
+
+    ;['a', 'b', 'c'].forEach(function(x){ document.body.classList.toggle('imdbb-lg-' + x, m === x) })
+
+    return m
+}
+
+function lnext(){
+    if(lact >= 3 || !lq.length) return
+
+    let j = lq.shift()
+    let L = window.Lampa
+    let lang = L.Storage.get('language', 'ru')
+    let x = new XMLHttpRequest()
+
+    lact++
+
+    let done = function(p, bad){
+        lact--
+
+        delete lpend[j.k]
+
+        lload()[j.k] = {p: p, t: bad ? Date.now() - LTTL + 300e3 : Date.now()}
+
+        lsaveLater()
+
+        setTimeout(run, 50)
+        setTimeout(lnext, 50)
+    }
+
+    x.open('GET', L.TMDB.api(j.kind + '/' + j.id + '/images?api_key=' + L.TMDB.key() + '&include_image_language=' + lang + ',en,null'), true)
+    x.timeout = 15000
+    x.onload = function(){
+        let p = ''
+
+        try{
+            let all = JSON.parse(x.responseText).logos || []
+            let pick = all.filter(function(a){ return a.iso_639_1 === lang })[0] || all.filter(function(a){ return a.iso_639_1 === 'en' })[0] || all[0]
+
+            if(pick && pick.file_path) p = pick.file_path.replace('.svg', '.png')
+        }
+        catch(e){}
+
+        done(p, false)
+    }
+    x.onerror = x.ontimeout = function(){ done('', true) }
+    x.send()
+}
+
+function lgPaint(el, view, d, kind){
+    let m = lgMode()
+    let ex = view.find('.imdbb-lgw')
+
+    if(m === 'off' || !el.closest('.imdbb-home')){
+        ex.remove()
+        return
+    }
+
+    let k = kind + ':' + d.id
+    let c = lget(k)
+
+    if(!c){
+        if(!lpend[k] && visible(el)){
+            lpend[k] = 1
+            lq.push({k: k, kind: kind, id: d.id})
+            lnext()
+        }
+
+        return
+    }
+
+    let name = d.title || d.name || ''
+    let sig = c.p || ('T:' + name)
+
+    if(ex.length && ex.attr('data-s') === sig) return
+
+    ex.remove()
+
+    let w = $('<div class="imdbb-lgw"></div>').attr('data-s', sig)
+
+    if(c.p) w.append($('<img class="imdbb-lgi">').attr('src', window.Lampa.TMDB.image('t/p/w300' + c.p)))
+    else w.append($('<span class="imdbb-lgt"></span>').text(name))
+
+    view.append(w)
 }
 
 function schedule(){

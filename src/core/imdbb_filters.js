@@ -167,6 +167,12 @@ function init(){
             field: {name: 'Скрыть кнопку «Ещё»', description: 'Кнопка с тремя точками в карточке (действует при следующем открытии карточки)'}
         })
 
+        L.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: 'imdbb_logo_mode', type: 'select', values: {off: 'Выкл', a: 'А: снизу слева', b: 'Б: по центру', c: 'В: только в фокусе'}, default: 'a'},
+            field: {name: 'Логотипы на карточках в ряду', description: 'Временно для проверки трёх вариантов. Только главная. Без логотипа показывается название.'}
+        })
+
         cmp()
         setTimeout(cmp, 1000)
         window.addEventListener('resize', cmp)
