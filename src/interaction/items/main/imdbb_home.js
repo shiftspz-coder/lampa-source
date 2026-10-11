@@ -1,3 +1,5 @@
+import {lgcached, lgput} from '../../card/module/ratting'
+
 export default function(main){
     try{
         let o = main.object || {}
@@ -37,15 +39,25 @@ export default function(main){
             catch(e){ return '' }
         }
 
-        let render = function(d, info, el){
+        let render = function(d, info, el, wait){
             let kind = kindOf(d)
             let title = d.title || d.name || ''
 
             let logo = ''
-            if(info && info.images && info.images.logos && info.images.logos.length){
+            let known = false
+            if(info && info.images && info.images.logos){
+                known = true
                 let ls = info.images.logos
                 let pick = ls.filter(function(x){ return x.iso_639_1 === 'ru' })[0] || ls.filter(function(x){ return x.iso_639_1 === 'en' })[0] || ls[0]
                 if(pick && pick.file_path) logo = L.TMDB.image('t/p/w500' + pick.file_path)
+                if(!lgcached(d)) lgput(d, pick && pick.file_path ? pick.file_path.replace('.svg', '.png') : '')
+            }
+            else if(!info){
+                let cp = lgcached(d)
+                if(cp){
+                    known = true
+                    if(cp.p) logo = L.TMDB.image('t/p/w500' + cp.p)
+                }
             }
             let lg = q('.imdbb-hero__logo')
             if(logo){
@@ -55,6 +67,12 @@ export default function(main){
                     let im = lg.firstChild
                     im.onerror = function(){ lg.innerHTML = '<div class="imdbb-hero__t">' + esc(title) + '</div>' }
                     im.src = logo
+                }
+            }
+            else if(wait && !known){
+                if(lg.getAttribute('data-src') !== 'imdbb-wait:' + title){
+                    lg.setAttribute('data-src', 'imdbb-wait:' + title)
+                    lg.innerHTML = ''
                 }
             }
             else if(lg.getAttribute('data-src') !== 'T:' + title){
@@ -120,7 +138,7 @@ export default function(main){
             try{ el = card.render(true) }catch(e){}
             cur = d
             curEl = el
-            render(d, cache[ckey(d)] || null, el)
+            render(d, cache[ckey(d)] || null, el, true)
             clearTimeout(timer)
             clearTimeout(timer2)
             timer = setTimeout(function(){

@@ -509,6 +509,24 @@ export function qcached(m){
     return c && c.v && c.v.q ? c.v.q : null
 }
 
+export function lgcached(m){
+    if(!m || !m.id) return null
+
+    return lget(kindOf(m) + ':' + m.id)
+}
+
+export function lgput(m, p){
+    if(!m || !m.id) return
+
+    let k = kindOf(m) + ':' + m.id
+
+    if(lget(k)) return
+
+    lload()[k] = {p: p || '', t: Date.now()}
+
+    lsaveLater()
+}
+
 export default {
     onCreate: function(){
         start()
