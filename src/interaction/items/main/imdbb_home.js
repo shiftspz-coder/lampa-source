@@ -66,11 +66,12 @@ function hput(k, j, ct){
 export default function(main){
     try{
         let o = main.object || {}
-        if(['main','category'].indexOf(o.component) < 0) return
+        if(['main','category','bookmarks'].indexOf(o.component) < 0) return
         if(!document.body.classList.contains('imdbb-compact')) return
         if(localStorage.getItem('imdbb_wide') === 'false') return
 
         let L = window.Lampa
+        let isBm = o.component === 'bookmarks'
         let hero = document.createElement('div')
         hero.className = 'imdbb-hero'
         hero.innerHTML = '<div class="imdbb-hero__logo"></div><div class="imdbb-hero__tag"></div><div class="imdbb-hero__meta"></div><div class="imdbb-hero__s"></div><div class="imdbb-hero__d"></div>'
@@ -222,7 +223,18 @@ export default function(main){
         }
 
         let upd = function(card, d){
-            if(!d || !(d.title || d.name)) return
+            if(!d) return
+            if(!d.id){
+                if(isBm){
+                    cur = null
+                    clearTimeout(timer)
+                    clearTimeout(timer2)
+                    hero.setAttribute('data-imdbb-bm', '1')
+                    hero.classList.add('imdbb-hero--wait')
+                }
+                return
+            }
+            if(!(d.title || d.name)) return
             let el = null
             try{ el = card.render(true) }catch(e){}
             cur = d
@@ -239,7 +251,7 @@ export default function(main){
             timer = setTimeout(function(){
                 if(cur !== d) return
                 try{
-                    if(d.backdrop_path && L.Background) L.Background.change(L.TMDB.image('t/p/w1280' + d.backdrop_path))
+                    if(d.backdrop_path && L.Background && !isBm) L.Background.change(L.TMDB.image('t/p/w1280' + d.backdrop_path))
                 }
                 catch(e){}
                 load(d, function(info){ if(cur === d){ render(d, info, curEl); hero.classList.remove('imdbb-hero--wait') } })

@@ -6,6 +6,7 @@ import LineModule from '../items/line/module/module'
 import Lang from '../../core/lang'
 import Cache from '../../utils/cache'
 import Router from '../../core/router'
+import Background from '../background'
 import Utils from '../../utils/utils'
 import Template from '../template'
 
@@ -147,6 +148,9 @@ function Results(source){
             },
             onInstance: (item, item_data)=>{
                 item.use({
+                    onFocus: ()=>{
+                        try{ Background.change(Utils.cardImgBackground(item_data)) }catch(e){}
+                    },
                     onEnter: ()=>{
                         if(source.onSelect){
                             source.onSelect({data, line, query, element: item_data, item_data},()=>{
