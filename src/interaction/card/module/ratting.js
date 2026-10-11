@@ -502,6 +502,14 @@ export function qcached(m){
     return c && c.v && c.v.q ? c.v.q : null
 }
 
+export function qlabel(m){
+    if(!m || !m.id) return ''
+
+    let c = qget(kindOf(m) + ':' + m.id)
+
+    return c && c.v ? label(c.v) : ''
+}
+
 export function lgcached(m){
     if(!m || !m.id) return null
 

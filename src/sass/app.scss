@@ -469,3 +469,9 @@ html body.imdbb-compact .full-start-new{ padding-left: 3em !important; padding-r
 html body.imdbb-compact .full-start-new__details.imdbb-details-c{ font-size: 1.15em !important; margin: .7304em 0 0 !important; }
 html body.imdbb-compact .full-start-new__details.imdbb-details-c > *{ margin-left: 0 !important; margin-right: 0 !important; }
 html body.imdbb-compact .full-start-new__details.imdbb-details-c > .imdbb-bul{ font-size: 1em !important; margin-left: .2739em !important; margin-right: .2739em !important; }
+
+/* imdbb-stub */
+.imdbb-sh{position:relative}
+.imdbb-stub{--imdbb-stub-b:14em; position:absolute; left:0; right:0; top:0; height:calc(100vh - 3.55em); box-sizing:border-box; padding:0 3em var(--imdbb-stub-b) 3em; display:flex; flex-direction:column; justify-content:flex-end; z-index:2; pointer-events:none}
+html body .activity.imdbb-noanim .activity__body{animation:none!important}
+html body .activity.imdbb-noanim .full-start__background.loaded{animation:none!important}

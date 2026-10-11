@@ -22,6 +22,7 @@ import Permit from '../core/account/permit'
 import TMDB from '../core/api/sources/tmdb'
 import VPN from '../core/vpn'
 import Keys from '../core/tmdb/keys'
+import ImdbbStub from '../interaction/items/main/imdbb_stub'
 
 let components = {
     start: Start,
@@ -54,6 +55,7 @@ function component(object){
             this.rows = ['start', 'description']
 
             this.html.addClass('layer--wheight')
+            ImdbbStub.show(this, object)
 
             Api.full(object, (data)=>{
                 if(!data.movie) return this.emit('error', {empty: true})
@@ -312,6 +314,7 @@ if(document.body.classList.contains('imdbb-compact')){ this.rows = this.rows.fil
             }
 
             // Вызываем пустой экран
+            ImdbbStub.hide(this)
             this.empty(status)
         }
     })
