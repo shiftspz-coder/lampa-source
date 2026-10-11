@@ -413,3 +413,7 @@ body.imdbb-compact .full-start-new__tagline{ margin: .31em 0 .973em !important; 
 .imdbb-home .items-line__title .full-person__photo{display:none!important}
 .imdbb-home .items-line__title .full-person{margin:0!important; padding:0!important; height:auto!important; min-height:0!important}
 .imdbb-home .items-line__title .full-person__body{margin:0!important; padding:0!important}
+
+/* imdbb-layout-c10 */
+.imdbb-compact-c10{--imdbb-c10:1}
+body.imdbb-compact .full-start-new__title + .full-start-new__rate-line{margin-top:1.12em!important}
