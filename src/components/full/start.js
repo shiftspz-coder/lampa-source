@@ -76,15 +76,7 @@ class Start extends Emit {
             let t = v.q === '1080' ? 'FHD' : v.q
             let d = ''
 
-            if(v.q !== 'TS' && v.dub){
-                if(typeof v.dub === 'object'){
-                    let s = Object.keys(v.dub).map(Number).sort(function(a, b){ return a - b }).pop()
-                    let n = v.dub[s]
-
-                    d = DUB + (n >= 99 ? '' : ' ' + n)
-                }
-                else d = DUB
-            }
+            if(v.q !== 'TS' && v.dub) d = DUB
 
             this.html.find('.imdbb-cq').remove()
 

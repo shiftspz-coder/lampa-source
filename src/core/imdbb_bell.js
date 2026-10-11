@@ -39,24 +39,11 @@ function kindOf(m){
 }
 
 function dcode(d){
-    if(!d) return 0
-    if(typeof d !== 'object') return 1
-
-    let ks = Object.keys(d).map(Number).filter(function(n){ return n > 0 })
-
-    if(!ks.length) return 1
-
-    let s = Math.max.apply(null, ks)
-
-    return s * 100 + Math.min(parseInt(d[s]) || 0, 99)
+    return d ? 1 : 0
 }
 
 function dtext(c){
-    if(c < 100) return '🗣️ Появился дубляж'
-
-    let s = Math.floor(c / 100), n = c % 100
-
-    return n >= 99 ? '🗣️ Дубляж: S' + s + ' полностью' : '🗣️ Дубляж: S' + s + ' · E' + n
+    return '🗣️ Появился дубляж'
 }
 
 function fetchQ(card, cb){

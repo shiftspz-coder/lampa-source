@@ -7,6 +7,7 @@ const QKEY = 'imdbb_q1'
 const EKEY = 'imdbb_ep_f1'
 const ETTL = 6 * 3600e3
 const MAXQ = 3
+window.__imdbbNoDubNum = true
 const DUB = '<span class="imdbb-dub"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.15em"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></span>'
 const pend = {}
 const epend = {}
@@ -265,15 +266,7 @@ function label(v){
 
     let t = v.q === '1080' ? 'FHD' : v.q
 
-    if(v.q !== 'TS' && v.dub){
-        if(typeof v.dub === 'object'){
-            let s = Object.keys(v.dub).map(Number).sort(function(a, b){ return a - b }).pop()
-            let n = v.dub[s]
-
-            t += ' ' + DUB + (n >= 99 ? '' : ' ' + n)
-        }
-        else t += ' ' + DUB
-    }
+    if(v.q !== 'TS' && v.dub) t += ' ' + DUB
 
     return t
 }
