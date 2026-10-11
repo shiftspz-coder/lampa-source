@@ -384,3 +384,9 @@ body.imdbb-compact .full-start-new__tagline{ margin: .31em 0 .973em !important; 
 .imdbb-home .card__vote{top:auto!important; bottom:0!important; right:0!important; left:auto!important; z-index:3; height:2em; line-height:2em; padding:0 .6em!important; background:transparent!important; color:#f5c518!important; font-size:1.1em}
 .imdbb-home .card__vote span:first-child:not(:last-child){display:none}
 .imdbb-home .imdbb-ep{top:auto!important; bottom:2.4em!important}
+/* imdbb-layout-c2 */
+.imdbb-home{--imdbb-c2:1; --imdbb-row:14em}
+.imdbb-home>.imdbb-hero{z-index:0}
+.imdbb-home>.scroll{position:absolute!important; left:0!important; right:0!important; bottom:0!important; top:auto!important; height:var(--imdbb-row)!important; z-index:1; overflow:hidden}
+.imdbb-home>.scroll .scroll__content{padding:0!important}
+.imdbb-home>.scroll .items-line{padding-bottom:0!important; margin:0!important}
