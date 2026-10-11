@@ -336,7 +336,7 @@ body.imdbb-compact .imdbb-p{ border-radius: .8em; }
 body.imdbb-compact .imdbb-p.focus .imdbb-av{ box-shadow: 0 0 0 .22em #fff; }
 
 /* imdbb-layout-b18 */
-.full-start-new__rate-line .rate--imdb > div:first-child{ color: var(--imdbb-btn,#f5c518) !important; }
+.full-start-new__rate-line .rate--imdb > div:first-child{ color: #f5c518 !important; }
 body.imdbb-compact .full-start-new__reactions .reaction--voted .reaction__count{ color: var(--imdbb-btn,#f5c518) !important; }
 
 /* imdbb-layout-b17 */
@@ -407,7 +407,7 @@ body.imdbb-compact .full-start-new__tagline{ margin: .31em 0 .973em !important; 
 /* imdbb-layout-c9 */
 .imdbb-home{--imdbb-c9:1}
 .imdbb-hero__r{color:#f5c518!important}
-.full-start-new__rate-line .rate--imdb > div{color:var(--imdbb-btn,#f5c518)!important; opacity:1!important; font-variant-numeric:tabular-nums}
+.full-start-new__rate-line .rate--imdb > div{color:#f5c518!important; opacity:1!important; font-variant-numeric:tabular-nums}
 .imdbb-hero__d{max-width:none!important}
 .imdbb-hero__tag:empty + .imdbb-hero__meta{margin-top:.7em}
 .imdbb-home .items-line__title .full-person__photo{display:none!important}
@@ -417,10 +417,20 @@ body.imdbb-compact .full-start-new__tagline{ margin: .31em 0 .973em !important; 
 /* imdbb-layout-c10 */
 .imdbb-compact-c10{--imdbb-c10:1}
 body.imdbb-compact .full-start-new__title + .full-start-new__rate-line{margin-top:1.12em!important}
-\n\n/* imdbb-layout-c11 */
+
+/* imdbb-layout-c11 */
 .imdbb-search-wide{--imdbb-c11:1}
 .imdbb-search-wide .card.imdbb-wc{width:16em}
 .imdbb-search-wide .card.imdbb-wc .card__view{padding-bottom:56.25%; border-radius:.6em; overflow:visible!important}
 .imdbb-search-wide .card.imdbb-wc .card__img{object-fit:cover; border-radius:.6em}
 .imdbb-search-wide .card.imdbb-wc .card__title{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .imdbb-home.imdbb-nobadge .card__vote,.imdbb-home.imdbb-nobadge .imdbb-q{display:none!important}
+.imdbb-home.imdbb-nobadge .imdbb-hero__s{display:none!important}
+
+/* imdbb-layout-c12 */
+body.imdbb-compact{--imdbb-c12:1}
+body.imdbb-compact .full-start-new__rate-line .rate--imdb{display:inline-flex!important; align-items:baseline!important; gap:.3em!important; font-size:1.12em!important}
+body.imdbb-compact .full-start-new__rate-line .rate--imdb > div{font-size:inherit!important; font-weight:inherit!important; line-height:1.2!important; margin:0!important; padding:0!important; width:auto!important; height:auto!important; min-width:0!important; background:none!important; color:#f5c518!important; opacity:1!important; text-transform:none!important; font-variant-numeric:tabular-nums}
+body .imdbb-q,body .imdbb-hero__q,body.imdbb-compact .full-start-new__rate-line .imdbb-cq{display:inline-flex!important; align-items:center!important; gap:.25em!important}
+body .imdbb-q svg,body .imdbb-hero__q svg,body .imdbb-cq svg{vertical-align:middle!important; margin:0!important; flex:none!important}
+body .imdbb-dub{display:inline-flex!important; align-items:center!important}
