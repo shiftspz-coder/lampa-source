@@ -392,3 +392,14 @@ body.imdbb-compact .full-start-new__tagline{ margin: .31em 0 .973em !important; 
 .imdbb-home .card__img{object-fit:cover}
 .imdbb-home .card__title,.imdbb-home .card__age{display:none!important}
 .imdbb-home .card__vote{top:auto!important; bottom:.5em!important; right:.5em!important; left:auto!important; z-index:3}
+
+/* imdbb-layout-c6 */
+.imdbb-home{--imdbb-c6:1}
+.imdbb-home .card__view{overflow:visible!important}
+.imdbb-home .card__img{border-radius:.6em}
+.imdbb-home .card__icons{display:none!important}
+.imdbb-home .items-line__body>.scroll{margin-left:var(--imdbb-x)!important; overflow:visible!important; clip-path:inset(-1em 0 -1em -.85em)}
+.imdbb-home .items-line__body .scroll__content{padding:.9em 0!important}
+.imdbb-hero__d{display:block!important; -webkit-line-clamp:unset!important; overflow:visible!important}
+.imdbb-hero__fav{display:inline-flex; align-items:center; color:#fff}
+.imdbb-hero__fav svg{width:1em!important; height:1em!important}

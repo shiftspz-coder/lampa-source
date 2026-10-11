@@ -101,6 +101,7 @@ export default function(main){
         }
 
         let load = function(d, cb){
+            if(d.episode_number !== undefined || d.still_path !== undefined) return /* imdbb_ep_guard */
             let k = ckey(d)
             if(cache[k]) return cb(cache[k])
             let kind = kindOf(d)

@@ -1,5 +1,6 @@
 import Scroll from '../../scroll'
 import ImdbbHome from './imdbb_home'
+import ImdbbHome2 from './imdbb_home2'
 import Controller from '../../../core/controller'
 import Emit from '../../../utils/emit'
 import Arrays from '../../../utils/arrays'
@@ -26,6 +27,7 @@ class Main extends Emit{
 
         this.html.append(this.scroll.render(true))
         ImdbbHome(this)
+        ImdbbHome2(this)
 
         this.emit('create')
     }
