@@ -355,3 +355,7 @@ html body.imdbb-compact .full-start-new__details.imdbb-details-c{ margin: 1.418e
 html body.imdbb-compact .full-start-new__details.imdbb-details-c > *{ margin-top: 0 !important; margin-bottom: 0 !important; }
 html body.imdbb-compact .full-start-new__rate-line{ margin-bottom: 0 !important; }
 html body.imdbb-compact .imdbb-ov{ margin-top: 1.2em !important; margin-bottom: 1.2em !important; }
+
+/* imdbb-layout-b23 */
+body.imdbb-compact .imdbb-ppl{ position: relative; width: calc(100% + .8em); box-sizing: border-box; overflow: hidden; padding: .4em; margin: 1.2em -.4em -.4em -.4em !important; scroll-behavior: smooth; }
+body.imdbb-compact .imdbb-ppl > *{ flex: 0 0 auto; }
