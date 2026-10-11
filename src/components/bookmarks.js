@@ -38,40 +38,17 @@ function component(object){
             let premium  = Account.hasPremium()
             let sync     = Account.Permit.sync
 
-            lines.push({
-                results: [],
-                params: {
-                    module: LineModule.toggle(LineModule.MASK.base, 'More', 'Event'),
-                    items: {
-                        view: 20
-                    }
-                }
-            })
+            let order = ['book','like','wath','look','scheduled','viewed','continued','thrown']
 
-            // Добавляем категории
-            category.forEach(a=>{
-                if(all[a].length){
-                    lines[0].results.push({
-                        title: Lang.translate('title_' + a),
-                        count: all[a].length,
-                        limit: sync ? (premium ? 2000 : 500) : 0,
-                        params: {
-                            module: RegisterModule.only('Line', 'Callback'),
-                            createInstance: (item)=> new Register(item),
-                            emit: {
-                                onEnter: Router.call.bind(Router, 'favorite', {type: a})
-                            }
-                        }
-                    })
-                }
-            })
+            order.forEach(a=>{
+                if(!all[a] || !all[a].length) return
 
-            if(lines[0].results.length == 0) lines = []
+                media.forEach(m=>{
+                    let part = all[a].filter(c=> m === 'tv' ? !!c.name : !c.name)
 
-            // Добавляем карточки
-            category.forEach(a=>{
-                if(all[a].length){
-                    let items = Arrays.clone(all[a].slice(0,20))
+                    if(!part.length) return
+
+                    let items = Arrays.clone(part)
 
                     items.forEach(item=>{
                         item.params = {
@@ -84,50 +61,17 @@ function component(object){
                         }
                     })
 
-                    // Если есть папки, то добавляем их
-                    if(folders.indexOf(a) > -1){
-                        let i = 0
-
-                        media.forEach(m=>{
-                            let filter = Utils.filterCardsByType(all[a], m)
-
-                            if(filter.length){
-                                Arrays.insert(items, i, {
-                                    results: filter,
-                                    media: m,
-                                    params: {
-                                        module: CardModule.only('Folder', 'Callback'),
-                                        emit: {
-                                            onEnter: Router.call.bind(Router, 'favorite', {
-                                                title : Lang.translate('title_' + a) + ' - ' + Lang.translate('menu_' + m),
-                                                type: a, 
-                                                filter: m
-                                            }),
-                                            onFocus: ()=>{
-                                                Background.change(Utils.cardImgBackground(filter[0]))
-                                            }
-                                        }
-                                    }
-                                })
-
-                                i++
-                            }
-                        })
-                    }
-
                     lines.push({
-                        title: Lang.translate('title_' + a),
+                        title: Lang.translate('title_' + a) + ' - ' + Lang.translate('menu_' + m),
                         results: items,
                         type: a,
-                        total_pages: all[a].length > 20 ? Math.ceil(all[a].length / 20) : 1,
+                        total_pages: 1,
+                        imdbb_rows: 'imdbb-bmrows',
                         params: {
-                            module: LineModule.toggle(LineModule.MASK.base, 'Event'),
-                            emit: {
-                                onMore: Router.call.bind(Router, 'favorite', {type: a, page: 2})
-                            }
+                            module: LineModule.toggle(LineModule.MASK.base, 'Event')
                         }
                     })
-                }
+                })
             })
 
             ContentRows.call('bookmarks', {}, lines)
