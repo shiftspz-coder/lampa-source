@@ -77,6 +77,22 @@ function build(d){
     return el
 }
 
+function cal(h){
+    try{
+        let s = h.querySelector('.imdbb-stub')
+        let a = s && s.querySelector('.imdbb-hero__d')
+        let b = h.querySelector('.imdbb-ov')
+        if(!a || !b) return
+        let ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect()
+        if(!ra.height || !rb.height) return
+        let fp = parseFloat(getComputedStyle(document.body).fontSize) || 16
+        let cur = parseFloat(getComputedStyle(s).paddingBottom) / fp
+        let nv = cur + (ra.bottom - rb.bottom) / fp
+        if(nv > 0 && nv < 40) localStorage.setItem('imdbb_stub_b', nv.toFixed(2))
+    }
+    catch(e){}
+}
+
 function hide(comp){
     try{
         let h = dom(comp)
@@ -94,7 +110,10 @@ function show(comp, object){
         if(!d || !d.id || !(d.title || d.name)) return
         let h = dom(comp)
         h.classList.add('imdbb-sh')
-        h.appendChild(build(d))
+        let se = build(d)
+        let sv = parseFloat(localStorage.getItem('imdbb_stub_b'))
+        if(sv > 0 && sv < 40) se.style.setProperty('--imdbb-stub-b', sv + 'em')
+        h.appendChild(se)
         comp.activity.loader(false)
         let sl = comp.activity.slide
         if(sl && sl.addClass) sl.addClass('imdbb-noanim')
@@ -102,7 +121,7 @@ function show(comp, object){
         h.__stubT = setInterval(function(){
             n++
             let fs = h.querySelector('.full-start-new')
-            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)) hide(comp)
+            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66) cal(h); hide(comp) }
         }, 120)
     }
     catch(e){ console.warn('imdbb_stub', e.message) }
