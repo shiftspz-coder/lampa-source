@@ -77,6 +77,27 @@ function build(d){
     return el
 }
 
+function probe(h){
+    try{
+        if(localStorage.getItem('imdbb_probe') === 'done') return
+        let pairs = [['лого','.imdbb-hero__logo img, .imdbb-hero__logo .imdbb-hero__t','.full-start-new__title img, .full-start-new__title'],['слоган','.imdbb-hero__tag','.full-start-new__tagline'],['мета','.imdbb-hero__meta','.full-start-new__rate-line'],['сезоны','.imdbb-hero__s','.imdbb-details-c'],['опис','.imdbb-hero__d','.imdbb-ov']]
+        let m = function(root, sel){
+            let e = root && root.querySelector(sel)
+            if(!e) return '-'
+            let r = e.getBoundingClientRect()
+            return Math.round(r.top) + '/' + Math.round(r.height) + '/' + Math.round(parseFloat(getComputedStyle(e).fontSize)) + '/x' + Math.round(r.left)
+        }
+        let st = h.querySelector('.imdbb-stub')
+        let fs = h.querySelector('.full-start-new')
+        if(!st || !fs) return
+        let out = pairs.map(function(x){ return x[0] + ' ' + m(st, x[1]) + ' → ' + m(fs, x[2]) }).join('  //  ')
+        out = 'top/h/шрифт/left: ' + out
+        localStorage.setItem('imdbb_probe', 'done')
+        window.Lampa.Noty.show(out, {time: 30000})
+    }
+    catch(e){}
+}
+
 function cal(h){
     try{
         let s = h.querySelector('.imdbb-stub')
@@ -121,7 +142,7 @@ function show(comp, object){
         h.__stubT = setInterval(function(){
             n++
             let fs = h.querySelector('.full-start-new')
-            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66) cal(h); hide(comp) }
+            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ probe(h); cal(h) } hide(comp) }
         }, 120)
     }
     catch(e){ console.warn('imdbb_stub', e.message) }
