@@ -123,6 +123,8 @@ function init(){
             field: {name: 'Логотип вместо названия', description: 'На карточке фильма'}
         })
 
+        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_infinite', type: 'trigger', default: true}, field: {name: 'Бесконечные карточки', description: 'Ряды подгружаются до конца вместо кнопки «Ещё»'}})
+
         let cmp = function(){
             try{
                 let v = L.Storage.get('imdbb_compact', 'true')
