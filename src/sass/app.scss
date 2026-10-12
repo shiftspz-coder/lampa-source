@@ -483,3 +483,6 @@ html body .imdbb-stub .imdbb-hero__meta{font-size:1.15em}
 html body .imdbb-stub.imdbb-stub--c{padding:0; display:block; height:auto; bottom:auto}
 html body.imdbb-compact .imdbb-fwait .imdbb-stub--c .full-start-new__right{opacity:1!important}
 html body .imdbb-stub--c .imdbb-stub-sp{flex:0 0 auto}
+
+/* imdbb-homealign */
+html body.imdbb-compact .full-start-new__right{padding-bottom:calc(3.5em + var(--imdbb-card-x, 0em))!important}

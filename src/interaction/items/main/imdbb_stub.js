@@ -199,6 +199,26 @@ function cap(h, d){
     catch(e){}
 }
 
+function adj(h){
+    try{
+        let hd = parseFloat(localStorage.getItem('imdbb_home_d'))
+        let fs = realFs(h)
+        let b = fs && fs.querySelector('.imdbb-ov')
+        if(!(hd > 5 && hd < 40) || !b || !fs.querySelector('.imdbb-ppl')) return
+        let rb = b.getBoundingClientRect()
+        if(!rb.height) return
+        let fp = parseFloat(getComputedStyle(document.body).fontSize) || 16
+        let diff = hd - (window.innerHeight - rb.bottom) / fp
+        if(Math.abs(diff) < 0.15) return
+        let nv = (parseFloat(localStorage.getItem('imdbb_card_x')) || 0) + diff
+        if(nv < 0) nv = 0
+        if(nv > 14) nv = 14
+        localStorage.setItem('imdbb_card_x', nv.toFixed(2))
+        document.body.style.setProperty('--imdbb-card-x', nv.toFixed(2) + 'em')
+    }
+    catch(e){}
+}
+
 function hide(comp){
     try{
         let h = dom(comp)
@@ -216,6 +236,8 @@ function show(comp, object){
         if(!d || !d.id || !(d.title || d.name)) return
         let h = dom(comp)
         h.classList.add('imdbb-sh')
+        let cx = parseFloat(localStorage.getItem('imdbb_card_x'))
+        if(cx >= 0 && cx < 14) document.body.style.setProperty('--imdbb-card-x', cx + 'em')
         let cc = cget(d)
         let se = cc ? fromCache(cc) : build(d)
         let sv = parseFloat(localStorage.getItem('imdbb_stub_b'))
@@ -228,7 +250,7 @@ function show(comp, object){
         h.__stubT = setInterval(function(){
             n++
             let fs = realFs(h)
-            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ cal(h); cap(h, d) } hide(comp) }
+            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ cal(h); cap(h, d); adj(h) } hide(comp) }
         }, 120)
     }
     catch(e){ console.warn('imdbb_stub', e.message) }

@@ -185,6 +185,23 @@ export default function(main){
             if(!sl && info && kind !== 'tv' && info.budget > 0) sl = 'Бюджет $ ' + String(info.budget).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
             q('.imdbb-hero__s').textContent = sl
             q('.imdbb-hero__d').textContent = (info && info.overview) || d.overview || ''
+            try{
+                let dd = q('.imdbb-hero__d')
+                if(dd && dd.textContent){
+                    clearTimeout(window.__imdbbHdT)
+                    window.__imdbbHdT = setTimeout(function(){
+                        try{
+                            let r = dd.getBoundingClientRect()
+                            if(!r.height || !dd.offsetParent) return
+                            let fp = parseFloat(getComputedStyle(document.body).fontSize) || 16
+                            let v = (window.innerHeight - r.bottom) / fp
+                            if(v > 5 && v < 40) localStorage.setItem('imdbb_home_d', v.toFixed(2))
+                        }
+                        catch(e){}
+                    }, 400)
+                }
+            }
+            catch(e){}
         }
 
         let load = function(d, cb){
