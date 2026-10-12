@@ -93,7 +93,7 @@ function cal(h){
     catch(e){}
 }
 
-const CKEY = 'imdbb_stub_c'
+const CKEY = 'imdbb_stub_d'
 
 function cload(){
     try{ return JSON.parse(localStorage.getItem(CKEY) || '{}') }
@@ -132,7 +132,7 @@ function fromCache(c){
     let el = document.createElement('div')
 
     el.className = 'imdbb-stub imdbb-stub--c'
-    el.innerHTML = '<div class="full-start-new"><div class="full-start-new__body"><div class="full-start-new__right">' + c.h + '<div class="imdbb-stub-sp" style="height:' + (c.sp || 0) + 'px"></div></div></div></div>'
+    el.innerHTML = '<div class="full-start-new"><div class="full-start-new__body"><div class="full-start-new__right">' + c.h + '<div class="imdbb-stub-sp" style="height:' + 0 + 'px"></div></div></div></div>'
     el.__dx = c.dx || 0
     el.__dy = c.dy || 0
     el.style.left = el.__dx + 'px'
@@ -204,17 +204,17 @@ function adj(h){
         let hd = parseFloat(localStorage.getItem('imdbb_home_d'))
         let fs = realFs(h)
         let b = fs && fs.querySelector('.imdbb-ov')
-        if(!(hd > 5 && hd < 40) || !b || !fs.querySelector('.imdbb-ppl')) return
+        let right = fs && fs.querySelector('.full-start-new__right')
+        if(!(hd > 5 && hd < 40) || !b || !right) return
         let rb = b.getBoundingClientRect()
         if(!rb.height) return
         let fp = parseFloat(getComputedStyle(document.body).fontSize) || 16
-        let diff = hd - (window.innerHeight - rb.bottom) / fp
-        if(Math.abs(diff) < 0.15) return
-        let nv = (parseFloat(localStorage.getItem('imdbb_card_x')) || 0) + diff
-        if(nv < 0) nv = 0
-        if(nv > 14) nv = 14
-        localStorage.setItem('imdbb_card_x', nv.toFixed(2))
-        document.body.style.setProperty('--imdbb-card-x', nv.toFixed(2) + 'em')
+        let diff = hd * fp - (window.innerHeight - rb.bottom)
+        if(Math.abs(diff) < 0.15 * fp) return
+        let cur = parseFloat(getComputedStyle(right).paddingBottom) || 0
+        let nv = Math.min(30 * fp, Math.max(8 * fp, cur + diff))
+        localStorage.setItem('imdbb_card_p', nv.toFixed(1))
+        document.body.style.setProperty('--imdbb-card-p', nv.toFixed(1) + 'px')
     }
     catch(e){}
 }
@@ -236,8 +236,8 @@ function show(comp, object){
         if(!d || !d.id || !(d.title || d.name)) return
         let h = dom(comp)
         h.classList.add('imdbb-sh')
-        let cx = parseFloat(localStorage.getItem('imdbb_card_x'))
-        if(cx >= 0 && cx < 14) document.body.style.setProperty('--imdbb-card-x', cx + 'em')
+        let cp = parseFloat(localStorage.getItem('imdbb_card_p'))
+        if(cp > 50 && cp < 1500) document.body.style.setProperty('--imdbb-card-p', cp + 'px')
         let cc = cget(d)
         let se = cc ? fromCache(cc) : build(d)
         let sv = parseFloat(localStorage.getItem('imdbb_stub_b'))

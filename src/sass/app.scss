@@ -485,4 +485,5 @@ html body.imdbb-compact .imdbb-fwait .imdbb-stub--c .full-start-new__right{opaci
 html body .imdbb-stub--c .imdbb-stub-sp{flex:0 0 auto}
 
 /* imdbb-homealign */
-html body.imdbb-compact .full-start-new__right{padding-bottom:calc(3.5em + var(--imdbb-card-x, 0em))!important}
+html body.imdbb-compact .full-start-new__right{position:relative; padding-bottom:var(--imdbb-card-p, 17em)!important}
+html body.imdbb-compact .imdbb-band{position:absolute; left:0; right:0; bottom:3.5em; display:flex; flex-direction:column; align-items:flex-start}
