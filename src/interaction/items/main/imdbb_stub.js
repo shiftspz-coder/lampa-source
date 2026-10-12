@@ -77,52 +77,6 @@ function build(d){
     return el
 }
 
-function probe(h){
-    try{
-        if(localStorage.getItem('imdbb_probe') === 'done') return
-        let pairs = [['лого','.imdbb-hero__logo img, .imdbb-hero__logo .imdbb-hero__t','.full-start-new__title img, .full-start-new__title'],['слоган','.imdbb-hero__tag','.full-start-new__tagline'],['мета','.imdbb-hero__meta','.full-start-new__rate-line'],['сезоны','.imdbb-hero__s','.imdbb-details-c'],['опис','.imdbb-hero__d','.imdbb-ov']]
-        let m = function(root, sel){
-            let e = root && root.querySelector(sel)
-            if(!e) return '-'
-            let r = e.getBoundingClientRect()
-            return Math.round(r.top) + '/' + Math.round(r.height) + '/' + Math.round(parseFloat(getComputedStyle(e).fontSize)) + '/x' + Math.round(r.left)
-        }
-        let st = h.querySelector('.imdbb-stub')
-        let fs = h.querySelector('.full-start-new')
-        if(!st || !fs) return
-        let out = pairs.map(function(x){ return x[0] + ' ' + m(st, x[1]) + ' → ' + m(fs, x[2]) }).join('  //  ')
-        out = 'top/h/шрифт/left: ' + out
-        localStorage.setItem('imdbb_probe', 'done')
-        window.Lampa.Noty.show(out, {time: 30000})
-    }
-    catch(e){}
-}
-
-function probe2(h){
-    try{
-        if(localStorage.getItem('imdbb_probe2') === 'done') return
-        let st = h.querySelector('.imdbb-stub')
-        let fs = h.querySelector('.full-start-new')
-        if(!st || !fs) return
-        let f = function(root, sel, name){
-            let out = []
-            Array.prototype.slice.call(root.querySelectorAll(sel)).forEach(function(e){
-                let r = e.getBoundingClientRect()
-                if(r.width < 2 || r.height < 2) return
-                if(e.children.length > 1 && e.querySelector(sel)) return
-                out.push(((e.textContent || '').trim().slice(0, 5) || '?') + ' w' + Math.round(r.width) + ' f' + Math.round(parseFloat(getComputedStyle(e).fontSize)) + ' x' + Math.round(r.left))
-            })
-            return name + ': ' + out.join(' | ')
-        }
-        localStorage.setItem('imdbb_probe2', 'done')
-        window.Lampa.Noty.show(f(st, '.imdbb-hero__meta > span', 'ЗАГОТОВКА'), {time: 30000})
-        setTimeout(function(){
-            window.Lampa.Noty.show(f(fs, '.full-start-new__rate-line > *, .imdbb-meta > *', 'КАРТОЧКА'), {time: 30000})
-        }, 400)
-    }
-    catch(e){}
-}
-
 function cal(h){
     try{
         let s = h.querySelector('.imdbb-stub')
@@ -167,7 +121,7 @@ function show(comp, object){
         h.__stubT = setInterval(function(){
             n++
             let fs = h.querySelector('.full-start-new')
-            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ probe(h); probe2(h); cal(h) } hide(comp) }
+            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ cal(h) } hide(comp) }
         }, 120)
     }
     catch(e){ console.warn('imdbb_stub', e.message) }
