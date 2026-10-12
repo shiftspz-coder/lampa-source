@@ -93,6 +93,112 @@ function cal(h){
     catch(e){}
 }
 
+const CKEY = 'imdbb_stub_c'
+
+function cload(){
+    try{ return JSON.parse(localStorage.getItem(CKEY) || '{}') }
+    catch(e){ return {} }
+}
+
+function cget(d){
+    let c = cload()[kindOf(d) + d.id]
+
+    return c && c.h && c.t + 6048e5 > Date.now() ? c : null
+}
+
+function cput(d, v){
+    try{
+        let a = cload()
+
+        v.t = Date.now()
+        a[kindOf(d) + d.id] = v
+
+        let ks = Object.keys(a)
+
+        if(ks.length > 60){
+            ks.sort(function(x, y){ return a[x].t - a[y].t }).slice(0, ks.length - 60).forEach(function(k){ delete a[k] })
+        }
+
+        localStorage.setItem(CKEY, JSON.stringify(a))
+    }
+    catch(e){}
+}
+
+function realFs(h){
+    return Array.prototype.slice.call(h.querySelectorAll('.full-start-new')).filter(function(x){ return !x.closest('.imdbb-stub') })[0] || null
+}
+
+function fromCache(c){
+    let el = document.createElement('div')
+
+    el.className = 'imdbb-stub imdbb-stub--c'
+    el.innerHTML = '<div class="full-start-new"><div class="full-start-new__body"><div class="full-start-new__right">' + c.h + '<div class="imdbb-stub-sp" style="height:' + (c.sp || 0) + 'px"></div></div></div></div>'
+    el.__dx = c.dx || 0
+    el.__dy = c.dy || 0
+    el.style.left = el.__dx + 'px'
+    el.style.right = (-el.__dx) + 'px'
+    el.style.top = el.__dy + 'px'
+
+    return el
+}
+
+function cap(h, d){
+    try{
+        let fs = realFs(h)
+        if(!fs) return
+        let right = fs.querySelector('.full-start-new__right')
+        let ov = fs.querySelector('.imdbb-ov')
+        if(!right || !ov) return
+
+        let rr = right.getBoundingClientRect()
+        let ro = ov.getBoundingClientRect()
+        let pb = parseFloat(getComputedStyle(right).paddingBottom) || 0
+        let sp = Math.max(0, Math.round(rr.bottom - pb - ro.bottom))
+        let old = h.querySelector('.imdbb-stub')
+        let c0 = cget(d)
+        let dx = 0, dy = 0
+
+        if(old && old.classList.contains('imdbb-stub--c')){
+            let so = old.querySelector('.imdbb-ov')
+
+            if(so){
+                let rs = so.getBoundingClientRect()
+
+                dx = (ro.left - rs.left) + (old.__dx || 0)
+                dy = (ro.top - rs.top) + (old.__dy || 0)
+            }
+        }
+        else if(c0){
+            dx = c0.dx || 0
+            dy = c0.dy || 0
+        }
+
+        let html = ''
+        let stop = false
+
+        Array.prototype.slice.call(right.children).forEach(function(ch){
+            if(stop) return
+            let cl = ch.className || ''
+            let last = ch === ov || ch.contains(ov)
+
+            if(!/full-start-new__(buttons|reactions)|imdbb-ppl/.test(cl)){
+                let cn = ch.cloneNode(true)
+
+                cn.classList.remove('selector')
+                Array.prototype.slice.call(cn.querySelectorAll('.selector')).forEach(function(x){ x.classList.remove('selector') })
+                html += cn.outerHTML
+            }
+
+            if(last) stop = true
+        })
+
+        if(html.length > 20000 || !stop) return
+
+        cput(d, {h: html, sp: sp, dx: Math.round(dx * 10) / 10, dy: Math.round(dy * 10) / 10})
+    }
+    catch(e){}
+}
+
 function hide(comp){
     try{
         let h = dom(comp)
@@ -110,9 +216,10 @@ function show(comp, object){
         if(!d || !d.id || !(d.title || d.name)) return
         let h = dom(comp)
         h.classList.add('imdbb-sh')
-        let se = build(d)
+        let cc = cget(d)
+        let se = cc ? fromCache(cc) : build(d)
         let sv = parseFloat(localStorage.getItem('imdbb_stub_b'))
-        if(sv > 0 && sv < 40) se.style.setProperty('--imdbb-stub-b', sv + 'em')
+        if(!cc && sv > 0 && sv < 40) se.style.setProperty('--imdbb-stub-b', sv + 'em')
         h.appendChild(se)
         comp.activity.loader(false)
         let sl = comp.activity.slide
@@ -120,8 +227,8 @@ function show(comp, object){
         let n = 0
         h.__stubT = setInterval(function(){
             n++
-            let fs = h.querySelector('.full-start-new')
-            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ cal(h) } hide(comp) }
+            let fs = realFs(h)
+            if((fs && !fs.closest('.imdbb-fwait')) || n > 66 || !document.body.contains(h)){ if(fs && n <= 66){ cal(h); cap(h, d) } hide(comp) }
         }, 120)
     }
     catch(e){ console.warn('imdbb_stub', e.message) }

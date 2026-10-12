@@ -478,3 +478,8 @@ html body .activity.imdbb-noanim .full-start__background.loaded{animation:none!i
 
 /* imdbb-stubmeta */
 html body .imdbb-stub .imdbb-hero__meta{font-size:1.15em}
+
+/* imdbb-stubc */
+html body .imdbb-stub.imdbb-stub--c{padding:0; display:block; height:auto; bottom:auto}
+html body.imdbb-compact .imdbb-fwait .imdbb-stub--c .full-start-new__right{opacity:1!important}
+html body .imdbb-stub--c .imdbb-stub-sp{flex:0 0 auto}
