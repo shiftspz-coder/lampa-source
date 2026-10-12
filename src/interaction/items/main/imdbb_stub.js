@@ -9,7 +9,7 @@ function dom(comp){ let h = comp && comp.html; return h && h[0] ? h[0] : h }
 
 function hinfo(d){
     try{
-        let c = JSON.parse(localStorage.getItem('imdbb_hd2') || '{}')[kindOf(d) + d.id]
+        let c = JSON.parse(localStorage.getItem('imdbb_hd3') || '{}')[kindOf(d) + d.id]
         return c && c.t + 6048e5 > Date.now() ? c.i : null
     }
     catch(e){ return null }

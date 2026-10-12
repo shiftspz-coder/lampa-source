@@ -1,6 +1,7 @@
 import {lgcached, lgput} from '../../card/module/ratting'
+import Utils from '../../../utils/utils'
 
-const HKEY = 'imdbb_hd2'
+const HKEY = 'imdbb_hd3'
 const HTTL = 7 * 864e5
 let hdisk = null
 let hsave
@@ -93,14 +94,24 @@ export default function(main){
         let cert = function(info, kind){
             try{
                 if(info && info._cert !== undefined) return info._cert
+                let cd = String(window.Lampa.Storage.get('language', 'ru') || 'ru').toUpperCase()
+                let codes = cd === 'US' ? ['US'] : [cd, 'US']
                 if(kind === 'tv'){
-                    let r = (info.content_ratings.results || []).filter(function(x){ return x.iso_3166_1 === 'RU' })[0]
-                    return r ? r.rating : ''
+                    let rs = (info.content_ratings && info.content_ratings.results) || []
+                    for(let n = 0; n < codes.length; n++){
+                        let r = rs.filter(function(x){ return x.iso_3166_1 === codes[n] && x.rating })[0]
+                        if(r) return Utils.decodePG(r.rating)
+                    }
+                    return ''
                 }
-                let r2 = (info.release_dates.results || []).filter(function(x){ return x.iso_3166_1 === 'RU' })[0]
-                if(!r2) return ''
-                let c = r2.release_dates.filter(function(x){ return x.certification })[0]
-                return c ? c.certification : ''
+                let rd = (info.release_dates && info.release_dates.results) || []
+                for(let n = 0; n < codes.length; n++){
+                    let r2 = rd.filter(function(x){ return x.iso_3166_1 === codes[n] })[0]
+                    if(!r2) continue
+                    let c = (r2.release_dates || []).filter(function(x){ return x.certification })[0]
+                    if(c) return Utils.decodePG(c.certification)
+                }
+                return ''
             }
             catch(e){ return '' }
         }
