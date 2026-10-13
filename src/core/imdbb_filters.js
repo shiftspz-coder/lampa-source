@@ -169,6 +169,12 @@ function init(){
 
         L.SettingsApi.addParam({
             component: 'imdbb',
+            param: {name: 'imdbb_swipe', type: 'trigger', default: true},
+            field: {name: 'Свайп (только мобильная версия)', description: 'Свайп пальцем двигает фокус по карточкам и рядам вместо прокрутки. Только телефон в горизонтали, на ТВ и приставках не действует. Работает сразу'}
+        })
+
+        L.SettingsApi.addParam({
+            component: 'imdbb',
             param: {name: 'imdbb_logo_mode', type: 'select', values: {off: 'Выкл', a: 'А: снизу слева', b: 'Б: по центру', c: 'В: только в фокусе'}, default: 'a'},
             field: {name: 'Логотипы на карточках в ряду', description: 'Временно для проверки трёх вариантов. Только главная. Без логотипа показывается название.'}
         })

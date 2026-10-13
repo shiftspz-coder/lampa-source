@@ -8,6 +8,7 @@ let BAD = '.selectbox, .modal, .settings, .settings-input, .head, .menu, .player
 function ok(e){
     try{
         if(!document.body.classList.contains('imdbb-compact')) return false
+        if(window.localStorage.getItem('imdbb_swipe') === 'false') return false
         if(document.body.classList.contains('selectbox--open')) return false
         if(!Utils.isTouchDevice() || Platform.tv()) return false
         let t = e.target
@@ -63,7 +64,7 @@ export default {
             let line = this
             let el = this.html
             let st = null
-            let on = function(){ return document.body.classList.contains('imdbb-compact') }
+            let on = function(){ return document.body.classList.contains('imdbb-compact') && window.localStorage.getItem('imdbb_swipe') !== 'false' }
             el.addEventListener('touchstart', function(e){
                 let p = e.touches[0]
                 st = (p && on()) ? {x: p.clientX, y: p.clientY, d: 0} : null
