@@ -2,29 +2,29 @@ import Utils from '../../../../utils/utils'
 import Platform from '../../../../core/platform'
 import Controller from '../../../../core/controller'
 
+let G = null
+let BAD = '.selectbox, .modal, .settings, .settings-input, .head, .menu, .player, .simple-keyboard, .search-box__keypad, .search__keypad, input, textarea'
 
-let imdbbG = null
-function imdbbCard(e){
+function ok(e){
     try{
-        if(!document.body || !document.body.classList.contains('imdbb-compact')) return false
+        if(!document.body.classList.contains('imdbb-compact')) return false
         if(document.body.classList.contains('selectbox--open')) return false
         if(!Utils.isTouchDevice() || Platform.tv()) return false
-        let a = window.Lampa.Activity.active()
-        if(!a || a.component !== 'full') return false
         let t = e.target
-        if(t && t.closest && t.closest('.selectbox, .modal, .settings, .settings-input')) return false
+        if(t && t.closest && t.closest(BAD)) return false
         return true
     }
     catch(x){ return false }
 }
-if(!window.__imdbbSwV){
-    window.__imdbbSwV = 1
+
+if(!window.__imdbbSwA){
+    window.__imdbbSwA = 1
     document.addEventListener('touchstart', function(e){
         let p = e.touches[0]
-        imdbbG = (p && imdbbCard(e)) ? {x: p.clientX, y: p.clientY, d: 0} : null
+        G = (p && ok(e)) ? {x: p.clientX, y: p.clientY, d: 0, l: !!(e.target.closest && e.target.closest('.items-line'))} : null
     }, {capture: true, passive: true})
     document.addEventListener('touchmove', function(e){
-        let g = imdbbG
+        let g = G
         let p = e.touches[0]
         if(!g || !p) return
         if(!g.d){
@@ -32,19 +32,26 @@ if(!window.__imdbbSwV){
             let dy = p.clientY - g.y
             if(Math.abs(dx) > 8 || Math.abs(dy) > 8) g.d = Math.abs(dx) > Math.abs(dy) ? 1 : 2
         }
-        if(g.d !== 1){
-            e.stopPropagation()
-            if(g.d === 2 && e.cancelable) e.preventDefault()
-        }
+        if(g.d === 1 && g.l) return
+        e.stopPropagation()
+        if(g.d && e.cancelable) e.preventDefault()
     }, {capture: true, passive: false})
     document.addEventListener('touchend', function(e){
-        let g = imdbbG
-        imdbbG = null
+        let g = G
+        G = null
         let p = e.changedTouches[0]
-        if(!g || g.d !== 2 || !p) return
-        let dy = g.y - p.clientY
-        if(Math.abs(dy) < 40) return
-        try{ Controller.move(dy > 0 ? 'down' : 'up') }catch(x){}
+        if(!g || !g.d || !p) return
+        try{
+            if(g.d === 2){
+                let dy = g.y - p.clientY
+                if(Math.abs(dy) >= 40) Controller.move(dy > 0 ? 'down' : 'up')
+            }
+            else if(!g.l){
+                let dx = g.x - p.clientX
+                if(Math.abs(dx) >= 40) Controller.move(dx > 0 ? 'right' : 'left')
+            }
+        }
+        catch(x){}
     }, {capture: true, passive: true})
 }
 
@@ -70,7 +77,7 @@ export default {
                     let dy = p.clientY - st.y
                     if(Math.abs(dx) > 8 || Math.abs(dy) > 8) st.d = Math.abs(dx) > Math.abs(dy) ? 1 : 2
                 }
-                if(!st.d || st.d === 1 || (st.d === 2 && el.closest('.imdbb-home'))){
+                if(!st.d || st.d === 1){
                     e.stopPropagation()
                     if(st.d && e.cancelable) e.preventDefault()
                 }

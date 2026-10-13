@@ -557,3 +557,7 @@ body.touch-device .items-line__body>.scroll{ touch-action: pan-y; }
 html body .imdbb-home>.imdbb-hero{ bottom: calc(var(--imdbb-row) + var(--imdbb-bot) - 1.7em) !important; }
 html body .imdbb-hero__logo img{ max-height: 3.8em !important; }
 }
+
+/* imdbb-rowx */
+html body .imdbb-nodescr .items-line__head{ padding-left: 3em !important; }
+html body .imdbb-nodescr .items-line__body .scroll__content{ padding: .9em 0 .9em 3em !important; }
