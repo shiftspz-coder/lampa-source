@@ -126,7 +126,6 @@ function init(){
         L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_infinite', type: 'trigger', default: true}, field: {name: 'Бесконечные карточки', description: 'Ряды подгружаются до конца вместо кнопки «Ещё»'}})
 
         L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_style', type: 'trigger', default: true}, field: {name: 'Стильный интерфейс', description: 'Горизонтальные карточки, блок информации и новая карточка фильма во всех разделах, включая поиск и избранное. ТВ и телефон в горизонтали'}, onChange: function(){ if(window.__imdbbStySync) window.__imdbbStySync() }})
-        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_hide_badges', type: 'trigger', default: false}, field: {name: 'Скрыть качество, IMDb и сезоны/серии на карточках', description: 'Они уже есть в блоке информации. Действует везде: главная, поиск, избранное и другие разделы'}})
 
 
         let cmp = function(){
@@ -150,21 +149,25 @@ function init(){
 
         window.__imdbbStySync = function(){ try{ let st = L.Storage.get('imdbb_style', 'true'); let on = !(st === false || st === 'false'); try{ L.Storage.set('imdbb_compact', on); L.Storage.set('imdbb_wide', on) }catch(e){} localStorage.setItem('imdbb_compact', on ? 'true' : 'false'); localStorage.setItem('imdbb_wide', on ? 'true' : 'false') }catch(e){} cmp() };
 
-        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_show_all', type: 'trigger', default: false}, field: {name: 'Показать все скрытые элементы', description: 'Возвращает всё, что скрывает «IMDb+» (список ниже), независимо от переключателей «Скрыть». Трейлеры и Shots: после перезапуска приложения'}, onChange: function(){ if(window.__imdbbSh) window.__imdbbSh() }})
-        ;[
-            ['imdbb_h_prof', 'профиль в шапке', 'Кнопка профиля вверху'],
-            ['imdbb_h_mark', 'индикаторы связи', 'Значки соединения в шапке'],
-            ['imdbb_h_bcast', '«Трансляция»', 'Кнопка в шапке (только стильный интерфейс)'],
-            ['imdbb_h_logo', 'логотип Lampa', 'Слева вверху (только стильный интерфейс)'],
-            ['imdbb_no_tr', 'трейлеры и Shots', 'Трейлеры в меню «Смотреть» и плагин Shots (Shots: после перезапуска приложения)'],
-            ['imdbb_no_more', 'кнопку «Ещё»', 'Кнопка с тремя точками в карточке (при следующем открытии карточки)'],
-            ['imdbb_h_sub', 'кнопка подписки', 'В карточке фильма (только стильный интерфейс, при следующем открытии карточки)'],
-            ['imdbb_h_qual', 'старые метки качества', 'Жёлтые метки на карточках (только стильный интерфейс)'],
-            ['imdbb_h_descr', 'ряд «Подробно»', 'Описание, жанр, производство, теги, бюджет и страны под карточкой (только стильный интерфейс, при следующем открытии карточки)'],
-            ['imdbb_h_disc', 'комментарии', 'Ряд комментариев под карточкой (только стильный интерфейс, при следующем открытии карточки)'],
-            ['imdbb_h_pers', 'ряд актёров', 'Родной ряд актёров под карточкой (только стильный интерфейс, при следующем открытии карточки)'],
-            ['imdbb_h_meta', 'ряды метаданных', 'metadata_chart и metadata_tags (только стильный интерфейс, при следующем открытии карточки)']
-        ].forEach(function(it){ L.SettingsApi.addParam({component: 'imdbb', param: {name: it[0], type: 'trigger', default: true}, field: {name: 'Скрыть: ' + it[1], description: it[2]}, onChange: function(){ if(window.__imdbbSh) window.__imdbbSh() }}) })
+        let VIS = [
+            ['imdbb_hide_badges', 'Рейтинг IMDb, качество, сезоны и серии на карточках', 'Значки на постерах и в рядах (по умолчанию показаны)', true],
+            ['imdbb_h_prof', 'Профиль в шапке', 'Кнопка профиля вверху'],
+            ['imdbb_h_mark', 'Индикаторы связи', 'Значки соединения в шапке'],
+            ['imdbb_h_bcast', '«Трансляция»', 'Кнопка в шапке (стильный интерфейс)'],
+            ['imdbb_h_logo', 'Логотип Lampa', 'Слева вверху (стильный интерфейс)'],
+            ['imdbb_no_tr', 'Трейлеры и Shots', 'Shots: после перезапуска приложения'],
+            ['imdbb_no_more', 'Кнопка «Ещё»', 'Три точки в карточке (при следующем открытии карточки)'],
+            ['imdbb_h_sub', 'Кнопка подписки', 'В карточке фильма (стильный интерфейс)'],
+            ['imdbb_h_qual', 'Старые метки качества', 'Жёлтые метки на карточках (стильный интерфейс)'],
+            ['imdbb_h_descr', 'Ряд «Подробно»', 'Описание, жанр, бюджет, страны под карточкой (стильный интерфейс)'],
+            ['imdbb_h_disc', 'Комментарии', 'Ряд под карточкой (стильный интерфейс)'],
+            ['imdbb_h_pers', 'Ряд актёров', 'Родной ряд под карточкой (стильный интерфейс)'],
+            ['imdbb_h_meta', 'Ряды метаданных', 'metadata_chart и metadata_tags (стильный интерфейс)']
+        ]
+        let visItem = null
+        let visShown = function(it){ let v = localStorage.getItem(it[0]); return it[3] ? v !== 'true' : v === 'false' }
+        let visText = function(){ return 'Показано: ' + VIS.filter(visShown).length + ' из ' + VIS.length }
+        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_visible', type: 'button'}, field: {name: 'Показывать элементы', description: visText()}, onRender: function(item){ visItem = item; item.find('.settings-param__descr').text(visText()) }, onChange: function(){ L.Select.show({title: 'Показывать элементы', items: VIS.map(function(it){ return {title: it[1], subtitle: it[2], key: it[0], checkbox: true, checked: visShown(it)} }), onCheck: function(a){ L.Storage.set(a.key, !a.checked) }, onBack: function(){ if(visItem) visItem.find('.settings-param__descr').text(visText()); L.Controller.toggle('settings_component') } }) }})
 
         
 
@@ -193,9 +196,9 @@ function init(){
 
         cmp()
         try{ if(localStorage.getItem('imdbb_style') === null){ let c0 = L.Storage.get('imdbb_compact', 'true'); let w0 = localStorage.getItem('imdbb_wide'); let on0 = !(c0 === false || c0 === 'false' || w0 === 'false'); L.Storage.set('imdbb_style', on0); window.__imdbbStySync() } }catch(e){}
-        window.__imdbbSh = function(){ try{ let all = localStorage.getItem('imdbb_show_all') === 'true'; ['prof','mark','bcast','logo','sub','qual','descr','disc','pers','meta'].forEach(function(k){ document.body.classList.toggle('imdbb-sh-' + k, all || localStorage.getItem('imdbb_h_' + k) === 'false') }) }catch(e){} }
+        window.__imdbbSh = function(){ try{ ['prof','mark','bcast','logo','sub','qual','descr','disc','pers','meta'].forEach(function(k){ document.body.classList.toggle('imdbb-sh-' + k, localStorage.getItem('imdbb_h_' + k) === 'false') }) }catch(e){} }
         window.__imdbbSh(); setTimeout(window.__imdbbSh, 1000)
-        try{ L.Storage.listener.follow('change', function(e){ if(e && e.name && (e.name === 'imdbb_show_all' || e.name.indexOf('imdbb_h_') === 0)) window.__imdbbSh() }) }catch(e){}
+        try{ L.Storage.listener.follow('change', function(e){ if(e && e.name && e.name.indexOf('imdbb_h_') === 0) window.__imdbbSh() }) }catch(e){}
         window.__imdbbNb = function(){ try{ document.body.classList.toggle('imdbb-nobadge', localStorage.getItem('imdbb_hide_badges') === 'true') }catch(e){} }
         window.__imdbbNb(); setTimeout(window.__imdbbNb, 1000)
         try{ L.Storage.listener.follow('change', function(e){ if(e && e.name === 'imdbb_hide_badges') window.__imdbbNb() }) }catch(e){}
