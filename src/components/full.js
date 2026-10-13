@@ -217,7 +217,7 @@ function component(object){
                 else this.html.find('.full-start__background').remove()
 
                 // Создаем все компоненты
-if(document.body.classList.contains('imdbb-compact')){ this.rows = this.rows.filter((r)=>r !== 'description' && !(Array.isArray(r) && ['discuss', 'persons', 'metadata_chart', 'metadata_tags'].indexOf(r[0]) >= 0)); this.html.addClass('imdbb-nodescr'); if(localStorage.getItem('imdbb_hide_badges') === 'true') this.html.addClass('imdbb-nobadge') }
+if(document.body.classList.contains('imdbb-compact')){ this.rows = this.rows.filter((r)=>{ let B = document.body.classList, k = Array.isArray(r) ? r[0] : null; if(r === 'description') return B.contains('imdbb-sh-descr'); if(k === 'discuss') return B.contains('imdbb-sh-disc'); if(k === 'persons') return B.contains('imdbb-sh-pers'); if(k === 'metadata_chart' || k === 'metadata_tags') return B.contains('imdbb-sh-meta'); return true }); this.html.addClass('imdbb-nodescr'); if(localStorage.getItem('imdbb_hide_badges') === 'true') this.html.addClass('imdbb-nobadge') }
                 this.build(this.rows.slice(0, this.view))
 
                 // Обновляем расписание

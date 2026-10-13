@@ -350,9 +350,9 @@ class Start extends Emit {
             catch(e){}
         })
 
-        if(window.localStorage.getItem('imdbb_no_tr') !== 'false') this.html.find('.view--trailer').remove()
-        if(window.localStorage.getItem('imdbb_no_more') !== 'false') this.html.find('.button--options').remove();
-        if(document.body.classList.contains('imdbb-compact')){ window.__imdbbSub = 1; this.html.find('.button--subscribe').remove() }
+        if(window.localStorage.getItem('imdbb_show_all') !== 'true' && window.localStorage.getItem('imdbb_no_tr') !== 'false') this.html.find('.view--trailer').remove()
+        if(window.localStorage.getItem('imdbb_show_all') !== 'true' && window.localStorage.getItem('imdbb_no_more') !== 'false') this.html.find('.button--options').remove();
+        if(document.body.classList.contains('imdbb-compact') && !document.body.classList.contains('imdbb-sh-sub')){ window.__imdbbSub = 1; this.html.find('.button--subscribe').remove() }
         if(window.lampa_settings.read_only) this.html.find('.button--play').remove()
 
         try{

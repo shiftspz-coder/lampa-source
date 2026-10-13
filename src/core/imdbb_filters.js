@@ -150,17 +150,23 @@ function init(){
 
         window.__imdbbStySync = function(){ try{ let st = L.Storage.get('imdbb_style', 'true'); let on = !(st === false || st === 'false'); try{ L.Storage.set('imdbb_compact', on); L.Storage.set('imdbb_wide', on) }catch(e){} localStorage.setItem('imdbb_compact', on ? 'true' : 'false'); localStorage.setItem('imdbb_wide', on ? 'true' : 'false') }catch(e){} cmp() };
 
-        L.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'imdbb_no_tr', type: 'trigger', default: true},
-            field: {name: 'Скрыть трейлеры и Shots', description: 'Убирает трейлеры из меню «Смотреть» и отключает плагин Shots (Shots: после перезапуска приложения)'}
-        })
+        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_show_all', type: 'trigger', default: false}, field: {name: 'Показать все скрытые элементы', description: 'Возвращает всё, что скрывает «IMDb+» (список ниже), независимо от переключателей «Скрыть». Трейлеры и Shots: после перезапуска приложения'}, onChange: function(){ if(window.__imdbbSh) window.__imdbbSh() }})
+        ;[
+            ['imdbb_h_prof', 'профиль в шапке', 'Кнопка профиля вверху'],
+            ['imdbb_h_mark', 'индикаторы связи', 'Значки соединения в шапке'],
+            ['imdbb_h_bcast', '«Трансляция»', 'Кнопка в шапке (только стильный интерфейс)'],
+            ['imdbb_h_logo', 'логотип Lampa', 'Слева вверху (только стильный интерфейс)'],
+            ['imdbb_no_tr', 'трейлеры и Shots', 'Трейлеры в меню «Смотреть» и плагин Shots (Shots: после перезапуска приложения)'],
+            ['imdbb_no_more', 'кнопку «Ещё»', 'Кнопка с тремя точками в карточке (при следующем открытии карточки)'],
+            ['imdbb_h_sub', 'кнопка подписки', 'В карточке фильма (только стильный интерфейс, при следующем открытии карточки)'],
+            ['imdbb_h_qual', 'старые метки качества', 'Жёлтые метки на карточках (только стильный интерфейс)'],
+            ['imdbb_h_descr', 'ряд «Подробно»', 'Описание, жанр, производство, теги, бюджет и страны под карточкой (только стильный интерфейс, при следующем открытии карточки)'],
+            ['imdbb_h_disc', 'комментарии', 'Ряд комментариев под карточкой (только стильный интерфейс, при следующем открытии карточки)'],
+            ['imdbb_h_pers', 'ряд актёров', 'Родной ряд актёров под карточкой (только стильный интерфейс, при следующем открытии карточки)'],
+            ['imdbb_h_meta', 'ряды метаданных', 'metadata_chart и metadata_tags (только стильный интерфейс, при следующем открытии карточки)']
+        ].forEach(function(it){ L.SettingsApi.addParam({component: 'imdbb', param: {name: it[0], type: 'trigger', default: true}, field: {name: 'Скрыть: ' + it[1], description: it[2]}, onChange: function(){ if(window.__imdbbSh) window.__imdbbSh() }}) })
 
-        L.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'imdbb_no_more', type: 'trigger', default: true},
-            field: {name: 'Скрыть кнопку «Ещё»', description: 'Кнопка с тремя точками в карточке (действует при следующем открытии карточки)'}
-        })
+        
 
         L.SettingsApi.addParam({
             component: 'imdbb',
@@ -187,6 +193,9 @@ function init(){
 
         cmp()
         try{ if(localStorage.getItem('imdbb_style') === null){ let c0 = L.Storage.get('imdbb_compact', 'true'); let w0 = localStorage.getItem('imdbb_wide'); let on0 = !(c0 === false || c0 === 'false' || w0 === 'false'); L.Storage.set('imdbb_style', on0); window.__imdbbStySync() } }catch(e){}
+        window.__imdbbSh = function(){ try{ let all = localStorage.getItem('imdbb_show_all') === 'true'; ['prof','mark','bcast','logo','sub','qual','descr','disc','pers','meta'].forEach(function(k){ document.body.classList.toggle('imdbb-sh-' + k, all || localStorage.getItem('imdbb_h_' + k) === 'false') }) }catch(e){} }
+        window.__imdbbSh(); setTimeout(window.__imdbbSh, 1000)
+        try{ L.Storage.listener.follow('change', function(e){ if(e && e.name && (e.name === 'imdbb_show_all' || e.name.indexOf('imdbb_h_') === 0)) window.__imdbbSh() }) }catch(e){}
         window.__imdbbNb = function(){ try{ document.body.classList.toggle('imdbb-nobadge', localStorage.getItem('imdbb_hide_badges') === 'true') }catch(e){} }
         window.__imdbbNb(); setTimeout(window.__imdbbNb, 1000)
         try{ L.Storage.listener.follow('change', function(e){ if(e && e.name === 'imdbb_hide_badges') window.__imdbbNb() }) }catch(e){}
