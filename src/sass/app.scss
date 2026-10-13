@@ -493,3 +493,10 @@ html body.imdbb-compact .imdbb-band{position:absolute; left:0; right:0; bottom:3
 html body.imdbb-compact .imdbb-ov{ display: -webkit-box !important; -webkit-line-clamp: 3 !important; -webkit-box-orient: vertical !important; overflow: hidden !important; }
 html body .imdbb-hero__d{ display: -webkit-box !important; -webkit-line-clamp: 3 !important; -webkit-box-orient: vertical !important; overflow: hidden !important; }
 }
+
+/* imdbb-lowh2 */
+@media (max-height: 478px) and (pointer: coarse){
+html body.imdbb-compact .imdbb-ov{ margin-bottom: .3em !important; }
+html body.imdbb-compact .imdbb-ppl{ margin-top: .8em !important; }
+html body.imdbb-compact .full-start-new__title img{ max-height: 1.1em !important; }
+}
