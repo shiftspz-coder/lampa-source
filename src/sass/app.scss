@@ -551,3 +551,9 @@ html body.imdbb-compact .full-start-new__title img{ max-height: 1.4em !important
 
 /* imdbb-swipe */
 body.touch-device .items-line__body>.scroll{ touch-action: pan-y; }
+
+/* imdbb-lowh10 */
+@media (max-height: 471px) and (pointer: coarse){
+html body .imdbb-home>.imdbb-hero{ bottom: calc(var(--imdbb-row) + var(--imdbb-bot) - 1.7em) !important; }
+html body .imdbb-hero__logo img{ max-height: 3.8em !important; }
+}
