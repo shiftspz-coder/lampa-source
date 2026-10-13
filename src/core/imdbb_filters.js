@@ -125,8 +125,8 @@ function init(){
 
         L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_infinite', type: 'trigger', default: true}, field: {name: 'Бесконечные карточки', description: 'Ряды подгружаются до конца вместо кнопки «Ещё»'}})
 
-        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_wide', type: 'trigger', default: true}, field: {name: 'Горизонтальные карточки и блок информации', description: 'Главная на ТВ и в горизонтали, применяется при открытии главной'}})
-        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_hide_badges', type: 'trigger', default: false}, field: {name: 'Скрыть качество, IMDb и сезоны/серии на главной', description: 'Они уже есть в блоке информации. Применяется при открытии главной'}})
+        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_style', type: 'trigger', default: true}, field: {name: 'Стильный интерфейс', description: 'Горизонтальные карточки, блок информации и новая карточка фильма во всех разделах, включая поиск и избранное. ТВ и телефон в горизонтали'}, onChange: function(){ if(window.__imdbbStySync) window.__imdbbStySync() }})
+        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_hide_badges', type: 'trigger', default: false}, field: {name: 'Скрыть качество, IMDb и сезоны/серии на карточках', description: 'Они уже есть в блоке информации. Действует везде: главная, поиск, избранное и другие разделы'}})
 
 
         let cmp = function(){
@@ -148,12 +148,7 @@ function init(){
             catch(e){}
         }
 
-        L.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'imdbb_compact', type: 'trigger', default: true},
-            field: {name: 'Компактная карточка (ТВ и горизонтальный экран)', description: 'Без постера; время и жанры в строке рейтингов. На телефоне работает в горизонтальном положении'},
-            onChange: function(){ cmp() }
-        })
+        window.__imdbbStySync = function(){ try{ let st = L.Storage.get('imdbb_style', 'true'); let on = !(st === false || st === 'false'); try{ L.Storage.set('imdbb_compact', on); L.Storage.set('imdbb_wide', on) }catch(e){} localStorage.setItem('imdbb_compact', on ? 'true' : 'false'); localStorage.setItem('imdbb_wide', on ? 'true' : 'false') }catch(e){} cmp() };
 
         L.SettingsApi.addParam({
             component: 'imdbb',
@@ -191,6 +186,10 @@ function init(){
         })
 
         cmp()
+        try{ if(localStorage.getItem('imdbb_style') === null){ let c0 = L.Storage.get('imdbb_compact', 'true'); let w0 = localStorage.getItem('imdbb_wide'); let on0 = !(c0 === false || c0 === 'false' || w0 === 'false'); L.Storage.set('imdbb_style', on0); window.__imdbbStySync() } }catch(e){}
+        window.__imdbbNb = function(){ try{ document.body.classList.toggle('imdbb-nobadge', localStorage.getItem('imdbb_hide_badges') === 'true') }catch(e){} }
+        window.__imdbbNb(); setTimeout(window.__imdbbNb, 1000)
+        try{ L.Storage.listener.follow('change', function(e){ if(e && e.name === 'imdbb_hide_badges') window.__imdbbNb() }) }catch(e){}
         setTimeout(cmp, 1000)
         window.addEventListener('resize', cmp)
         window.addEventListener('orientationchange', function(){ setTimeout(cmp, 300) })

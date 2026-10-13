@@ -7,8 +7,7 @@ import EmptyRouter from '../interaction/empty/module/router'
 
 export function imdbbOn(){
     try{
-        let inf = typeof window.imdbbInf === 'function' ? window.imdbbInf() : true
-        return document.body.classList.contains('imdbb-compact') && localStorage.getItem('imdbb_wide') !== 'false' && inf
+        return document.body.classList.contains('imdbb-compact') && localStorage.getItem('imdbb_wide') !== 'false'
     }
     catch(e){ return false }
 }

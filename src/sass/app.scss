@@ -562,3 +562,5 @@ html body .imdbb-hero__logo img{ max-height: 3.8em !important; }
 html body .imdbb-nodescr .items-line__head{ padding-left: 3em !important; }
 html body .imdbb-nodescr .items-line__body .scroll__content{ padding: .9em 0 .9em 3em !important; }
 body.imdbb-compact .card__quality{display:none !important}
+/* imdbb-nbglobal */
+body.imdbb-nobadge .card .card__vote,body.imdbb-nobadge .card .imdbb-q,body.imdbb-nobadge .card .card__type,body.imdbb-nobadge .card .imdbb-ep,body.imdbb-nobadge .card .card__quality{display:none !important}

@@ -7,7 +7,7 @@ export default {
     onScroll: function(){
         let d = this.data
 
-        if(!window.imdbbInf() || this.imdbb_wait || !d || !((d.url && d.source) || d.imdbb_next) || !(d.total_pages > 1)) return
+        if(!(window.imdbbInf() || (d && d.imdbb_next)) || this.imdbb_wait || !d || !((d.url && d.source) || d.imdbb_next) || !(d.total_pages > 1)) return
 
         let page = d.page || 1
 

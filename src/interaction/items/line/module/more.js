@@ -7,7 +7,7 @@ export default {
     onVisible: function(){
         let pages = this.data.total_pages || 1
 
-        if(pages <= 1 || (window.imdbbInf && window.imdbbInf())) return
+        if(pages <= 1 || (window.imdbbInf && window.imdbbInf()) || this.data.imdbb_next) return
 
         let button = document.createElement('div')
             button.classList.add('items-line__more')
@@ -20,7 +20,7 @@ export default {
     },
 
     onScroll: function(){
-        if(!this.more && !(window.imdbbInf && window.imdbbInf()) && this.data.results.length == this.items.length && this.data.total_pages > 1){
+        if(!this.more && !(window.imdbbInf && window.imdbbInf()) && !this.data.imdbb_next && this.data.results.length == this.items.length && this.data.total_pages > 1){
             this.more = new More(this.params.more)
 
             this.more.create()
