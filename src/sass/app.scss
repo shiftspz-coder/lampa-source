@@ -500,3 +500,9 @@ html body.imdbb-compact .imdbb-ov{ margin-bottom: .3em !important; }
 html body.imdbb-compact .imdbb-ppl{ margin-top: .8em !important; }
 html body.imdbb-compact .full-start-new__title img{ max-height: 1.1em !important; }
 }
+
+/* imdbb-lowh3 */
+@media (max-height: 477px) and (pointer: coarse){
+html body .imdbb-hero > *{ flex-shrink: 0 !important; }
+html body .imdbb-hero__logo img{ max-height: 3.5em !important; }
+}
