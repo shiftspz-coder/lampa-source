@@ -123,18 +123,21 @@ export default function(main){
 
             let logo = ''
             let known = false
+            let pl = null
             if(info && info.images && info.images.logos){
                 known = true
                 let ls = info.images.logos
                 let pick = ls.filter(function(x){ return x.iso_639_1 === 'ru' })[0] || ls.filter(function(x){ return x.iso_639_1 === 'en' })[0] || ls[0]
                 if(pick && pick.file_path) logo = L.TMDB.image('t/p/w500' + pick.file_path)
-                if(!lgcached(d)) lgput(d, pick && pick.file_path ? pick.file_path.replace('.svg', '.png') : '')
+                pl = pick ? (pick.iso_639_1 || '') : null
+                if(!lgcached(d) || lgcached(d).l === undefined) lgput(d, pick && pick.file_path ? pick.file_path.replace('.svg', '.png') : '', pick ? (pick.iso_639_1 || '') : '')
             }
             else if(!info){
                 let cp = lgcached(d)
                 if(cp){
                     known = true
                     if(cp.p) logo = L.TMDB.image('t/p/w500' + cp.p)
+                    pl = cp.l === undefined ? null : cp.l
                 }
             }
             let lg = q('.imdbb-hero__logo')
@@ -157,6 +160,18 @@ export default function(main){
                 lg.setAttribute('data-src', 'T:' + title)
                 lg.innerHTML = '<div class="imdbb-hero__t">' + esc(title) + '</div>'
             }
+
+            try{
+                let ru = L.Storage.get('imdbb_logo_ru', 'false')
+                let old = lg.querySelector('.imdbb-hero__ru')
+                if(old) old.remove()
+                if((ru === true || ru === 'true') && logo && pl !== null && pl !== 'ru' && title && title !== (d.original_title || d.original_name || '')){
+                    let c = document.createElement('div')
+                    c.className = 'imdbb-hero__ru'
+                    c.textContent = title
+                    lg.appendChild(c)
+                }
+            }catch(e){}
 
             q('.imdbb-hero__tag').textContent = (info && info.tagline) || ''
 

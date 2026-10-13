@@ -587,3 +587,10 @@ html body .imdbb-pst .imdbb-pmeta{display:flex; align-items:center; white-space:
 html body .imdbb-pst .imdbb-pmeta>span{padding:0 .6em; border-left:1px solid rgba(255,255,255,.3)}
 html body .imdbb-pst .imdbb-pmeta>span:first-child{padding-left:0; border-left:0}
 html body .imdbb-pst .imdbb-pdescr{max-width:42em; font-size:1.3em; line-height:1.4; font-weight:300; color:rgba(255,255,255,.85); margin:0 0 .8em; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
+
+/* imdbb-rutl */
+.imdbb-rutl{display:none; height:0; margin:0; padding:0; position:relative; overflow:visible}
+body.imdbb-compact .imdbb-rutl{display:block}
+.imdbb-rutl__t{position:absolute; left:0; bottom:.35em; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:1.2em; line-height:1.1; color:rgba(255,255,255,.75); pointer-events:none}
+.imdbb-hero__logo{position:relative}
+.imdbb-hero__ru{position:absolute; left:0; bottom:100%; margin-bottom:.35em; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:1.15em; line-height:1.1; color:rgba(255,255,255,.75); pointer-events:none}

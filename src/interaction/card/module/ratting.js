@@ -516,14 +516,16 @@ export function lgcached(m){
     return lget(kindOf(m) + ':' + m.id)
 }
 
-export function lgput(m, p){
+export function lgput(m, p, l){
     if(!m || !m.id) return
 
     let k = kindOf(m) + ':' + m.id
 
-    if(lget(k)) return
+    let e0 = lget(k)
 
-    lload()[k] = {p: p || '', t: Date.now()}
+    if(e0 && (e0.l !== undefined || l === undefined)) return
+
+    lload()[k] = {p: p || '', t: Date.now(), l: l}
 
     lsaveLater()
 }

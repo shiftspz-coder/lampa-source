@@ -205,19 +205,21 @@ class Start extends Emit {
             let ibh = this.html
             let ibc = this.card
             let ibl = lgcached(ibc)
+            let ruOn = L.Storage.get('imdbb_logo_ru', 'false'); ruOn = ruOn === true || ruOn === 'true'
+            if(ibl && ibl.l === undefined && ruOn) ibl = null
             let back = function(){ lt.css('visibility', ''); lg.css('visibility', ''); gate(ibh, 'l') }
             let url = L.TMDB.api((this.card.name ? 'tv' : 'movie') + '/' + this.card.id + '/images?api_key=' + L.TMDB.key() + '&include_image_language=' + lang + ',en,null')
 
             lt.css('visibility', 'hidden')
             lg.css('visibility', 'hidden')
 
-            let getter = ibl ? function(ok){ ok({logos: ibl.p ? [{iso_639_1: lang, file_path: ibl.p}] : []}) } : function(ok, bad){ $.get(url, ok).fail(bad) }
+            let getter = ibl ? function(ok){ ok({logos: ibl.p ? [{iso_639_1: (ibl.l === undefined ? lang : ibl.l), file_path: ibl.p}] : []}) } : function(ok, bad){ $.get(url, ok).fail(bad) }
 
             getter(function(r){
                 let all = r && r.logos ? r.logos : []
                 let pick = all.filter(function(x){ return x.iso_639_1 === lang })[0] || all.filter(function(x){ return x.iso_639_1 === 'en' })[0] || all[0]
 
-                if(!ibl) lgput(ibc, pick && pick.file_path ? pick.file_path.replace('.svg', '.png') : '')
+                if(!ibl) lgput(ibc, pick && pick.file_path ? pick.file_path.replace('.svg', '.png') : '', pick ? (pick.iso_639_1 || '') : '')
 
                 if(!pick || !pick.file_path) return back()
 
@@ -226,6 +228,7 @@ class Start extends Emit {
 
                 img.on('load', function(){
                     lt.removeClass('twolines').html('').append(img).css('visibility', '')
+                    try{ ibh.find('.imdbb-rutl').remove(); let ct = ibc.title || ibc.name || ''; let co = ibc.original_title || ibc.original_name || ''; if(ruOn && (pick.iso_639_1 || '') !== lang && ct && ct !== co){ let w = document.createElement('div'); w.className = 'imdbb-rutl'; let t2 = document.createElement('div'); t2.className = 'imdbb-rutl__t'; t2.textContent = ct; w.appendChild(t2); if(lt[0] && lt[0].parentNode) lt[0].parentNode.insertBefore(w, lt[0]) } }catch(e){}
                     lg.css('visibility', '')
                     gate(ibh, 'l')
                 })
