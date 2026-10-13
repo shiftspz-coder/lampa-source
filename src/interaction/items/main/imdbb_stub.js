@@ -42,7 +42,18 @@ function build(d){
 
     q('.imdbb-hero__tag').textContent = (info && info.tagline) || ''
 
-    let parts = []
+    let imdbbMg = function(ps){
+    if(!ps.length) return ''
+    let r = '', pl = '', tx = [], g = ''
+    ps.forEach(function(x){
+        if(x.indexOf('<span class="imdbb-hero__r"') === 0) r = x
+        else if(x.indexOf('<span class="imdbb-hero__q"') === 0 || x.indexOf('<span class="imdbb-hero__c"') === 0) pl += x
+        else if(x.indexOf('<span class="imdbb-hero__g"') === 0) g = x
+        else tx.push(x.replace(/^<span>/, '').replace(/<\/span>$/, ''))
+    })
+    return r + (pl ? '<span class="imdbb-hero__pl">' + pl + '</span>' : '') + (tx.length ? '<span class="imdbb-hero__tx">' + tx.join('<em class="imdbb-dot">·</em>') + '</span>' : '') + g
+}
+let parts = []
     let r = IMDb.cached(d)
     let ql = qlabel(d)
     let ct = info && info._cert
@@ -50,9 +61,9 @@ function build(d){
     let dm = date.match(/^(\d{4})-(\d\d)-(\d\d)$/)
     let ds = dm ? dm[3] + '.' + dm[2] + '.' + dm[1] : date.slice(0, 4)
 
-    if(r) parts.push('<span class="imdbb-hero__r">' + (r >= 10 ? '10' : r.toFixed(1)) + ' IMDB</span>')
+    if(r) parts.push('<span class="imdbb-hero__r"><b>' + (r >= 10 ? '10' : r.toFixed(1)) + '</b><i>IMDb</i></span>')
     if(ql) parts.push('<span class="imdbb-hero__q">' + ql + '</span>')
-    if(ct) parts.push('<span>' + esc(ct) + '</span>')
+    if(ct) parts.push('<span class="imdbb-hero__c">' + esc(ct) + '</span>')
     if(ds) parts.push('<span>' + esc(ds) + '</span>')
 
     if(info){
@@ -60,10 +71,10 @@ function build(d){
         if(c) parts.push('<span>' + esc(MAP[c] || c) + '</span>')
         if(info.runtime > 0) parts.push('<span>' + ('0' + Math.floor(info.runtime / 60)).slice(-2) + ':' + ('0' + (info.runtime % 60)).slice(-2) + '</span>')
         let g = (info.genres || []).slice(0, 3).map(function(x){ let n = x.name + ''; return n.charAt(0).toUpperCase() + n.slice(1) }).join(', ')
-        if(g) parts.push('<span>' + esc(g) + '</span>')
+        if(g) parts.push('<span class="imdbb-hero__g">' + esc(g) + '</span>')
     }
 
-    q('.imdbb-hero__meta').innerHTML = parts.join('')
+    q('.imdbb-hero__meta').innerHTML = imdbbMg(parts)
 
     let sl = ''
     if(info && kind === 'tv' && info.number_of_seasons){

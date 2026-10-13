@@ -594,3 +594,30 @@ body.imdbb-compact .imdbb-rutl{display:block}
 .imdbb-rutl__t{position:absolute; left:0; bottom:.35em; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:1.2em; line-height:1.1; color:rgba(255,255,255,.75); pointer-events:none}
 .imdbb-hero__logo{position:relative}
 .imdbb-hero__ru{position:absolute; left:0; bottom:100%; margin-bottom:.35em; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:1.15em; line-height:1.1; color:rgba(255,255,255,.75); pointer-events:none}
+
+/* imdbb-metaB */
+html body .imdbb-hero__meta{display:grid; grid-template-columns:auto auto 1fr; align-items:center; justify-items:start; row-gap:.3em; column-gap:0; white-space:nowrap}
+html body .imdbb-hero__meta>span{padding:0; border-left:0}
+html body .imdbb-hero__meta>.imdbb-hero__r{grid-column-start:1; grid-row-start:1; grid-row-end:span 3; align-self:stretch; display:flex; flex-direction:column; align-items:center; justify-content:center; padding-right:.9em; border-right:1px solid rgba(255,255,255,.3)}
+html body .imdbb-hero__r b{font-size:2.1em; line-height:1; font-weight:500; font-variant-numeric:tabular-nums}
+html body .imdbb-hero__r i{font-style:normal; font-size:.7em; margin-top:.2em; color:rgba(255,255,255,.7)}
+html body .imdbb-hero__meta .imdbb-hero__r ~ span{margin-left:.9em}
+html body .imdbb-hero__pl{display:flex; align-items:center; gap:.5em; grid-column-start:2}
+html body .imdbb-hero__pl>span{border:1px solid rgba(255,255,255,.45); border-radius:.3em; padding:.05em .55em; display:inline-flex; align-items:center}
+html body .imdbb-hero__tx, html body .imdbb-hero__g{grid-column-start:2; grid-column-end:-1; color:rgba(255,255,255,.7)}
+html body .imdbb-dot{font-style:normal; margin:0 .4em; opacity:.6}
+html body .imdbb-hero__fav{grid-column-start:3; grid-row-start:1}
+html body.imdbb-compact .full-start-new__rate-line{display:grid!important; grid-template-columns:auto auto auto 1fr; align-items:center; justify-items:start; row-gap:.3em}
+html body.imdbb-compact .full-start-new__rate-line > *{margin:0!important; order:0}
+html body.imdbb-compact .full-start-new__rate-line > *::before{display:none!important}
+html body.imdbb-compact .full-start-new__rate-line .rate--imdb.hide{display:none!important}
+html body.imdbb-compact .full-start-new__rate-line .rate--imdb{grid-column-start:1; grid-row-start:1; grid-row-end:span 3; align-self:stretch; flex-direction:column!important; align-items:center!important; justify-content:center; gap:.2em!important; padding:0 .9em 0 0!important; border-right:1px solid rgba(255,255,255,.3)}
+html body.imdbb-compact .full-start-new__rate-line .rate--imdb > div:first-child{font-size:2.1em!important; line-height:1!important; font-weight:500!important}
+html body.imdbb-compact .full-start-new__rate-line .rate--imdb > div:last-child{font-size:.7em!important; color:rgba(255,255,255,.7)!important}
+html body.imdbb-compact .full-start-new__rate-line .rate--imdb ~ *{margin-left:.9em!important}
+html body.imdbb-compact .full-start-new__rate-line > .imdbb-cq{grid-column-start:2; grid-row-start:1; border:1px solid rgba(255,255,255,.45); border-radius:.3em; padding:.05em .55em!important}
+html body.imdbb-compact .full-start-new__rate-line .rate--imdb ~ .full-start__pg, html body.imdbb-compact .full-start-new__rate-line > .full-start__pg{grid-column-start:3; grid-row-start:1; margin-left:.5em!important; border:1px solid rgba(255,255,255,.45); border-radius:.3em; padding:.05em .55em!important}
+html body.imdbb-compact .full-start-new__rate-line > .imdbb-mrow, html body.imdbb-compact .full-start-new__rate-line > .imdbb-grow{display:block!important; grid-column-start:2; grid-column-end:-1; padding:0!important; color:rgba(255,255,255,.7); font-size:1.12em; white-space:nowrap}
+html body.imdbb-compact .full-start-new__rate-line > .imdbb-mrow{grid-row-start:2}
+html body.imdbb-compact .full-start-new__rate-line > .imdbb-grow{grid-row-start:3}
+html body.imdbb-compact .full-start-new__rate-line > .imdbb-fav{grid-column-start:4; grid-row-start:1; margin-left:.6em!important}

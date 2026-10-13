@@ -175,7 +175,18 @@ export default function(main){
 
             q('.imdbb-hero__tag').textContent = (info && info.tagline) || ''
 
-            let parts = []
+            let imdbbMg = function(ps){
+    if(!ps.length) return ''
+    let r = '', pl = '', tx = [], g = ''
+    ps.forEach(function(x){
+        if(x.indexOf('<span class="imdbb-hero__r"') === 0) r = x
+        else if(x.indexOf('<span class="imdbb-hero__q"') === 0 || x.indexOf('<span class="imdbb-hero__c"') === 0) pl += x
+        else if(x.indexOf('<span class="imdbb-hero__g"') === 0) g = x
+        else tx.push(x.replace(/^<span>/, '').replace(/<\/span>$/, ''))
+    })
+    return r + (pl ? '<span class="imdbb-hero__pl">' + pl + '</span>' : '') + (tx.length ? '<span class="imdbb-hero__tx">' + tx.join('<em class="imdbb-dot">·</em>') + '</span>' : '') + g
+}
+let parts = []
             let rate = ''
             let qh = ''
             if(el){
@@ -187,10 +198,10 @@ export default function(main){
                 let qq = el.querySelector('.imdbb-q')
                 if(qq) qh = qq.innerHTML
             }
-            if(rate) parts.push('<span class="imdbb-hero__r">' + esc(rate) + ' IMDB</span>')
+            if(rate) parts.push('<span class="imdbb-hero__r"><b>' + esc(rate) + '</b><i>IMDb</i></span>')
             if(qh) parts.push('<span class="imdbb-hero__q">' + qh + '</span>')
             let ct = info ? cert(info, kind) : ''
-            if(ct) parts.push('<span>' + esc(ct) + '</span>')
+            if(ct) parts.push('<span class="imdbb-hero__c">' + esc(ct) + '</span>')
             let date = (info && (info.release_date || info.first_air_date)) || d.release_date || d.first_air_date || ''
             let dm = date.match(/^(\d{4})-(\d\d)-(\d\d)$/)
             let ds = dm ? dm[3] + '.' + dm[2] + '.' + dm[1] : date.slice(0, 4)
@@ -200,9 +211,9 @@ export default function(main){
                 if(c) parts.push('<span>' + esc(MAP[c] || c) + '</span>')
                 if(info.runtime > 0){ let rm = info.runtime; parts.push('<span>' + ('0' + Math.floor(rm / 60)).slice(-2) + ':' + ('0' + (rm % 60)).slice(-2) + '</span>') }
                 let g = (info.genres || []).slice(0, 3).map(function(x){ let n = x.name + ''; return n.charAt(0).toUpperCase() + n.slice(1) }).join(', ')
-                if(g) parts.push('<span>' + esc(g) + '</span>')
+                if(g) parts.push('<span class="imdbb-hero__g">' + esc(g) + '</span>')
             }
-            q('.imdbb-hero__meta').innerHTML = parts.join('')
+            q('.imdbb-hero__meta').innerHTML = imdbbMg(parts)
 
             let sl = ''
             if(info && kind === 'tv' && info.number_of_seasons){
