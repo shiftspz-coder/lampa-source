@@ -535,3 +535,10 @@ html body .imdbb-nodescr .items-line__body .scroll__content{ padding: .9em 0 !im
 .imdbb-nodescr.imdbb-nobadge .items-line .imdbb-q,
 .imdbb-nodescr.imdbb-nobadge .items-line .card__type,
 .imdbb-nodescr.imdbb-nobadge .items-line .imdbb-ep{ display: none !important; }
+
+/* imdbb-lowh8 */
+@media (max-height: 473px) and (pointer: coarse){
+html body{ --imdbb-card-x: .4em !important; }
+html body.imdbb-compact .full-start-new__tagline{ margin-bottom: .4em !important; }
+html body.imdbb-compact .imdbb-ov{ margin-top: .2em !important; }
+}
