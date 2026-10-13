@@ -435,7 +435,7 @@ function lgPaint(el, view, d, kind){
     let m = lgMode()
     let ex = view.find('.imdbb-lgw')
 
-    let ok = $(el).closest('.imdbb-home').length || $(el).hasClass('imdbb-wc')
+    let ok = $(el).closest('.imdbb-home').length || $(el).hasClass('imdbb-wc') || ($(el).hasClass('card--wide') && $(el).closest('.imdbb-nodescr').length)
 
     if(m === 'off' || !ok){
         $(el).removeClass('imdbb-lgd')
