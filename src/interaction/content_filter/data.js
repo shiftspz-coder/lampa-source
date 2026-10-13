@@ -440,6 +440,16 @@ for(let a = 15; a >= 0; a-=3){
 }
 
 
+function yearItems(){
+    let items = [{title: '#{filter_any}'}]
+    let y = (new Date()).getFullYear()
+    for(let v = y; v >= y - 100; v--) items.push({title: String(v), val: v})
+    return items
+}
+
+data.year_from = {title: '#{title_year} #{filter_rating_from}', items: yearItems()}
+data.year_to = {title: '#{title_year} #{filter_rating_to}', items: yearItems()}
+
 data.language.items.forEach(i=>i.checkbox = true)
 
 export default data

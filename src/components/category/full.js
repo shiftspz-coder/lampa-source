@@ -14,7 +14,10 @@ function imdbLister(object){
     let mn = parseFloat(object.imdb_min) || 0
     let mx = parseFloat(object.imdb_max) || 10
 
-    if(!(mn > 0 || mx < 10)) return null
+    let hasRange = mn > 0 || mx < 10
+    let sortOn = !!object.imdb_sort
+
+    if(!(hasRange || sortOn)) return null
 
     let starts = {1: 1}
 
@@ -28,7 +31,9 @@ function imdbLister(object){
 
             if(!kept.length) return err && err()
 
-            ok(Object.assign({}, last, {results: kept, page: page}))
+            if(sortOn) kept.sort(function(a, b){ return b.r - a.r })
+
+            ok(Object.assign({}, last, {results: kept.map(function(x){ return x.m }), page: page}))
         }
 
         let step = function(cur){
@@ -39,9 +44,10 @@ function imdbLister(object){
                 let total = (data && data.total_pages) || 1
                 let left = list.length
                 let flags = []
+                let rates = []
 
                 let after = function(){
-                    list.forEach(function(m, i){ if(flags[i]) kept.push(m) })
+                    list.forEach(function(m, i){ if(flags[i]) kept.push({m: m, r: rates[i]}) })
 
                     tries++
 
@@ -53,7 +59,8 @@ function imdbLister(object){
 
                 list.forEach(function(m, i){
                     IMDb.rating(m, function(r){
-                        flags[i] = r > 0 && r >= mn && r <= mx
+                        rates[i] = parseFloat(r) || 0
+                        flags[i] = hasRange ? (rates[i] > 0 && rates[i] >= mn && rates[i] <= mx) : true
 
                         left--
 

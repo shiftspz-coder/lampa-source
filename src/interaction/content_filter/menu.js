@@ -6,6 +6,18 @@ import Storage from '../../core/storage/storage'
 import Permit from '../../core/account/permit'
 import data from './data'
 
+function yearRange(){
+    let pick = (w)=>{
+        let it = w.items.find(x=>x.selected && x.val)
+        return it ? it.val : 0
+    }
+    let a = pick(data.year_from), b = pick(data.year_to)
+
+    if(a && b && b < a){ let t = a; a = b; b = t }
+
+    return {min: a, max: b}
+}
+
 function imdbRange(){
     let pick = (w)=>{
         let it = w.items.find(s=>s.selected && s.val)
@@ -30,7 +42,7 @@ function main(){
     let items = [{
         title: Lang.translate('search_start'),
         search: true
-    },data.type].concat(Storage.field('source') == 'cub' ? [data.rating] : [data.imdb_from, data.imdb_to], [data['genres_'+type],data.language,data.year])
+    },data.type].concat(Storage.field('source') == 'cub' ? [data.rating] : [data.imdb_from, data.imdb_to], [data['genres_'+type],data.language].concat(Storage.field('source') == 'cub' ? [data.year] : [data.year_from, data.year_to]))
 
     if(Storage.field('source') == 'cub') items.push(data.pgrating,data.sort,data.quality)
 
@@ -79,19 +91,14 @@ function queryForTMDB(){
         if(a.checked) languages.push(a.code)
     })
 
-    data.year.items.forEach(a=>{
-        if(a.selected && !a.any){
-            let need = type == 'movie' ? 'primary_release_date' : 'first_air_date'
+    let yr = yearRange()
+    let yneed = type == 'movie' ? 'primary_release_date' : 'first_air_date'
 
-            if(a.title.indexOf('-') >= 0){
-                query.push(need+'.lte='+a.title.split('-')[0]+'-12-31')
-                query.push(need+'.gte='+a.title.split('-')[1]+'-01-01')
-            }
-            else{
-                query.push((type == 'movie' ? 'primary_release_year' : 'first_air_date_year') + '=' + a.title)
-            }
-        }
-    })
+    if(yr.min) query.push(yneed + '.gte=' + yr.min + '-01-01')
+    if(yr.max) query.push(yneed + '.lte=' + yr.max + '-12-31')
+
+    query.push('sort_by=vote_average.desc')
+    query.push('vote_count.gte=200')
 
     data['genres_'+type].items.forEach(a=>{
         if(a.checked)  genres.push(a.id)
@@ -206,6 +213,7 @@ function search(){
         card_type: true,
         imdb_min: source == 'cub' ? 0 : imdbRange().min,
         imdb_max: source == 'cub' ? 0 : imdbRange().max,
+        imdb_sort: source == 'cub' ? 0 : 1,
         page: 1
     }
 
