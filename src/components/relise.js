@@ -4,6 +4,7 @@ import CategoryModule from '../interaction/items/category/module/module'
 import Background from '../interaction/background'
 import Utils from '../utils/utils'
 import Router from '../core/router'
+import imdbbRows, {imdbbOn} from './imdbb_rows'
 
 /**
  * Компонент "Релизы"
@@ -11,6 +12,8 @@ import Router from '../core/router'
  * @returns 
  */
 function component(object){
+    if(imdbbOn()) return imdbbRows(object, (page, ok, err)=>{ Api.relise(Object.assign({}, object, {page: page}), ok, err) })
+
     let comp = Utils.createInstance(Category, object, {
         module: CategoryModule.toggle(CategoryModule.MASK.base, 'Pagination')
     })

@@ -7,7 +7,7 @@ export default {
     onScroll: function(){
         let d = this.data
 
-        if(!window.imdbbInf() || this.imdbb_wait || !d || !d.url || !d.source || !(d.total_pages > 1)) return
+        if(!window.imdbbInf() || this.imdbb_wait || !d || !((d.url && d.source) || d.imdbb_next) || !(d.total_pages > 1)) return
 
         let page = d.page || 1
 
@@ -28,7 +28,9 @@ export default {
 
         this.imdbb_wait = true
 
-        window.Lampa.Api.list({url: d.url, page: page + 1, source: d.source}, (res)=>{
+        let nx = d.imdbb_next ? (cb, er)=>{ d.imdbb_next(page + 1, (list)=>{ cb({results: list}) }, er) } : (cb, er)=>{ window.Lampa.Api.list({url: d.url, page: page + 1, source: d.source}, cb, er) }
+
+        nx((res)=>{
             this.imdbb_wait = false
 
             if(this.destroyed || !res || !res.results) return
@@ -38,7 +40,8 @@ export default {
             let ids = {}
 
             d.results.forEach((x)=>{ ids[x.id] = 1 })
-            res.results.forEach((x)=>{ if(!ids[x.id]) d.results.push(x) })
+            let f0 = d.results[0]; let wd = !!(d.imdbb_wrow || (f0 && f0.params && f0.params.style && f0.params.style.name === 'wide'))
+            res.results.forEach((x)=>{ if(!ids[x.id]){ if(wd) x.params = Object.assign({}, x.params, {style: {name: 'wide'}, imdbb_infw: 1}); d.results.push(x) } })
 
             this.emit('scroll')
         }, ()=>{ this.imdbb_wait = false })

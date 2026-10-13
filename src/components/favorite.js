@@ -5,6 +5,7 @@ import Background from '../interaction/background'
 import Utils from '../utils/utils'
 import Router from '../core/router'
 import EmptyRouter from '../interaction/empty/module/router'
+import imdbbRows, {imdbbOn} from './imdbb_rows'
 
 /**
  * Компонент избранного, просмотр папки или истории
@@ -13,6 +14,8 @@ import EmptyRouter from '../interaction/empty/module/router'
  */
 
 function component(object){
+    if(imdbbOn()) return imdbbRows(object, (page, ok, err)=>{ Api.favorite(Object.assign({}, object, {page: page}), ok, err) }, {type: object.type, router: 'favorites'})
+
     let comp = Utils.createInstance(Category, object, {
         module: CategoryModule.toggle(CategoryModule.MASK.base, 'Pagination'),
         empty: {

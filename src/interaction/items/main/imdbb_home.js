@@ -68,12 +68,12 @@ function hput(k, j, ct){
 export default function(main){
     try{
         let o = main.object || {}
-        if(['main','category','bookmarks'].indexOf(o.component) < 0) return
+        if(['main','category','bookmarks','relise','favorite','category_full'].indexOf(o.component) < 0) return
         if(!document.body.classList.contains('imdbb-compact')) return
         if(localStorage.getItem('imdbb_wide') === 'false') return
 
         let L = window.Lampa
-        let isBm = o.component === 'bookmarks'
+        let isBm = ['bookmarks','relise','favorite','category_full'].indexOf(o.component) > -1
         let hero = document.createElement('div')
         hero.className = 'imdbb-hero'
         hero.innerHTML = '<div class="imdbb-hero__logo"></div><div class="imdbb-hero__tag"></div><div class="imdbb-hero__meta"></div><div class="imdbb-hero__s"></div><div class="imdbb-hero__d"></div>'
