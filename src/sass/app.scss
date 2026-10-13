@@ -577,3 +577,12 @@ html body .imdbb-home.imdbb-act .items-line{height:calc(100vh - 3.55em)!importan
 html body .imdbb-home.imdbb-act .items-line.imdbb-pl{padding-top:0!important}
 html body .imdbb-home.imdbb-act>.imdbb-hero{transition:opacity .25s}
 html body .imdbb-home.imdbb-act.imdbb-pup>.imdbb-hero{opacity:0}
+/* imdbb-pst */
+html body .imdbb-pst .person-start__tags{display:none!important}
+html body .imdbb-pst .person-start__left{display:flex; flex-direction:column; justify-content:flex-end}
+html body .imdbb-pst .person-start__name{margin-bottom:.25em}
+html body .imdbb-pst .person-start__place{margin:0 0 .6em; border-left:2px solid rgba(255,255,255,.4); padding-left:.6em; max-width:100%; color:rgba(255,255,255,.8)}
+html body .imdbb-pst .imdbb-pmeta{display:flex; align-items:center; white-space:nowrap; font-size:1.2em; margin:0 0 .7em}
+html body .imdbb-pst .imdbb-pmeta>span{padding:0 .6em; border-left:1px solid rgba(255,255,255,.3)}
+html body .imdbb-pst .imdbb-pmeta>span:first-child{padding-left:0; border-left:0}
+html body .imdbb-pst .imdbb-pdescr{max-width:42em; font-size:1.3em; line-height:1.4; font-weight:300; color:rgba(255,255,255,.85); margin:0 0 .8em; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}

@@ -20,6 +20,46 @@ export default {
 
         this.prefix = Template.prefix(this.html, 'person-start')
 
+        try{
+            if(document.body.classList.contains('imdbb-compact') && localStorage.getItem('imdbb_wide') !== 'false'){
+                let el = (this.html && this.html[0] && this.html.find) ? this.html[0] : this.html
+                el.classList.add('imdbb-pst')
+                let bt = el.querySelector('.person-start__bottom'), parts = [], ru = Storage.get('language','ru') === 'ru'
+                if(this.data.birthday) parts.push(Utils.parseTime(this.data.birthday).full)
+                if(ru && this.data.birthday){
+                    let b = new Date(this.data.birthday), e = this.data.deathday ? new Date(this.data.deathday) : new Date()
+                    if(!isNaN(b) && !isNaN(e)){
+                        let n = e.getUTCFullYear() - b.getUTCFullYear()
+                        if(e.getUTCMonth() < b.getUTCMonth() || (e.getUTCMonth() === b.getUTCMonth() && e.getUTCDate() < b.getUTCDate())) n--
+                        if(n > 0 && n < 130){
+                            let m10 = n % 10, m100 = n % 100
+                            parts.push(n + ' ' + (m10 === 1 && m100 !== 11 ? 'год' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'года' : 'лет'))
+                        }
+                    }
+                }
+                if(ru){
+                    let pr = {Acting: this.data.gender === 1 ? 'Актриса' : 'Актёр', Directing: 'Режиссёр', Writing: 'Сценарист', Production: 'Продюсер'}[this.data.known_for_department]
+                    if(pr) parts.push(pr)
+                }
+                if(bt && bt.parentNode){
+                    if(parts.length){
+                        let mt = document.createElement('div')
+                        mt.className = 'imdbb-pmeta'
+                        parts.forEach((t)=>{ let sp = document.createElement('span'); sp.textContent = t; mt.appendChild(sp) })
+                        bt.parentNode.insertBefore(mt, bt)
+                    }
+                    let bio = (this.data.biography || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim()
+                    if(bio){
+                        let ds = document.createElement('div')
+                        ds.className = 'imdbb-pdescr'
+                        ds.textContent = bio
+                        bt.parentNode.insertBefore(ds, bt)
+                    }
+                }
+            }
+        }
+        catch(e){}
+
         this.subscribed = Storage.get('person_subscribes_id','[]').find(a=>a == this.data.id)
 
         Utils.imgLoad(this.prefix.img, this.data.profile_path ? TMDB.img(this.data.profile_path, 'w500') : this.data.img || 'img/img_broken.svg', (img)=>{
