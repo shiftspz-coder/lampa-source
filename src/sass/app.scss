@@ -515,3 +515,11 @@ html body .imdbb-hero__tag{ margin: .25em 0 .45em !important; }
 html body .imdbb-hero__meta{ margin: .25em 0 .45em !important; }
 html body.imdbb-compact .full-start-new__right{ padding-top: 2.8em !important; }
 }
+
+/* imdbb-lowh5 */
+@media (max-height: 475px) and (pointer: coarse){
+.imdbb-home{ --imdbb-row: 16.5em; --imdbb-bot: .2em; }
+html body.imdbb-compact .full-start-new__buttons{ margin-top: -2em !important; }
+html body.imdbb-compact .full-start-new__title img{ max-height: 1.6em !important; }
+}
+.imdbb-nodescr .card--wide .card__promo{ display: none !important; }

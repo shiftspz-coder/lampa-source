@@ -188,21 +188,21 @@ function component(object){
                         return parseInt(yearA) - parseInt(yearB)
                     })
 
-                    this.rows.push(['cards', data.collection])
+                    this.rows.push(['cards', ((d)=>{ if(document.body.classList.contains('imdbb-compact') && localStorage.getItem('imdbb_wide') !== 'false'){ d.results.forEach((c)=>{ c.params = Object.assign({}, c.params, {style: {name: 'wide'}}) }); d.params = Object.assign({}, d.params, {items: {view: 4}}); d.imdbb_wrow = 1 } return d })(data.collection)])
                 }
 
                 // Создаем рекомендации
                 if(!adult_block && data.recomend && data.recomend.results && data.recomend.results.length){
                     data.recomend.title   = Lang.translate('title_recomendations')
 
-                    this.rows.push(['cards', data.recomend])
+                    this.rows.push(['cards', ((d)=>{ if(document.body.classList.contains('imdbb-compact') && localStorage.getItem('imdbb_wide') !== 'false'){ d.results.forEach((c)=>{ c.params = Object.assign({}, c.params, {style: {name: 'wide'}}) }); d.params = Object.assign({}, d.params, {items: {view: 4}}); d.imdbb_wrow = 1 } return d })(data.recomend)])
                 }
 
                 // Создаем похожие
                 if(!adult_block && data.simular && data.simular.results && data.simular.results.length){
                     data.simular.title   = Lang.translate('title_similar')
 
-                    this.rows.push(['cards', data.simular])
+                    this.rows.push(['cards', ((d)=>{ if(document.body.classList.contains('imdbb-compact') && localStorage.getItem('imdbb_wide') !== 'false'){ d.results.forEach((c)=>{ c.params = Object.assign({}, c.params, {style: {name: 'wide'}}) }); d.params = Object.assign({}, d.params, {items: {view: 4}}); d.imdbb_wrow = 1 } return d })(data.simular)])
                 }
 
                 // Добавляем картинку для фона
