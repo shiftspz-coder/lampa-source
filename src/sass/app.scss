@@ -568,5 +568,6 @@ body.imdbb-nobadge .card .card__vote,body.imdbb-nobadge .card .imdbb-q,body.imdb
 .imdbb-prow .card{width:16em}
 .imdbb-prow .card__view{padding-bottom:56.25%; border-radius:.6em; overflow:visible!important}
 .imdbb-prow .card__img{object-fit:cover; border-radius:.6em}
-.imdbb-prow .card__title,.imdbb-prow .card__age,.imdbb-prow .card__vote,.imdbb-prow .imdbb-q,.imdbb-prow .card__type,.imdbb-prow .imdbb-ep,.imdbb-prow .card__quality,.imdbb-prow .card__icons{display:none!important}
+.imdbb-prow .card__title,.imdbb-prow .card__age,.imdbb-prow .card__icons{display:none!important}
+.imdbb-prow .card__vote{top:auto!important; bottom:.5em!important; right:.5em!important; left:auto!important; z-index:3}
 .imdbb-prow .items-line__body .scroll__content{padding-top:.9em!important; padding-bottom:.9em!important}
