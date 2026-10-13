@@ -40,8 +40,8 @@ function yearRow(){
         index: 0,
         screen: ['main'],
         settings: [
-            {param: {name: 'year_releases_from', type: 'input', default: '2026-01-01', placeholder: '2026-01-01'}, field: {name: 'Релизы: дата от', description: 'Формат ГГГГ-ММ-ДД'}},
-            {param: {name: 'year_releases_to', type: 'input', default: '2026-12-31', placeholder: '2026-12-31'}, field: {name: 'Релизы: дата до', description: 'Формат ГГГГ-ММ-ДД'}}
+            {param: {name: 'year_releases_from', type: 'input', values: '', default: '2026-01-01', placeholder: '2026-01-01'}, field: {name: 'Релизы: дата от', description: 'Формат ГГГГ-ММ-ДД, например 2026-12-31'}},
+            {param: {name: 'year_releases_to', type: 'input', values: '', default: '2026-12-31', placeholder: '2026-12-31'}, field: {name: 'Релизы: дата до', description: 'Формат ГГГГ-ММ-ДД, например 2026-12-31'}}
         ],
         call: (params)=>{
             let from = val('year_releases_from', '2026-01-01')
