@@ -13,7 +13,7 @@ function component(object){
 
     comp.use({
         onCreate: function(){
-            try{ if(imdbbOn()) this.html.classList.add('imdbb-prow') }catch(e){}
+            try{ if(imdbbOn()){ let hm = this.html; hm.classList.add('imdbb-prow'); hm.classList.add('imdbb-pup'); this.imdbb_pt = setInterval(()=>{ try{ hm.classList.toggle('imdbb-pup', !hm.querySelector('.card.focus')) }catch(e){} }, 300) } }catch(e){}
             Api.person(object,(data)=>{
                 if(data.person){
                     let lines = []
@@ -31,6 +31,7 @@ function component(object){
                                     this.person.create()
 
                                     this.scroll.append(this.person.render(true))
+                                    try{ let ph = this.person.render(true), tr = 0; if(ph && ph.jquery) ph = ph[0]; let mk = ()=>{ let ln = ph && ph.closest && ph.closest('.items-line'); if(ln) ln.classList.add('imdbb-pl'); else if(++tr < 20) setTimeout(mk, 100) }; mk() }catch(e){}
                                 },
                                 onToggle: function(){
                                     data.person.profile_path && Background.change(Api.img(data.person.profile_path, 'w200'))
@@ -73,6 +74,7 @@ function component(object){
                 }
             },this.empty.bind(this))
         },
+        onDestroy: function(){ clearInterval(this.imdbb_pt) },
         onInstance: function(item){
             item.use({
                 onInstance: function(card, data){

@@ -571,3 +571,9 @@ body.imdbb-nobadge .card .card__vote,body.imdbb-nobadge .card .imdbb-q,body.imdb
 .imdbb-prow .card__title,.imdbb-prow .card__age,.imdbb-prow .card__icons{display:none!important}
 .imdbb-prow .card__vote{top:auto!important; bottom:.5em!important; right:.5em!important; left:auto!important; z-index:3}
 .imdbb-prow .items-line__body .scroll__content{padding-top:.9em!important; padding-bottom:.9em!important}
+/* imdbb-act */
+html body .imdbb-home.imdbb-act>.scroll{top:0!important; bottom:0!important; height:auto!important}
+html body .imdbb-home.imdbb-act .items-line{height:calc(100vh - 3.55em)!important; padding-top:calc(100vh - 3.55em - var(--imdbb-row) - var(--imdbb-bot))!important; box-sizing:border-box!important}
+html body .imdbb-home.imdbb-act .items-line.imdbb-pl{padding-top:0!important}
+html body .imdbb-home.imdbb-act>.imdbb-hero{transition:opacity .25s}
+html body .imdbb-home.imdbb-act.imdbb-pup>.imdbb-hero{opacity:0}
