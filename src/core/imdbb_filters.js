@@ -109,19 +109,43 @@ function init(){
             icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
         })
 
-        ITEMS.forEach(function(it){
-            L.SettingsApi.addParam({
-                component: 'imdbb',
-                param: {name: 'imdbb_f_' + it[0], type: 'trigger', default: false},
-                field: {name: it[1], description: it[2]}
+        let FLT = ITEMS.map(function(it){ return [it[0], it[1].replace(/^Фильтр: /, ''), it[2]] }).concat([['nobd', 'Поиск: скрывать карточки без кадра', 'В поиске остаются только широкие карточки с кадром (при следующем поиске)']])
+        let NBD = {off: 'Как сейчас', a: 'А: постер обрезан по центру', b: 'Б: постер целиком на фоне'}
+        let fltItem = null
+        let fltOn = function(k){ let v = L.Storage.get('imdbb_f_' + k, 'false'); return v === true || v === 'true' }
+        let fltNbd = function(){ let m = String(L.Storage.get('imdbb_card_nobd', 'off')); return NBD[m] ? m : 'off' }
+        let fltText = function(){ return 'Включено: ' + FLT.filter(function(x){ return fltOn(x[0]) }).length + ' из ' + FLT.length + ' · Поиск, карточки без кадра: ' + NBD[fltNbd()] }
+        let fltBack = function(){ if(fltItem) fltItem.find('.settings-param__descr').text(fltText()); L.Controller.toggle('settings_component') }
+        let fltOpen = function(){
+            L.Select.show({
+                title: 'Фильтры (галочка: скрывать)',
+                items: FLT.map(function(x){ return {title: x[1], subtitle: x[2], key: x[0], checkbox: true, checked: fltOn(x[0])} }).concat([{title: 'Поиск: карточки без кадра', subtitle: 'Сейчас: ' + NBD[fltNbd()], onSelect: function(){ setTimeout(function(){ L.Select.show({title: 'Поиск: карточки без кадра', items: Object.keys(NBD).map(function(k){ return {title: NBD[k], key: k, selected: fltNbd() === k} }), onSelect: function(a){ L.Storage.set('imdbb_card_nobd', a.key); fltBack() }, onBack: fltBack }) }, 50) }}]),
+                onCheck: function(a){ L.Storage.set('imdbb_f_' + a.key, a.checked) },
+                onBack: fltBack
             })
-        })
+        }
+        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_flt', type: 'button'}, field: {name: 'Фильтры', description: fltText()}, onRender: function(item){ fltItem = item; item.find('.settings-param__descr').text(fltText()) }, onChange: fltOpen})
 
-        L.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'logo_card', type: 'trigger', default: true},
-            field: {name: 'Логотип вместо названия', description: 'На карточке фильма'}
-        })
+        let LGM = {off: 'Выкл', a: 'А: снизу слева', b: 'Б: по центру', c: 'В: только в фокусе'}
+        let lgxItem = null
+        let lgxCard = function(){ let v = L.Storage.get('logo_card', 'true'); return !(v === false || v === 'false') }
+        let lgxMode = function(){ let m = String(L.Storage.get('imdbb_logo_mode', 'a')); return LGM[m] ? m : 'a' }
+        let lgxText = function(){ return 'В открытой карточке: ' + (lgxCard() ? 'да' : 'нет') + ' · В ряду: ' + LGM[lgxMode()] }
+        let lgxBack = function(){ if(lgxItem) lgxItem.find('.settings-param__descr').text(lgxText()); L.Controller.toggle('settings_component') }
+        let lgxOpen = function(){
+            L.Select.show({
+                title: 'Логотипы',
+                items: [
+                    {title: 'Логотип вместо названия в открытой карточке', subtitle: 'На карточке фильма', key: 'card', checkbox: true, checked: lgxCard()},
+                    {title: 'Логотипы на карточках в ряду', subtitle: 'Сейчас: ' + LGM[lgxMode()] + ' (только главная)', onSelect: function(){ setTimeout(function(){ L.Select.show({title: 'Логотипы в ряду (главная)', items: Object.keys(LGM).map(function(k){ return {title: LGM[k], key: k, selected: lgxMode() === k} }), onSelect: function(a){ L.Storage.set('imdbb_logo_mode', a.key); lgxBack() }, onBack: lgxBack }) }, 50) }}
+                ],
+                onCheck: function(a){ L.Storage.set('logo_card', a.checked) },
+                onBack: lgxBack
+            })
+        }
+        L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_lgx', type: 'button'}, field: {name: 'Логотипы', description: lgxText()}, onRender: function(item){ lgxItem = item; item.find('.settings-param__descr').text(lgxText()) }, onChange: lgxOpen})
+
+        
 
         L.SettingsApi.addParam({component: 'imdbb', param: {name: 'imdbb_infinite', type: 'trigger', default: true}, field: {name: 'Бесконечные карточки', description: 'Ряды подгружаются до конца вместо кнопки «Ещё»'}})
 
@@ -177,22 +201,10 @@ function init(){
             field: {name: 'Свайп (только мобильная версия)', description: 'Свайп пальцем двигает фокус по карточкам и рядам вместо прокрутки. Только телефон в горизонтали, на ТВ и приставках не действует. Работает сразу'}
         })
 
-        L.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'imdbb_logo_mode', type: 'select', values: {off: 'Выкл', a: 'А: снизу слева', b: 'Б: по центру', c: 'В: только в фокусе'}, default: 'a'},
-            field: {name: 'Логотипы на карточках в ряду', description: 'Временно для проверки трёх вариантов. Только главная. Без логотипа показывается название.'}
-        })
+        
 
-        L.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'imdbb_f_nobd', type: 'trigger', default: false},
-            field: {name: 'Поиск: скрывать карточки без кадра', description: 'В поиске остаются только широкие карточки, у которых есть кадр. Действует при следующем поиске'}
-        })
-        L.SettingsApi.addParam({
-            component: 'imdbb',
-            param: {name: 'imdbb_card_nobd', type: 'select', values: {off: 'Как сейчас', a: 'А: постер обрезан по центру', b: 'Б: постер целиком на фоне'}, default: 'off'},
-            field: {name: 'Поиск: карточки без кадра', description: 'Как показывать широкие карточки, если нет кадра. Действует при следующем поиске. При включённом фильтре выше таких карточек нет'}
-        })
+        
+        
 
         cmp()
         try{ if(localStorage.getItem('imdbb_style') === null){ let c0 = L.Storage.get('imdbb_compact', 'true'); let w0 = localStorage.getItem('imdbb_wide'); let on0 = !(c0 === false || c0 === 'false' || w0 === 'false'); L.Storage.set('imdbb_style', on0); window.__imdbbStySync() } }catch(e){}
