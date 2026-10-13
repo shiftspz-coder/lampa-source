@@ -506,3 +506,12 @@ html body.imdbb-compact .full-start-new__title img{ max-height: 1.1em !important
 html body .imdbb-hero > *{ flex-shrink: 0 !important; }
 html body .imdbb-hero__logo img{ max-height: 3.5em !important; }
 }
+
+/* imdbb-lowh4 */
+@media (max-height: 476px) and (pointer: coarse){
+html body .imdbb-hero__d{ -webkit-line-clamp: 2 !important; }
+html body .imdbb-hero__logo img{ max-height: 2.6em !important; }
+html body .imdbb-hero__tag{ margin: .25em 0 .45em !important; }
+html body .imdbb-hero__meta{ margin: .25em 0 .45em !important; }
+html body.imdbb-compact .full-start-new__right{ padding-top: 2.8em !important; }
+}
