@@ -68,6 +68,15 @@ data.rating = {
     ]
 }
 
+function imdbItems(){
+    let items = [{title: '#{filter_any}'}]
+    for(let v = 1; v <= 10; v += 0.5) items.push({title: String(v), val: v})
+    return items
+}
+
+data.imdb_from = {title: 'IMDb #{filter_rating_from}', items: imdbItems()}
+data.imdb_to = {title: 'IMDb #{filter_rating_to}', items: imdbItems()}
+
 data.pgrating = {
     title: '#{title_pgrating}',
     items: [

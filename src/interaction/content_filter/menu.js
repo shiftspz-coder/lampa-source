@@ -6,6 +6,18 @@ import Storage from '../../core/storage/storage'
 import Permit from '../../core/account/permit'
 import data from './data'
 
+function imdbRange(){
+    let pick = (w)=>{
+        let it = w.items.find(s=>s.selected && s.val)
+        return it ? it.val : 0
+    }
+    let a = pick(data.imdb_from), b = pick(data.imdb_to) || 10
+
+    if(a && b < a){ let t = a; a = b; b = t }
+
+    return {min: a, max: b}
+}
+
 /**
  * Главное меню фильтрации
  */
@@ -18,7 +30,7 @@ function main(){
     let items = [{
         title: Lang.translate('search_start'),
         search: true
-    },data.type,data.rating,data['genres_'+type],data.language,data.year]
+    },data.type].concat(Storage.field('source') == 'cub' ? [data.rating] : [data.imdb_from, data.imdb_to], [data['genres_'+type],data.language,data.year])
 
     if(Storage.field('source') == 'cub') items.push(data.pgrating,data.sort,data.quality)
 
@@ -58,17 +70,10 @@ function queryForTMDB(){
     let genres   = []
     let languages = []
 
-    data.rating.items.forEach(a=>{
-        if(a.selected && (a.voite || a.start)){
-            if(a.start){
-                query.push('vote_average.gte='+a.start)
-            }
-            else{
-                query.push('vote_average.gte='+a.voite.split('-')[0])
-                query.push('vote_average.lte='+a.voite.split('-')[1])
-            }
-        }
-    })
+    let rg = imdbRange()
+
+    if(rg.min) query.push('vote_average.gte=' + Math.max(0, rg.min - 1.5))
+    if(rg.max < 10) query.push('vote_average.lte=' + Math.min(10, rg.max + 1.5))
 
     data.language.items.forEach(a=>{
         if(a.checked) languages.push(a.code)
@@ -199,6 +204,8 @@ function search(){
         component: 'category_full',
         source: source == 'cub' ? 'cub' : 'tmdb',
         card_type: true,
+        imdb_min: source == 'cub' ? 0 : imdbRange().min,
+        imdb_max: source == 'cub' ? 0 : imdbRange().max,
         page: 1
     }
 
