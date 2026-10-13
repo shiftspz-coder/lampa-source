@@ -16,7 +16,7 @@ import Router from '../core/router'
 function component(object){
     let comp = new Main(object)
     let next = null
-    window.__imdbbMp = 1
+    window.__imdbbMp = 1; window.__imdbbMp2 = 1
 
     comp.use({
         onCreate: function(){
@@ -84,7 +84,7 @@ function component(object){
                             let src  = person_data.profile_path ? TMDB.img(person_data.profile_path,'w90_and_h90_face') : person_data.img || './img/actor.svg'
 
                             cards.forEach(item=>{
-                                item.params = { style: {name: 'wide'},
+                                item.params = {
                                     emit: {
                                         onEnter: Router.call.bind(Router, 'full', item),
                                         onFocus: function(){
