@@ -538,7 +538,16 @@ html body .imdbb-nodescr .items-line__body .scroll__content{ padding: .9em 0 !im
 
 /* imdbb-lowh8 */
 @media (max-height: 473px) and (pointer: coarse){
-html body{ --imdbb-card-x: .4em !important; }
 html body.imdbb-compact .full-start-new__tagline{ margin-bottom: .4em !important; }
 html body.imdbb-compact .imdbb-ov{ margin-top: .2em !important; }
 }
+
+/* imdbb-lowh9 */
+@media (max-height: 472px) and (pointer: coarse){
+html body.imdbb-compact .full-start-new__right{ padding-bottom: 15.4em !important; }
+html body.imdbb-compact .imdbb-band{ bottom: 2.5em !important; }
+html body.imdbb-compact .full-start-new__title img{ max-height: 1.4em !important; }
+}
+
+/* imdbb-swipe */
+body.touch-device .items-line__body>.scroll{ touch-action: pan-y; }
