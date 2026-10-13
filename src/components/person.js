@@ -6,12 +6,14 @@ import LineModule from '../interaction/items/line/module/module'
 import Router from '../core/router'
 import Person from '../interaction/person/person'
 import PersonModule from '../interaction/person/module/module'
+import {imdbbOn} from './imdbb_rows'
 
 function component(object){
     let comp = Utils.createInstance(Main, object)
 
     comp.use({
         onCreate: function(){
+            try{ if(imdbbOn()) this.html.classList.add('imdbb-prow') }catch(e){}
             Api.person(object,(data)=>{
                 if(data.person){
                     let lines = []
