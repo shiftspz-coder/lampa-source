@@ -2,6 +2,7 @@ import Arrays from '../utils/arrays'
 import Settings from '../interaction/settings/api'
 import Storage from '../core/storage/storage'
 import Lang from '../core/lang'
+import TMDB from './api/sources/tmdb'
 
 let rows = []
 let component = 'content_rows'
@@ -18,9 +19,44 @@ function init(){
         name: Lang.translate('title_channels'),
     })
 
+    add(yearRow())
+
     Lampa.Settings.listener.follow('open', (e) => {
         if (e.name == 'main') settings()
     })
+}
+
+function yearRow(){
+    let rx = /^\d{4}-\d{2}-\d{2}$/
+    let val = (k, d)=>{
+        let v = String(Storage.get(k, d)).trim()
+
+        return rx.test(v) ? v : d
+    }
+
+    return {
+        name: 'year_releases',
+        title: 'Релизы по дате выхода',
+        index: 0,
+        screen: ['main'],
+        settings: [
+            {param: {name: 'year_releases_from', type: 'input', default: '2026-01-01', placeholder: '2026-01-01'}, field: {name: 'Релизы: дата от', description: 'Формат ГГГГ-ММ-ДД'}},
+            {param: {name: 'year_releases_to', type: 'input', default: '2026-12-31', placeholder: '2026-12-31'}, field: {name: 'Релизы: дата до', description: 'Формат ГГГГ-ММ-ДД'}}
+        ],
+        call: (params)=>{
+            let from = val('year_releases_from', '2026-01-01')
+            let to   = val('year_releases_to', '2026-12-31')
+            let full = from.slice(0,4) == to.slice(0,4) && from.slice(5) == '01-01' && to.slice(5) == '12-31'
+
+            return function(call){
+                TMDB.get('discover/movie?primary_release_date.gte=' + from + '&primary_release_date.lte=' + to + '&sort_by=primary_release_date.desc', params, (json)=>{
+                    json.title = full ? 'Релизы ' + from.slice(0,4) : 'Релизы ' + from + ' — ' + to
+
+                    call(json)
+                }, call)
+            }
+        }
+    }
 }
 
 function settings(){
@@ -40,6 +76,10 @@ function settings(){
                 name: row.title || Lang.translate('extensions_no_name'),
             }
         })
+
+        if(Arrays.isArray(row.settings)){
+            row.settings.forEach(x=>Settings.addParam({component, param: x.param, field: x.field}))
+        }
     })
 }
 
