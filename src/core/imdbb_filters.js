@@ -240,3 +240,30 @@ function init(){
 }
 
 export default {init, filter}
+;(function(){
+if(window.__imdbbProbe3) return; window.__imdbbProbe3 = 1;
+var last = '';
+function nm(e){ return e.tagName.toLowerCase() + (typeof e.className === 'string' && e.className.trim() ? '.' + e.className.trim().split(/\s+/).slice(0,2).join('.') : ''); }
+setInterval(function(){
+  try{
+    if(!document.body.classList.contains('imdbb-compact')) return;
+    var im = null, l = document.querySelectorAll('.imdbb-hero__logo img, .full-start-new__title img');
+    for(var i = 0; i < l.length; i++){ var r0 = l[i].getBoundingClientRect(); if(r0.width > 0 && r0.height > 0 && r0.bottom > 0){ im = l[i]; break; } }
+    if(!im){ last = ''; return; }
+    var key = im.src + '|' + (im.closest('.imdbb-hero') ? 'h' : 'c');
+    if(key === last) return;
+    last = key;
+    setTimeout(function(){
+      var r = im.getBoundingClientRect();
+      var out = ['logo top=' + Math.round(r.top) + ' h=' + Math.round(r.height) + ' vh=' + innerHeight];
+      var p = im.parentElement;
+      while(p && p !== document.documentElement && out.length < 7){
+        var cs = getComputedStyle(p), o = cs.overflowY, m = cs.maskImage && cs.maskImage !== 'none', c = cs.clipPath && cs.clipPath !== 'none';
+        if(o !== 'visible' || m || c) out.push(nm(p) + ' top=' + Math.round(p.getBoundingClientRect().top) + ' ov=' + o + (m ? ' M' : '') + (c ? ' C' : ''));
+        p = p.parentElement;
+      }
+      Lampa.Noty.show(out.join(' | '), {time: 30000});
+    }, 1500);
+  }catch(e){}
+}, 700);
+})();
