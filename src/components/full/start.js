@@ -235,7 +235,7 @@ class Start extends Emit {
                     gate(ibh, 'l')
                 })
                 img.on('error', back)
-                img.attr('src', L.TMDB.image('t/p/w500' + pick.file_path.replace('.svg', '.png')))
+                img.attr('src', L.TMDB.image('t/p/w500' + pick.file_path.replace('.svg', '.png'))); if(window.__imdbbLgDark) window.__imdbbLgDark.watch(img[0])
             }, back)
         }
 

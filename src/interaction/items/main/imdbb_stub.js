@@ -37,7 +37,7 @@ function build(d){
         lg.innerHTML = '<img alt="">'
         let im = lg.firstChild
         im.onerror = txt
-        im.src = L.TMDB.image('t/p/w500' + path.replace('.svg', '.png'))
+        im.src = L.TMDB.image('t/p/w500' + path.replace('.svg', '.png')); if(window.__imdbbLgDark) window.__imdbbLgDark.watch(im)
     }
     else txt()
 

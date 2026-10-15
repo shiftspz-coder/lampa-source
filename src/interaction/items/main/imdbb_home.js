@@ -1,6 +1,7 @@
 import {lgcached, lgput} from '../../card/module/ratting'
 import Utils from '../../../utils/utils'
 import ovx from '../../../utils/imdbb_ov'
+import '../../../utils/imdbb_lgdark'
 
 const HKEY = 'imdbb_hd3'
 const HTTL = 7 * 864e5
@@ -148,7 +149,7 @@ export default function(main){
                     lg.innerHTML = '<img alt="">'
                     let im = lg.firstChild
                     im.onerror = function(){ lg.innerHTML = '<div class="imdbb-hero__t">' + esc(title) + '</div>' }
-                    im.src = logo
+                    im.src = logo; if(window.__imdbbLgDark) window.__imdbbLgDark.watch(im)
                 }
             }
             else if(wait && !known){
