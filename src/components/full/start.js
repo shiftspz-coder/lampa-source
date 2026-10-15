@@ -21,7 +21,7 @@ import Translations from './start/translations'
 import Bookmarks from './start/bookmarks'
 import Buttons from './start/buttons'
 
-const QKEY = 'imdbb_q1'
+const QKEY = 'imdbb_q2'
 
 function gate(h, k){
     let e = h && h[0]

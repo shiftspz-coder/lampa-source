@@ -3,7 +3,7 @@ import Template from '../../template'
 import IMDb from '../../../utils/imdb'
 
 const rates = {}
-const QKEY = 'imdbb_q1'
+const QKEY = 'imdbb_q2'
 const EKEY = 'imdbb_ep_f1'
 const ETTL = 6 * 3600e3
 const MAXQ = 3
