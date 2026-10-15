@@ -1,4 +1,4 @@
-import {cert as imdbbCert} from '../../interaction/items/main/imdbb_info'
+import {cert as imdbbCert, HERO_HTML, metaHtml, subLine} from '../../interaction/items/main/imdbb_info'
 import {lgcached, lgput} from '../../interaction/card/module/ratting'
 import Template from '../../interaction/template'
 import Controller from '../../core/controller'
@@ -35,6 +35,7 @@ function gate(h, k){
     if(k) e.__w[k] = 1
 
     if(!k || (e.__w.l && e.__w.r && e.__w.q)) h.removeClass('imdbb-fwait')
+    if(e.__imdbbHu) setTimeout(e.__imdbbHu, 0)
 }
 const DUB = '<span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.15em"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></span>'
 
@@ -194,7 +195,7 @@ class Start extends Emit {
         let ibw = this.html
 
         if(document.body.classList.contains('imdbb-compact')){
-            ibw.addClass('imdbb-fwait')
+            ibw.addClass('imdbb-fwait');window.__imdbbUnif = 1;(()=>{ try{ if(localStorage.getItem('imdbb_hero_card') === 'false') return; let rg = this.html.find('.full-start-new__right'); if(!rg.length) return; let hero = $('<div class="imdbb-hero imdbb-hero--card">' + HERO_HTML + '</div>'), card = this.card; rg.prepend(hero); this.html.addClass('imdbb-unif'); let up = ()=>{ try{ let r = this.html.find('.rate--imdb:not(.hide) > div').eq(0).text().trim(), qc = this.html.find('.imdbb-cq').first(), on = this.html.find('.imdbb-fav.on').length, pl; hero.find('.imdbb-hero__tag').text(card.tagline || ''); hero.find('.imdbb-hero__meta').html(metaHtml(card, card, {rate: r, ql: qc.length ? qc.html() : '', ct: pg || ''})); pl = hero.find('.imdbb-hero__pl'); on && pl.length && pl.append('<span class="imdbb-hero__fav"><svg viewBox="0 0 24 24" width="1em" height="1em"><path d="M6 3h12v18l-6-4-6 4z" fill="currentColor"/></svg></span>'); hero.find('.imdbb-hero__s').text(subLine(card, card)); hero.find('.imdbb-hero__d').text(ovx.pick(card, card.overview) || '') }catch(e){} }; this.html[0].__imdbbHu = up; up(); ovx.refresh(card, function(t){ hero.find('.imdbb-hero__d').text(t) }) }catch(e){} })();
             setTimeout(function(){ gate(ibw) }, 1000)
         }
 
@@ -210,7 +211,7 @@ class Start extends Emit {
             let ibl = lgcached(ibc)
             let ruOn = L.Storage.get('imdbb_logo_ru', 'false'); ruOn = ruOn === true || ruOn === 'true'
             if(ibl && ibl.l === undefined && ruOn) ibl = null
-            let back = function(){ lt.css('visibility', ''); lg.css('visibility', ''); gate(ibh, 'l') }
+            let back = function(){ lt.css('visibility', ''); lg.css('visibility', ''); try{ let hl = ibh.find('.imdbb-hero__logo'); if(hl.length && !hl.children().length) hl.html($('<div class="imdbb-hero__t"></div>').text(ibc.title || ibc.name || '')) }catch(e){} gate(ibh, 'l') }
             let url = L.TMDB.api((this.card.name ? 'tv' : 'movie') + '/' + this.card.id + '/images?api_key=' + L.TMDB.key() + '&include_image_language=' + lang + ',en,null')
 
             lt.css('visibility', 'hidden')
@@ -230,7 +231,7 @@ class Start extends Emit {
                 let img = $('<img style="' + st + '" />')
 
                 img.on('load', function(){
-                    lt.removeClass('twolines').html('').append(img).css('visibility', '')
+                    lt.removeClass('twolines').html('').append(img).css('visibility', ''); try{ let hl = ibh.find('.imdbb-hero__logo')[0]; if(hl){ hl.innerHTML = '<img alt="">'; hl.firstChild.src = img.attr('src'); if(window.__imdbbLgDark) window.__imdbbLgDark.watch(hl.firstChild) } }catch(e){}
                     try{ ibh.find('.imdbb-rutl').remove(); let ct = ibc.title || ibc.name || ''; let co = ibc.original_title || ibc.original_name || ''; if(ruOn && (pick.iso_639_1 || '') !== lang && ct && ct !== co){ let w = document.createElement('div'); w.className = 'imdbb-rutl'; let t2 = document.createElement('div'); t2.className = 'imdbb-rutl__t'; t2.textContent = ct; w.appendChild(t2); if(lt[0] && lt[0].parentNode) lt[0].parentNode.insertBefore(w, lt[0]) } }catch(e){}
                     lg.css('visibility', '')
                     gate(ibh, 'l')
@@ -240,7 +241,7 @@ class Start extends Emit {
             }, back)
         }
 
-        if(logoOff === false || logoOff === 'false' || !this.card.id) gate(this.html, 'l')
+        if(logoOff === false || logoOff === 'false' || !this.card.id){ try{ let hl = this.html.find('.imdbb-hero__logo'); hl.length && hl.html($('<div class="imdbb-hero__t"></div>').text(this.card.title || this.card.name || '')) }catch(e){}; gate(this.html, 'l') }
 
         let compact = document.body.classList.contains('imdbb-compact')
         let meta = []
@@ -344,6 +345,7 @@ class Start extends Emit {
         catch(e){}
         window.__imdbbB2 = 1;
         let imdbbFav = $('<div class="imdbb-meta imdbb-fav"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z" fill="currentColor"/></svg></div>').appendTo(this.html.find('.full-start-new__rate-line'))
+        try{ new MutationObserver(()=>{ let u = this.html[0] && this.html[0].__imdbbHu; u && u() }).observe(imdbbFav[0], {attributes: true, attributeFilter: ['class']}) }catch(e){}
         let imdbbFavUpd = ()=>{ try{ imdbbFav.toggleClass('on', !!window.Lampa.Favorite.check(this.card).book) }catch(e){} }
         imdbbFavUpd()
         this.html.on('hover:long', '.button--play', ()=>{
