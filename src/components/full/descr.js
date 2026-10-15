@@ -11,6 +11,7 @@ import Keys from '../../core/tmdb/keys'
 import Warning from '../../interaction/warning'
 import Modal from '../../interaction/modal'
 import Storage from '../../core/storage/storage'
+import ovx from '../../utils/imdbb_ov'
 
 class Descriptiopn extends Emit{
     constructor(data) {
@@ -31,7 +32,7 @@ class Descriptiopn extends Emit{
         let date      = (this.card.release_date || this.card.first_air_date || '') + ''
 
         this.body = Template.get('full_descr',{
-            text: (this.card.overview || Lang.translate('full_notext')) + '<br><br>',
+            text: ((document.body.classList.contains('imdbb-compact') ? ovx.pick(this.card, this.card.overview) : this.card.overview) || Lang.translate('full_notext')) + '<br><br>',
             relise: date.length > 3 ? Utils.parseTime(date).full : date.length > 0 ? date : Lang.translate('player_unknown'),
             budget: '$ ' + Utils.numberWithSpaces(this.card.budget || 0),
             countries: countries.join(', ')

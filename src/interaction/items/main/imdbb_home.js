@@ -1,5 +1,6 @@
 import {lgcached, lgput} from '../../card/module/ratting'
 import Utils from '../../../utils/utils'
+import ovx from '../../../utils/imdbb_ov'
 
 const HKEY = 'imdbb_hd3'
 const HTTL = 7 * 864e5
@@ -224,7 +225,7 @@ let parts = []
             }
             if(!sl && info && kind !== 'tv' && info.budget > 0) sl = 'Бюджет $ ' + String(info.budget).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
             q('.imdbb-hero__s').textContent = sl
-            q('.imdbb-hero__d').textContent = (info && info.overview) || d.overview || ''
+            q('.imdbb-hero__d').textContent = ovx.pick(d, info && info.overview, d.overview)
             try{
                 let dd = q('.imdbb-hero__d')
                 if(dd && dd.textContent){
@@ -249,12 +250,16 @@ let parts = []
             let k = ckey(d)
             if(cache[k]) return cb(cache[k])
             let hc = hget(k)
-            if(hc){ cache[k] = hc; return cb(hc) }
+            if(hc && !ovx.old(hc.overview, (hload()[k] || {}).t)){ cache[k] = hc; return cb(hc) }
             let kind = kindOf(d)
             let app = kind === 'tv' ? 'images,content_ratings' : 'images,release_dates'
             let url = L.TMDB.api(kind + '/' + d.id + '?api_key=' + L.TMDB.key() + '&language=ru&append_to_response=' + app + '&include_image_language=ru,en,null')
             fetch(url).then(function(r){ return r.json() }).then(function(j){
-                if(j && j.id){ cache[k] = j; hput(k, j, cert(j, kind)); cb(j) }
+                if(j && j.id){
+                    let done = function(){ cache[k] = j; hput(k, j, cert(j, kind)); cb(j) }
+                    if(String(j.overview || '').trim()) done()
+                    else fetch(L.TMDB.api(kind + '/' + d.id + '?api_key=' + L.TMDB.key() + '&language=en')).then(function(r2){ return r2.json() }).then(function(e){ if(e && e.overview) j.overview = e.overview }, function(){}).then(done)
+                }
             }).catch(function(){})
         }
 

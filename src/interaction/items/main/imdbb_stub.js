@@ -1,5 +1,6 @@
 import IMDb from '../../../utils/imdb'
 import {lgcached, qlabel} from '../../card/module/ratting'
+import ovx from '../../../utils/imdbb_ov'
 
 const MAP = {US:'США',GB:'Великобритания',RU:'Россия',FR:'Франция',DE:'Германия',JP:'Япония',KR:'Южная Корея',CA:'Канада',CN:'Китай',IN:'Индия',ES:'Испания',IT:'Италия',AU:'Австралия',SE:'Швеция',TR:'Турция',UA:'Украина',BR:'Бразилия',MX:'Мексика',PL:'Польша',DK:'Дания',NO:'Норвегия',IE:'Ирландия',NL:'Нидерланды',BE:'Бельгия',HK:'Гонконг',TH:'Таиланд'}
 
@@ -85,7 +86,7 @@ let parts = []
     }
     if(!sl && info && kind !== 'tv' && info.budget > 0) sl = 'Бюджет $ ' + String(info.budget).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
     q('.imdbb-hero__s').textContent = sl
-    q('.imdbb-hero__d').textContent = (info && info.overview) || d.overview || ''
+    q('.imdbb-hero__d').textContent = ovx.pick(d, info && info.overview, d.overview)
 
     return el
 }
