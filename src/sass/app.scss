@@ -651,3 +651,7 @@ html body img.imdbb-lgdark{filter:drop-shadow(0 0 .25em rgba(255,255,255,.5))}
 /* imdbb-unif */
 html body.imdbb-compact .imdbb-unif .full-start-new__head,html body.imdbb-compact .imdbb-unif .full-start-new__title,html body.imdbb-compact .imdbb-unif .full-start-new__tagline,html body.imdbb-compact .imdbb-unif .full-start-new__rate-line,html body.imdbb-compact .imdbb-unif .full-start-new__details,html body.imdbb-compact .imdbb-unif .imdbb-ov,html body.imdbb-compact .imdbb-unif .imdbb-rutl{display:none!important}
 html body.imdbb-compact .imdbb-unif .imdbb-hero--card{position:relative; display:flex; flex-direction:column; align-items:flex-start; margin-bottom:1.2em; text-shadow:0 1px 4px rgba(0,0,0,.75)}
+
+/* imdbb-pxalign */
+html body .imdbb-home{ --imdbb-bot: calc(.2em + 5.2px) !important; }
+html body .imdbb-home>.imdbb-hero{ bottom: calc(var(--imdbb-row) + var(--imdbb-bot) - 1.7em - 15.6px) !important; }
