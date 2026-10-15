@@ -89,6 +89,6 @@ if(typeof window !== 'undefined') window.__imdbbCert = cert
  function top(sel){ var a=document.querySelectorAll(sel); for(var i=0;i<a.length;i++){ var r=a[i].getBoundingClientRect(); if(r.height>0&&r.width>0) return r.top.toFixed(1) } return '-' }
  setInterval(function(){
   if(!el.parentNode&&document.body) document.body.appendChild(el)
-  el.textContent='T '+top('.imdbb-home .items-line__title')+'\nH '+top('.imdbb-home .items-line__head')+'\nB '+top('.full-start-new__buttons .button--play')+'\nDh '+bot('.imdbb-home .imdbb-hero__d')+'\nDc '+bot('.imdbb-ov')+'\nvh '+innerHeight+' dpr '+devicePixelRatio
+  el.textContent='T '+top('.imdbb-home .items-line__title')+'\nH '+top('.imdbb-home .items-line__head')+'\nB '+top('.full-start-new__buttons .button--play')+'\nDh '+bot('.imdbb-home .imdbb-hero__d')+'\nDc '+(function(){window.__imdbbDbg3=1;var a=document.querySelectorAll('.imdbb-ov'),o=[];for(var i=0;i<a.length;i++){var r=a[i].getBoundingClientRect();o.push(r.bottom.toFixed(1)+'/'+r.height.toFixed(0)+'/'+getComputedStyle(a[i]).display)}var b=document.querySelector('.imdbb-band'),p=b&&b.previousElementSibling;var pb=p?p.getBoundingClientRect().bottom.toFixed(1)+'/'+String(p.className).slice(0,24):'-';return a.length+' '+o.join(',')+' P '+pb})()+'\nvh '+innerHeight+' dpr '+devicePixelRatio
  },500)
 }catch(e){}})()
