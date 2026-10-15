@@ -621,3 +621,14 @@ html body.imdbb-compact .full-start-new__rate-line > .imdbb-mrow, html body.imdb
 html body.imdbb-compact .full-start-new__rate-line > .imdbb-mrow{grid-row-start:2}
 html body.imdbb-compact .full-start-new__rate-line > .imdbb-grow{grid-row-start:3}
 html body.imdbb-compact .full-start-new__rate-line > .imdbb-fav{grid-column-start:4; grid-row-start:1; margin-left:.6em!important}
+
+/* imdbb-lowh11 */
+@media (max-height: 471px) and (pointer: coarse){
+html body .imdbb-home{ --imdbb-row: 15.2em !important; }
+html body .imdbb-home>.imdbb-hero{ bottom: calc(var(--imdbb-row) + var(--imdbb-bot) - 2.2em) !important; padding-bottom: .5em !important; }
+html body .imdbb-hero__tag{ margin: .1em 0 .25em !important; }
+html body .imdbb-hero__meta{ margin: .1em 0 .25em !important; }
+html body .imdbb-home .items-line__head{ margin-bottom: .1em !important; }
+html body .imdbb-home .items-line__body .scroll__content{ padding: .3em 0 .9em !important; }
+html body .imdbb-nodescr .items-line__body .scroll__content{ padding: .3em 0 .9em 3em !important; }
+}
