@@ -199,7 +199,9 @@ let parts = []
                 if(qq) qh = qq.innerHTML
             }
             if(rate) parts.push('<span class="imdbb-hero__r"><b>' + esc(rate) + '</b><i>IMDb</i></span>')
-            if(qh) parts.push('<span class="imdbb-hero__q">' + qh + '</span>')
+            let qm = window.__imdbbQm ? window.__imdbbQm(d) : []
+            if(qm.length) qm.forEach(function(x){ parts.push('<span class="imdbb-hero__q">' + x + '</span>') })
+            else if(qh) parts.push('<span class="imdbb-hero__q">' + qh + '</span>')
             let ct = info ? cert(info, kind) : ''
             if(ct) parts.push('<span class="imdbb-hero__c">' + esc(ct) + '</span>')
             let date = (info && (info.release_date || info.first_air_date)) || d.release_date || d.first_air_date || ''

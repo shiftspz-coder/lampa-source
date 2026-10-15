@@ -626,7 +626,7 @@ html body.imdbb-compact .full-start-new__rate-line > .imdbb-fav{grid-column-star
 @media (max-height: 471px) and (pointer: coarse){
 html body .imdbb-home{ --imdbb-row: 15.2em !important; }
 html body .imdbb-home>.imdbb-hero{ bottom: calc(var(--imdbb-row) + var(--imdbb-bot) - 2.2em) !important; padding-bottom: .5em !important; }
-html body .imdbb-hero__tag{ margin: .1em 0 .25em !important; }
+html body .imdbb-hero__tag{ margin: .25em 0 .25em !important; }
 html body .imdbb-hero__meta{ margin: .1em 0 .25em !important; }
 html body .imdbb-home .items-line__head{ margin-bottom: .1em !important; }
 html body .imdbb-home .items-line__body .scroll__content{ padding: .3em 0 .9em !important; }
@@ -640,3 +640,7 @@ html body.imdbb-compact .full-start-new__title img{ max-height: 1.17em !importan
 html body.imdbb-compact .full-start-new__buttons .button--play{ padding: .5em 1.1em .5em .8em !important; }
 html body.imdbb-compact .full-start-new__buttons .button--play, html body.imdbb-compact .full-start-new__buttons .button--book, html body.imdbb-compact .full-start-new__buttons .button--reaction{ margin-right: .4em !important; }
 }
+
+/* imdbb-dubframe */
+html body.imdbb-compact .full-start-new__rate-line > .imdbb-cq.imdbb-cqm{display:inline-flex!important; gap:.5em!important; border:0!important; border-radius:0!important; background:none!important; padding:0!important}
+html body.imdbb-compact .full-start-new__rate-line > .imdbb-cqm > span{display:inline-block!important; border:1px solid rgba(255,255,255,.45); border-radius:.3em; padding:.05em .55em; white-space:nowrap}

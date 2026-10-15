@@ -139,7 +139,7 @@ function qnext(){
         try{ v = JSON.parse(x.responseText) }
         catch(e){}
 
-        end(v && typeof v === 'object' ? {q: v.q || null, dub: v.dub || null} : null)
+        end(v && typeof v === 'object' ? {q: v.q || null, dub: v.dub || null, dubq: v.dubq || null} : null)
     }
     x.onerror = x.ontimeout = function(){ end(null) }
     x.send()
@@ -508,6 +508,35 @@ export function qlabel(m){
     let c = qget(kindOf(m) + ':' + m.id)
 
     return c && c.v ? label(c.v) : ''
+}
+
+function mlabels(v){
+    if(!v || !v.q) return []
+
+    let out = [v.q === '1080' ? 'FHD' : v.q]
+
+    if(v.q === 'TS' || !v.dub) return out
+
+    let dq = v.dubq && typeof v.dubq === 'object' ? v.dubq : null
+    let has = function(k){
+        let e = dq ? dq[k] : null
+
+        return e && (typeof e !== 'object' || Object.keys(e).length) ? true : false
+    }
+
+    out.push(dq && v.q === '4K' && !has('4K') && has('1080') ? 'Дубляж FHD' : 'Дубляж')
+
+    return out
+}
+
+window.__imdbbQl = mlabels
+
+window.__imdbbQm = function(m){
+    if(!document.body.classList.contains('imdbb-compact') || !m || !m.id) return []
+
+    let c = qget(kindOf(m) + ':' + m.id)
+
+    return c && c.v ? mlabels(c.v) : []
 }
 
 export function lgcached(m){

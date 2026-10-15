@@ -62,7 +62,9 @@ let parts = []
     let ds = dm ? dm[3] + '.' + dm[2] + '.' + dm[1] : date.slice(0, 4)
 
     if(r) parts.push('<span class="imdbb-hero__r"><b>' + (r >= 10 ? '10' : r.toFixed(1)) + '</b><i>IMDb</i></span>')
-    if(ql) parts.push('<span class="imdbb-hero__q">' + ql + '</span>')
+    let qm = window.__imdbbQm ? window.__imdbbQm(d) : []
+    if(qm.length) qm.forEach(function(x){ parts.push('<span class="imdbb-hero__q">' + x + '</span>') })
+    else if(ql) parts.push('<span class="imdbb-hero__q">' + ql + '</span>')
     if(ct) parts.push('<span class="imdbb-hero__c">' + esc(ct) + '</span>')
     if(ds) parts.push('<span>' + esc(ds) + '</span>')
 
