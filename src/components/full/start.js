@@ -1,3 +1,4 @@
+import {cert as imdbbCert} from '../../interaction/items/main/imdbb_info'
 import {lgcached, lgput} from '../../interaction/card/module/ratting'
 import Template from '../../interaction/template'
 import Controller from '../../core/controller'
@@ -153,7 +154,7 @@ class Start extends Emit {
         let relise  = (this.card.release_date || this.card.first_air_date || '') + ''
         let year    = relise ? relise.slice(0,4) : ''
         let quality = !this.card.first_air_date ? this.card.release_quality || this.card.quality : false
-        let pg      = TMDB.parsePG(this.card)
+        let pg      = TMDB.parsePG(this.card) || imdbbCert(this.card, (this.card.first_air_date || this.card.number_of_seasons !== undefined) ? 'tv' : 'movie')
         let head    = []
         let info    = []
 

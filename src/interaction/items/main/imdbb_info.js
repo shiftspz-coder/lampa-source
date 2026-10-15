@@ -1,3 +1,4 @@
+import Utils from '../../../utils/utils'
 const MAP = {US:'США',GB:'Великобритания',RU:'Россия',FR:'Франция',DE:'Германия',JP:'Япония',KR:'Южная Корея',CA:'Канада',CN:'Китай',IN:'Индия',ES:'Испания',IT:'Италия',AU:'Австралия',SE:'Швеция',TR:'Турция',UA:'Украина',BR:'Бразилия',MX:'Мексика',PL:'Польша',DK:'Дания',NO:'Норвегия',IE:'Ирландия',NL:'Нидерланды',BE:'Бельгия',HK:'Гонконг',TH:'Таиланд'}
 
 function esc(s){ return String(s || '').replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] }) }
@@ -51,3 +52,30 @@ export function subLine(d, info){
 }
 
 if(typeof window !== 'undefined') window.__imdbbInfo = 1
+
+export function cert(info, kind){
+    try{
+        if(info && info._cert !== undefined) return info._cert
+        let cd = String(window.Lampa.Storage.get('language', 'ru') || 'ru').toUpperCase()
+        let codes = cd === 'US' ? ['US'] : [cd, 'US']
+        if(kind === 'tv'){
+            let rs = (info.content_ratings && info.content_ratings.results) || []
+            for(let n = 0; n < codes.length; n++){
+                let r = rs.filter(function(x){ return x.iso_3166_1 === codes[n] && x.rating })[0]
+                if(r) return Utils.decodePG(r.rating)
+            }
+            return ''
+        }
+        let rd = (info.release_dates && info.release_dates.results) || []
+        for(let n = 0; n < codes.length; n++){
+            let r2 = rd.filter(function(x){ return x.iso_3166_1 === codes[n] })[0]
+            if(!r2) continue
+            let c = (r2.release_dates || []).filter(function(x){ return x.certification })[0]
+            if(c) return Utils.decodePG(c.certification)
+        }
+        return ''
+    }
+    catch(e){ return '' }
+}
+
+if(typeof window !== 'undefined') window.__imdbbCert = cert

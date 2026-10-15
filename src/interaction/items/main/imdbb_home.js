@@ -1,4 +1,4 @@
-import {metaHtml, subLine, HERO_HTML} from './imdbb_info'
+import {metaHtml, subLine, HERO_HTML, cert} from './imdbb_info'
 import {lgcached, lgput} from '../../card/module/ratting'
 import Utils from '../../../utils/utils'
 import ovx from '../../../utils/imdbb_ov'
@@ -93,31 +93,6 @@ export default function(main){
         let esc = function(s){ return String(s || '').replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] }) }
         let kindOf = function(d){ return d.media_type === 'tv' || (d.name && !d.title) || d.first_air_date ? 'tv' : 'movie' }
         let ckey = function(d){ return kindOf(d) + d.id }
-
-        let cert = function(info, kind){
-            try{
-                if(info && info._cert !== undefined) return info._cert
-                let cd = String(window.Lampa.Storage.get('language', 'ru') || 'ru').toUpperCase()
-                let codes = cd === 'US' ? ['US'] : [cd, 'US']
-                if(kind === 'tv'){
-                    let rs = (info.content_ratings && info.content_ratings.results) || []
-                    for(let n = 0; n < codes.length; n++){
-                        let r = rs.filter(function(x){ return x.iso_3166_1 === codes[n] && x.rating })[0]
-                        if(r) return Utils.decodePG(r.rating)
-                    }
-                    return ''
-                }
-                let rd = (info.release_dates && info.release_dates.results) || []
-                for(let n = 0; n < codes.length; n++){
-                    let r2 = rd.filter(function(x){ return x.iso_3166_1 === codes[n] })[0]
-                    if(!r2) continue
-                    let c = (r2.release_dates || []).filter(function(x){ return x.certification })[0]
-                    if(c) return Utils.decodePG(c.certification)
-                }
-                return ''
-            }
-            catch(e){ return '' }
-        }
 
         let render = function(d, info, el, wait){
             let kind = kindOf(d)
