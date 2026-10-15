@@ -191,7 +191,7 @@ export default function(main){
             let k = ckey(d)
             if(cache[k]) return cb(cache[k])
             let hc = hget(k)
-            if(hc && !ovx.old(hc.overview, (hload()[k] || {}).t)){ cache[k] = hc; return cb(hc) }
+            if(hc && !ovx.old(hc.overview, (hload()[k] || {}).t) && !(!hc.tagline && Date.now() - ((hload()[k] || {}).t || 0) > 864e5)){ cache[k] = hc; return cb(hc) } ;window.__imdbbTgFresh = 1
             let kind = kindOf(d)
             let app = kind === 'tv' ? 'images,content_ratings' : 'images,release_dates'
             let url = L.TMDB.api(kind + '/' + d.id + '?api_key=' + L.TMDB.key() + '&language=ru&append_to_response=' + app + '&include_image_language=ru,en,null')
