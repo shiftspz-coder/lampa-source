@@ -632,3 +632,11 @@ html body .imdbb-home .items-line__head{ margin-bottom: .1em !important; }
 html body .imdbb-home .items-line__body .scroll__content{ padding: .3em 0 .9em !important; }
 html body .imdbb-nodescr .items-line__body .scroll__content{ padding: .3em 0 .9em 3em !important; }
 }
+
+/* imdbb-lowh12 */
+@media (max-height: 471px) and (pointer: coarse){
+html body.imdbb-compact .imdbb-ov{ -webkit-line-clamp: 2 !important; }
+html body.imdbb-compact .full-start-new__title img{ max-height: 1.17em !important; }
+html body.imdbb-compact .full-start-new__buttons .button--play{ padding: .5em 1.1em .5em .8em !important; }
+html body.imdbb-compact .full-start-new__buttons .button--play, html body.imdbb-compact .full-start-new__buttons .button--book, html body.imdbb-compact .full-start-new__buttons .button--reaction{ margin-right: .4em !important; }
+}
