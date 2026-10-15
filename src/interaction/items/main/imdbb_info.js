@@ -93,4 +93,5 @@ if(typeof window !== 'undefined') window.__imdbbCert = cert
  },500)
 }catch(e){}})()
 
-if(typeof window !== "undefined") window.__imdbbPxAlign = 1
+
+if(typeof window !== "undefined") window.__imdbbTfAlign = 1
