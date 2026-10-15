@@ -79,3 +79,15 @@ export function cert(info, kind){
 }
 
 if(typeof window !== 'undefined') window.__imdbbCert = cert
+
+;(function(){try{
+ if(typeof document==='undefined'||window.__imdbbDbg) return
+ window.__imdbbDbg=1
+ var el=document.createElement('div')
+ el.style.cssText='position:fixed;left:6px;top:6px;z-index:99999;background:#000;color:#0f0;font:14px monospace;padding:4px 8px;pointer-events:none;white-space:pre'
+ function top(sel){ var a=document.querySelectorAll(sel); for(var i=0;i<a.length;i++){ var r=a[i].getBoundingClientRect(); if(r.height>0&&r.width>0) return r.top.toFixed(1) } return '-' }
+ setInterval(function(){
+  if(!el.parentNode&&document.body) document.body.appendChild(el)
+  el.textContent='T '+top('.imdbb-home .items-line__title')+'\nH '+top('.imdbb-home .items-line__head')+'\nB '+top('.full-start-new__buttons .button--play')+'\nvh '+innerHeight+' dpr '+devicePixelRatio
+ },500)
+}catch(e){}})()
