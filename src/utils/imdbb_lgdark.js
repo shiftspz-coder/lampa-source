@@ -1,4 +1,4 @@
-const KEY = 'imdbb_ld2'
+const KEY = 'imdbb_ld3'
 const TH = 100
 const CH = 40
 let mem = null
@@ -50,7 +50,7 @@ function measure(src, cb){
                 s += (0.2126 * p[i] + 0.7152 * p[i + 1] + 0.0722 * p[i + 2]) * al; sr += p[i] * al; sg += p[i + 1] * al; sb += p[i + 2] * al
                 a += al
             }
-            if(a <= 20000) return cb(null); let mx = Math.max(sr, sg, sb) / a, mn = Math.min(sr, sg, sb) / a; cb(s / a < TH && mx - mn < CH ? 1 : 0)
+            if(a <= w * h * 255 * 0.01) return cb(null); let mx = Math.max(sr, sg, sb) / a, mn = Math.min(sr, sg, sb) / a; cb(s / a < TH && mx - mn < CH ? 1 : 0)
         }catch(e){ cb(null) }
     }
     im.onerror = function(){ cb(null) }
