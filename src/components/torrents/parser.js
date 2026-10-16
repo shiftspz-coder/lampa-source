@@ -7,6 +7,7 @@ import Voices from './voices'
  * @returns {{ season: number|null, episodes: string|null, year: number|null, quality: string|null, resolution: string|null }}
  */
 function general(title) {
+    title = String(title).replace(/(\d)к(?![а-яёa-z])/g,'$1k').replace(/(\d)р(?![а-яёa-z])/g,'$1p'); window.__imdbbNorm = 1
     let result = {
         season:     null,
         seasons:    [],
@@ -132,7 +133,7 @@ function general(title) {
 
     for(let q of qualities){
         // Экранируем дефис, добавляем lookahead чтобы "WEB-DL" не совпадало с "WEB-DLRip"
-        let pattern = q.replace(/-/g, '[-]?') + '(?![a-zA-Z])'
+        let pattern = (q=='CAM'||q=='TS' ? '\\b' : '') + q.replace(/-/g, '[-]?') + '(?![a-zA-Z])'
 
         if(new RegExp(pattern, 'i').test(title)){
             result.quality = q
@@ -141,7 +142,7 @@ function general(title) {
     }
 
     // ─── HDR ─────────────────────────────────────────────────────────────────
-    let hdr = title.match(/\b(HDR|Dolby Vision)\b/i)
+    let hdr = title.match(/\b(HDR10\+?|HDR|Dolby Vision)(?![a-z0-9])/i)
     
     if(hdr) result.hdr = hdr[1]
 
