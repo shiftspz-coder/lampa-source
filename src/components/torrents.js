@@ -807,7 +807,7 @@ function component(object){
                 let ffprobe_elem = item.find('.torrent-item__ffprobe')
                 let ffprobe_tags = []
                 let general      = element.general || {}
-                let quality      = general.resolution || (element.info && element.info.quality ? Utils.qualityToText(element.info.quality + 'p') : '')
+                let quality      = (general.quality && /^(TS|CAM)$/i.test(general.quality)) ? general.quality.toUpperCase() : (general.resolution || (element.info && element.info.quality ? Utils.qualityToText(element.info.quality + 'p') : '')); window.__imdbbTsBadge = 1
 
                 if(object.movie.number_of_seasons && general.season){
                     ffprobe_elem.append('<div class="m-general"><div>S'+general.season+'</div>'+(general.episodes ? '<div>' + general.episodes + '</div>' : '')+'</div>')
