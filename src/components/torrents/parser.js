@@ -141,7 +141,11 @@ function general(title) {
         }
     }
 
-    // ─── HDR ─────────────────────────────────────────────────────────────────
+        // TS/CAM важнее других качеств в названии
+    if(/\b(ts|cam)\b/i.test(title)) result.quality = /\bcam\b/i.test(title) ? 'CAM' : 'TS'
+    window.__imdbbTsFirst = 1
+
+// ─── HDR ─────────────────────────────────────────────────────────────────
     let hdr = title.match(/\b(HDR10\+?|HDR|Dolby Vision)(?![a-z0-9])/i)
     
     if(hdr) result.hdr = hdr[1]
