@@ -940,6 +940,9 @@ export default {
     settings_parser_hide_trackers: 'Hide trackers',
     settings_parser_hide_trackers_descr: 'Tracker names separated by commas, e.g. toloka, rutracker. Releases from them are not shown',
     settings_parser_hide_trackers_placeholder: 'toloka, rutracker',
+    settings_parser_sources: 'Sources',
+    settings_parser_sources_descr: 'Choose which trackers to show results from. The list fills in after searches',
+    settings_parser_sources_empty: 'The list is empty: run a torrent search first',
 
     helper_keyboard: 'Después de introducir el valor, pulsa el botón "Atrás" para guardar',
     helper_torrents: 'Mantén pulsada la tecla (OK) para abrir el menú contextual',

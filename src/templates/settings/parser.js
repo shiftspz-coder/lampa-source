@@ -100,6 +100,11 @@ let html = `<div>
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">#{settings_parser_hide_trackers_descr}</div>
         </div>
+        <div class="settings-param selector" data-type="button" data-name="parser_sources" data-static="true">
+            <div class="settings-param__name">#{settings_parser_sources}</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">#{settings_parser_sources_descr}</div>
+        </div>
         <div class="settings-param selector" data-type="select" data-name="parse_timeout">
             <div class="settings-param__name">#{settings_parser_timeout_title}</div>
             <div class="settings-param__value"></div>

@@ -941,6 +941,9 @@ export default {
     settings_parser_hide_trackers: 'Скрывать трекеры',
     settings_parser_hide_trackers_descr: 'Названия трекеров через запятую, например: toloka, rutracker. Раздачи с них не показываются',
     settings_parser_hide_trackers_placeholder: 'toloka, rutracker',
+    settings_parser_sources: 'Источники',
+    settings_parser_sources_descr: 'Отметьте трекеры, раздачи с которых показывать. Список пополняется после поисков',
+    settings_parser_sources_empty: 'Список пуст: сначала выполните поиск раздач',
 
     helper_keyboard: 'После ввода значения нажмите кнопку «Назад» для сохранения',
     helper_torrents: 'Удерживайте клавишу (ОК) для вызова контекстного меню',

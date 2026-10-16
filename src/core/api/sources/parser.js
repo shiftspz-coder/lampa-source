@@ -1,4 +1,7 @@
 import Storage from '../../storage/storage'
+import Select from '../../../interaction/select'
+import Controller from '../../controller'
+import Params from '../../../interaction/settings/params'
 import Utils from '../../../utils/utils'
 import Reguest from '../../../utils/reguest'
 import Lang from '../../lang'
@@ -19,7 +22,31 @@ function isAnimeMovie(movie){
         && (movie.genres || []).some(g => g.id == TMDB_GENRE_ANIMATION)
 }
 
+function openTrackerSources(){
+    let enabled = Controller.enabled().name
+    let getHide = ()=>String(Storage.field('parser_hide_trackers') || '').toLowerCase().split(',').map(x=>x.trim()).filter(Boolean)
+    let seen = String(Storage.get('parser_seen_trackers','') || '').split('|').filter(Boolean).sort((x,y)=>x.toLowerCase() < y.toLowerCase() ? -1 : 1)
+    let items = seen.map(name=>{
+        let low = name.toLowerCase()
+        return {title: name, tracker: low, checkbox: true, checked: !getHide().some(h=>low.indexOf(h) > -1)}
+    })
+    if(!items.length) items = [{title: Lang.translate('settings_parser_sources_empty'), noenter: true}]
+    Select.show({
+        title: Lang.translate('settings_parser_sources'),
+        items: items,
+        onBack: ()=>{ Controller.toggle(enabled) },
+        onCheck: (a)=>{
+            let hide = getHide()
+            if(a.checked) hide = hide.filter(h=>a.tracker.indexOf(h) == -1)
+            else if(hide.indexOf(a.tracker) == -1) hide.push(a.tracker)
+            Storage.set('parser_hide_trackers', hide.join(', '))
+        }
+    })
+}
+
 function init(){
+    Params.listener.follow('button',(e)=>{ if(e.name === 'parser_sources') openTrackerSources() })
+    window.__imdbbSources = 1
     Storage.set('parser_torrent_type', Storage.get('parser_torrent_type') || 'jackett')
 
     let source = {
@@ -170,6 +197,12 @@ function mergeResults(items){
 function get(params = {}, oncomplite, onerror){
     function complite(data){
         try{
+            let seen = String(Storage.get('parser_seen_trackers','') || '').split('|').filter(Boolean)
+            if(data && Array.isArray(data.Results)){
+                let ch = false
+                data.Results.forEach(r=>{ let n = String(r.Tracker || '').trim(); if(n && !seen.some(x=>x.toLowerCase() == n.toLowerCase())){ seen.push(n); ch = true } })
+                if(ch) Storage.set('parser_seen_trackers', seen.join('|'), true)
+            }
             let hide = String(Storage.field('parser_hide_trackers') || '').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean)
             if(hide.length && data && Array.isArray(data.Results)){
                 data.Results = data.Results.filter(r=>{ let t = String(r.Tracker || '').toLowerCase(); return !hide.some(h=>t.indexOf(h) > -1) })
