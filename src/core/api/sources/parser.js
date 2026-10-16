@@ -25,7 +25,7 @@ function isAnimeMovie(movie){
 function openTrackerSources(){
     let enabled = Controller.enabled().name
     let getHide = ()=>String(Storage.field('parser_hide_trackers') || '').toLowerCase().split(',').map(x=>x.trim()).filter(Boolean)
-    let seen = String(Storage.get('parser_seen_trackers','') || '').split('|').filter(Boolean).sort((x,y)=>x.toLowerCase() < y.toLowerCase() ? -1 : 1)
+    let seen = Array.from(new Map(String(Storage.get('parser_seen_trackers','') || '').split(/[|,]/).map(x=>x.trim()).filter(Boolean).map(x=>[x.toLowerCase(),x])).values()).sort((x,y)=>x.toLowerCase() < y.toLowerCase() ? -1 : 1)
     let items = seen.map(name=>{
         let low = name.toLowerCase()
         return {title: name, tracker: low, checkbox: true, checked: !getHide().some(h=>low.indexOf(h) > -1)}
@@ -47,6 +47,8 @@ function openTrackerSources(){
 function init(){
     Params.listener.follow('button',(e)=>{ if(e.name === 'parser_sources') openTrackerSources() })
     window.__imdbbSources = 1
+    window.__imdbbSrcSplit = 1
+    window.__imdbbHideAll = 1
     Storage.set('parser_torrent_type', Storage.get('parser_torrent_type') || 'jackett')
 
     let source = {
@@ -200,12 +202,12 @@ function get(params = {}, oncomplite, onerror){
             let seen = String(Storage.get('parser_seen_trackers','') || '').split('|').filter(Boolean)
             if(data && Array.isArray(data.Results)){
                 let ch = false
-                data.Results.forEach(r=>{ let n = String(r.Tracker || '').trim(); if(n && !seen.some(x=>x.toLowerCase() == n.toLowerCase())){ seen.push(n); ch = true } })
+                data.Results.forEach(r=>{ String(r.Tracker || '').split(',').forEach(n=>{ n = n.trim(); if(n && !seen.some(x=>x.toLowerCase() == n.toLowerCase())){ seen.push(n); ch = true } }) })
                 if(ch) Storage.set('parser_seen_trackers', seen.join('|'), true)
             }
             let hide = String(Storage.field('parser_hide_trackers') || '').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean)
             if(hide.length && data && Array.isArray(data.Results)){
-                data.Results = data.Results.filter(r=>{ let t = String(r.Tracker || '').toLowerCase(); return !hide.some(h=>t.indexOf(h) > -1) })
+                data.Results = data.Results.filter(r=>{ let ts = String(r.Tracker || '').toLowerCase().split(',').map(x=>x.trim()).filter(Boolean); if(!ts.length) return true; return !ts.every(t=>hide.some(h=>t.indexOf(h) > -1)) })
             }
         }catch(e){}
         ;window.__imdbbHideTr = 1
