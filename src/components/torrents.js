@@ -824,6 +824,8 @@ function component(object){
                 let audio = element.ffprobe.filter(a=>a.codec_type == 'audio' && a.tags)
                 let subs  = element.ffprobe.filter(a=>a.codec_type == 'subtitle' && a.tags)
                 let voice = Arrays.clone(element.info && element.info.voices ? element.info.voices : [])
+                TitleParser.voices(element.Title).forEach(v=>{ if(!voice.some(x=>x.toLowerCase() == v.toLowerCase())) voice.push(v) })
+                window.__imdbbVoiceTitle = 1
 
                 if(video) ffprobe_tags.push({media: 'video',value: video.width + 'x' + video.height})
 
