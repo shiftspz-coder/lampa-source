@@ -924,6 +924,9 @@ export default {
     settings_param_jackett_interview_all: '全部',
     settings_param_jackett_interview_healthy: '仅提供',
     settings_parser_jackett_interview: '投票跟踪器',
+    settings_parser_hide_trackers: 'Hide trackers',
+    settings_parser_hide_trackers_descr: 'Tracker names separated by commas, e.g. toloka, rutracker. Releases from them are not shown',
+    settings_parser_hide_trackers_placeholder: 'toloka, rutracker',
     title_ongoing: '进行中',
     title_pgrating: '年龄限制',
 

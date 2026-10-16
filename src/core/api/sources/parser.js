@@ -169,6 +169,13 @@ function mergeResults(items){
 
 function get(params = {}, oncomplite, onerror){
     function complite(data){
+        try{
+            let hide = String(Storage.field('parser_hide_trackers') || '').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean)
+            if(hide.length && data && Array.isArray(data.Results)){
+                data.Results = data.Results.filter(r=>{ let t = String(r.Tracker || '').toLowerCase(); return !hide.some(h=>t.indexOf(h) > -1) })
+            }
+        }catch(e){}
+        ;window.__imdbbHideTr = 1
         oncomplite(data)
     }
 

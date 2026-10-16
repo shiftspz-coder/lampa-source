@@ -796,6 +796,7 @@ select('jackett_url','','')
 select('jackett_key','','')
 select('jackett_url_two','','')
 select('jackett_key_two','','')
+select('parser_hide_trackers','','')
 select('prowlarr_url','','');
 select('prowlarr_key','','');
 select('prowlarr_url_two','','');

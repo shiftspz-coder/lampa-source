@@ -938,6 +938,9 @@ export default {
     settings_param_jackett_interview_all: 'Все',
     settings_param_jackett_interview_healthy: 'Только доступные',
     settings_parser_jackett_interview: 'Опрашивать трекеры',
+    settings_parser_hide_trackers: 'Скрывать трекеры',
+    settings_parser_hide_trackers_descr: 'Названия трекеров через запятую, например: toloka, rutracker. Раздачи с них не показываются',
+    settings_parser_hide_trackers_placeholder: 'toloka, rutracker',
 
     helper_keyboard: 'После ввода значения нажмите кнопку «Назад» для сохранения',
     helper_torrents: 'Удерживайте клавишу (ОК) для вызова контекстного меню',

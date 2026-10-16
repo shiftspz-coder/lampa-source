@@ -973,6 +973,9 @@ export default {
     settings_param_jackett_interview_all: 'Tudo',
     settings_param_jackett_interview_healthy: 'Disponível apenas',
     settings_parser_jackett_interview: 'Rastreadores de enquetes',
+    settings_parser_hide_trackers: 'Hide trackers',
+    settings_parser_hide_trackers_descr: 'Tracker names separated by commas, e.g. toloka, rutracker. Releases from them are not shown',
+    settings_parser_hide_trackers_placeholder: 'toloka, rutracker',
     title_ongoing: 'Em andamento',
     title_pgrating: 'Limite de idade',
 

@@ -937,6 +937,9 @@ export default {
     settings_param_jackett_interview_all: 'Todos',
     settings_param_jackett_interview_healthy: 'Solo disponibles',
     settings_parser_jackett_interview: 'Consultar trackers',
+    settings_parser_hide_trackers: 'Hide trackers',
+    settings_parser_hide_trackers_descr: 'Tracker names separated by commas, e.g. toloka, rutracker. Releases from them are not shown',
+    settings_parser_hide_trackers_placeholder: 'toloka, rutracker',
 
     helper_keyboard: 'Después de introducir el valor, pulsa el botón "Atrás" para guardar',
     helper_torrents: 'Mantén pulsada la tecla (OK) para abrir el menú contextual',
