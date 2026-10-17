@@ -838,7 +838,7 @@ export default {
     menu_multtv:  'Seriale animowane',
     menu_feed:  'Kanał',
 
-    lampa_movie_title:  'Lampa Kino',
+    lampa_movie_title:  'MoovieS Kino',
     lampa_movie_descr:  'Śledź nowości na swoim smartfonie. <br>Telegram',
 
     plugins_catalog_work:  'Działające wtyczki',
@@ -1226,7 +1226,7 @@ export default {
     input_detection_mouse:  'Czy przełączyć na sterowanie myszą?',
     input_detection_remote:  'Czy przełączyć na sterowanie pilotem?',
 
-    https_text:  'Używasz protokołu HTTPS, z którym Lampa działa nieprawidłowo. Dla poprawnego działania użyj adresu HTTP',
+    https_text:  'Używasz protokołu HTTPS, z którym MoovieS działa nieprawidłowo. Dla poprawnego działania użyj adresu HTTP',
 
     premiere_author_recomend_1:  'Zamów pizzę i przygotuj się na akcję.',
     premiere_author_recomend_2:  'Impreza dopiero się zaczyna.',
@@ -1236,9 +1236,9 @@ export default {
     premiere_title:  'Premiera',
 
     termsofuse_t_01:  'Warunki użytkowania',
-    termsofuse_t_02:  'Lampa to narzędzie do przeglądania nowości filmowych...',
+    termsofuse_t_02:  'MoovieS to narzędzie do przeglądania nowości filmowych...',
     termsofuse_t_03:  'Treści',
-    termsofuse_t_04:  'Lampa korzysta z API themoviedb.org...',
+    termsofuse_t_04:  'MoovieS korzysta z API themoviedb.org...',
     termsofuse_t_05:  'API themoviedb.org umożliwia dostęp do bazy danych filmów...',
     termsofuse_t_06:  'Komunikacja odbywa się przez zapytania API...',
     termsofuse_t_07:  'Dzięki temu aplikacja zapewnia dostęp do bazy filmów...',
@@ -1249,7 +1249,7 @@ export default {
     termsofuse_t_12:  'W razie naruszeń skontaktuj się z twórcami...',
     termsofuse_t_13:  'Zgłoś problem właścicielowi treści...',
 
-    install_app_apk_title:  'Jak zainstalować Lampa na Androidzie',
+    install_app_apk_title:  'Jak zainstalować MoovieS na Androidzie',
     install_app_apk_text:  'Zalecamy instalację APK dla stabilności...',
     install_app_apk_qr:  'Zeskanuj QR, aby pobrać APK',
 
@@ -1299,7 +1299,7 @@ export default {
     install_extension_rule_3:  '- Mogą wymagać dostępu do danych',
     install_extension_rule_4:  '- Odpowiedzialność spoczywa na użytkowniku',
     install_extension_rule_5:  '- Instaluj tylko z zaufanych źródeł',
-    install_extension_rule_6:  'LAMPA nie wspiera pirackich wtyczek.',
+    install_extension_rule_6:  'MoovieS nie wspiera pirackich wtyczek.',
     install_extension_rule_7:  'Kontynuując akceptujesz ryzyko.',
 
     terminal_title:  'Terminal',

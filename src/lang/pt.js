@@ -718,7 +718,7 @@ export default {
     settings_added: 'Adicionado',
     settings_removed: 'Eliminado',
 
-	settings_param_player_inner: 'Lampa',
+	settings_param_player_inner: 'MoovieS',
     settings_param_player_outside: 'Externo',
     settings_param_player_inner_tvos: 'Interno',
     settings_param_yes: 'Sim',
@@ -753,7 +753,7 @@ export default {
     settings_param_card_view_all: 'Mostrar tudo',
     settings_param_navigation_remote: 'Comando',
     settings_param_navigation_mouse: 'Comando com rato',
-    settings_param_keyboard_lampa: 'Lampa',
+    settings_param_keyboard_lampa: 'MoovieS',
     settings_param_keyboard_system: 'Sistema',
 
 	helper_keyboard: 'Depois de inserir o valor, pressione o botão "Voltar" para guardar',
@@ -1065,9 +1065,9 @@ export default {
     speedtest_button: 'Testar velocidade',
     settings_rest_protocol_use: 'Conexão segura',
     settings_rest_protocol_descr: 'Usar protocolo HTTPS',
-    install_app_apk_title: 'Como instalar o Lampa no Android',
-    install_app_apk_text: 'Notamos que você usa o MediaStationX para executar o Lampa no Android. Recomendamos instalar o Lampa como um aplicativo APK. Isso garantirá uma operação mais estável e acesso a todos os recursos do aplicativo. <br><br>Acesse o grupo do Telegram <span class="account-modal__site">@lampa_group</span> para baixar o APK mais recente e as instruções de instalação.',
-    install_app_apk_qr: 'Escaneie o código QR para baixar o APK do Lampa',
+    install_app_apk_title: 'Como instalar o MoovieS no Android',
+    install_app_apk_text: 'Notamos que você usa o MediaStationX para executar o MoovieS no Android. Recomendamos instalar o MoovieS como um aplicativo APK. Isso garantirá uma operação mais estável e acesso a todos os recursos do aplicativo. <br><br>Acesse o grupo do Telegram <span class="account-modal__site">@lampa_group</span> para baixar o APK mais recente e as instruções de instalação.',
+    install_app_apk_qr: 'Escaneie o código QR para baixar o APK do MoovieS',
     copy_link_buffer: 'Copiar link',
 
     tv_status_returning_series: 'Em andamento',
@@ -1185,11 +1185,11 @@ export default {
     loading_progress_step_5: 'Chegando em breve',
 
     install_extension_rule_1: 'Instalação de um plug-in de terceiros',
-    install_extension_rule_2: 'Os plug-ins são criados por desenvolvedores independentes, e o LAMPA não verifica seu conteúdo. Ao instalá-los, você concorda que:',
+    install_extension_rule_2: 'Os plug-ins são criados por desenvolvedores independentes, e o MoovieS não verifica seu conteúdo. Ao instalá-los, você concorda que:',
     install_extension_rule_3: '- Alguns plug-ins podem solicitar acesso aos seus dados ou trabalhar com fontes não verificadas.',
     install_extension_rule_4: '- Se o plug-in que você instalar violar direitos autorais ou outras leis, toda a responsabilidade pelo seu uso será sua.',
     install_extension_rule_5: '- Instale apenas plug-ins de fontes confiáveis. Se você tiver dúvidas sobre a segurança ou legalidade de um plug-in, é melhor não instalá-lo.',
-    install_extension_rule_6: 'O LAMPA não apoia nem aprova plug-ins relacionados a conteúdo pirata.',
+    install_extension_rule_6: 'O MoovieS não apoia nem aprova plug-ins relacionados a conteúdo pirata.',
     install_extension_rule_7: 'Ao continuar, você confirma que compreende esses riscos.',
     ad_plugin: 'Anúncio do plugin',
 
