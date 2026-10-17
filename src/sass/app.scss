@@ -656,3 +656,22 @@ html body.imdbb-compact .imdbb-unif .imdbb-hero--card{position:relative; display
 /* imdbb-tfalign */
 html body .imdbb-home .items-line{ transform: translateY(-5.2px) !important; }
 html body .imdbb-home>.imdbb-hero{ transform: translateY(10.4px) !important; }
+
+/*! imdbb-clamp6 */
+@media not all and (max-height: 479px) and (pointer: coarse){
+html body .imdbb-hero__d,
+html body.imdbb-compact .imdbb-ov,
+html body.imdbb-compact .full-start-new__description{
+  display:-webkit-box!important; -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:6!important; line-clamp:6!important; overflow:hidden!important;
+}
+}
+
+/*! imdbb-fav-noframe */
+html body .imdbb-hero__fav,
+html body .imdbb-hero__meta > .imdbb-hero__fav,
+html body .imdbb-meta.imdbb-fav,
+html body.imdbb-compact .full-start-new__rate-line > .imdbb-meta.imdbb-fav{
+  border:0!important; background:none!important; box-shadow:none!important; outline:0!important; border-radius:0!important;
+}
+html body .imdbb-meta.imdbb-fav{ padding:0!important; }
