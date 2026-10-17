@@ -680,8 +680,9 @@ html body .imdbb-meta.imdbb-fav{ padding:0!important; }
 html body .imdbb-home>.imdbb-hero > *,
 html body .imdbb-hero__d{ flex-shrink:0!important; }
 
-/*! imdbb-hero-tight */
+/*! imdbb-hero-drop */
 @media not all and (max-height: 479px) and (pointer: coarse){
-html body .imdbb-home>.imdbb-hero .imdbb-hero__meta{ margin-top:0!important; margin-bottom:0!important; }
-html body.imdbb-compact .full-start-new__right{ transform: translateY(.42em)!important; }
+html body .imdbb-home>.imdbb-hero{ bottom: calc(var(--imdbb-row) + var(--imdbb-bot) - 1em) !important; }
+html body.imdbb-compact .full-start-new__right{ padding-bottom: calc(var(--imdbb-card-p, 17em) - 1em) !important; }
+html body.imdbb-compact .imdbb-band{ bottom: calc(3.5em - 1em) !important; }
 }
