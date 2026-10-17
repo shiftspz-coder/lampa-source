@@ -305,6 +305,15 @@ function fixProtocolLink(u){
     return rewriteIfHTTPS((localStorage.getItem('protocol') || 'https') + '://' + u.replace(/^(http:\/\/|https:\/\/)/, ''))
 }
 
+function cubUrl(path){
+    if(window.location.protocol == 'https:'){
+        let base = ''
+        try{ base = localStorage.getItem('cub_proxy') || '' }catch(e){}
+        return (base || window.location.origin + '/p/3849c2cf/cub') + path
+    }
+    return protocol() + Manifest.cub_domain + path
+}
+
 function fixMirrorLink(u){
     Manifest.old_mirrors.forEach(mirror=>{
         u = u.replace('://' + mirror, '://' + Manifest.cub_domain)
@@ -1187,6 +1196,7 @@ export default {
     buildUrl,
     simpleMarkdownParser,
     fixProtocolLink,
+    cubUrl,
     fixMirrorLink,
     callWaiting,
     clearCard,

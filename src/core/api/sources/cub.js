@@ -584,7 +584,7 @@ function metadataGet(params, oncomplite){
 function reactionsGet(params, oncomplite){
     if(window.lampa_settings.disable_features.reactions) return oncomplite({result: []})
     
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/get/' + params.method + '_' + params.id, oncomplite,()=>{
+    network.silent(Utils.cubUrl('/api/reactions/get/' + params.method + '_' + params.id), oncomplite,()=>{
         oncomplite({result: []})
     }, false, {timeout: 1000 * 5})
 }
@@ -596,7 +596,7 @@ function discussGet(params, oncomplite, onerror){
 }
 
 function reactionsAdd(params, oncomplite, onerror){
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/add/' + params.method + '_' + params.id + '/' + params.type + '?uid=' + Storage.get('lampa_uid','none'), oncomplite, onerror)
+    network.silent(Utils.cubUrl('/api/reactions/add/' + params.method + '_' + params.id + '/' + params.type + '?uid=' + Storage.get('lampa_uid','none')), oncomplite, onerror)
 }
 
 function menuCategory(params, oncomplite){
