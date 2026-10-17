@@ -19,6 +19,8 @@ function proxy(name){
  * @return {string} Проксированный URL запроса
  */
 function api(url){
+    if(window.location.protocol == 'https:') return window.location.origin + '/p/3849c2cf/tmdb/' + url
+
     let base  = Utils.protocol() + 'api.themoviedb.org/3/' + url
 
     return Storage.field('proxy_tmdb') && Storage.field('tmdb_proxy_api') ? proxy('tmdb_proxy_api') + '/' + base : base

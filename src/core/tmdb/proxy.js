@@ -94,6 +94,8 @@ function init(){
     }
 
     TMDB.api = function(url){
+        if(window.location.protocol == 'https:') return window.location.origin + '/p/3849c2cf/tmdb/' + url
+
         let base  = Utils.protocol() + 'api.themoviedb.org/3/' + url
 
         return Utils.addUrlComponent(filter(Storage.field('proxy_tmdb') ? Utils.protocol() + tmdb_proxy.path_api + url : base), 'email=' + encodeURIComponent(email()))
