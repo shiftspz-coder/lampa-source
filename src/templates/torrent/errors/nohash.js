@@ -28,7 +28,6 @@ let html = `<div class="error">
     <div class="is--torlook">
         <div>#{torent_nohash_do}</div>
         <ul>
-            <li>#{torent_nohash_do_four}</li>
             <li>#{torent_nohash_do_five}</li>
         </ul>
     </div>
