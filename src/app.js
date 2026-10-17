@@ -111,6 +111,7 @@ import ImdbbFilters from './core/imdbb_filters'
 import './core/moovies_server'
 import ImdbbBell from './core/imdbb_bell'
 import ImdbbSync from './core/imdbb_sync'
+import ImdbbSnow from './core/imdbb_snow'
 import Emit from './utils/emit'
 import Router from './core/router'
 import Timer from './core/timer'
@@ -639,6 +640,7 @@ function startApp(){
     ImdbbFilters.init()
     ImdbbBell.init()
     ImdbbSync.init()
+    ImdbbSnow.init()
     LoadingProgress.status('ContentRows init')
     
     // Добавляем источники поиска

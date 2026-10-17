@@ -1,0 +1,271 @@
+const KEY_ON = 'imdbb_snow'
+const KEY_KIND = 'imdbb_snow_kind'
+const GL = ['\u2744\uFE0E', '\u2745\uFE0E', '\u2746\uFE0E']
+
+const PRESETS = {
+    storm: {k: 'dot', n: 100, a: 1, b: 3, v1: 70, v2: 130, wind: 60, sway: 8},
+    fluff: {k: 'dot', n: 70, a: 1, b: 2.2, v1: 12, v2: 28, wind: 6, sway: 10},
+    flakes: {k: 'soft', n: 34, a: 2.5, b: 5, v1: 25, v2: 50, wind: 10, sway: 18},
+    glyphs: {k: 'glyph', n: 22, a: 12, b: 24, v1: 18, v2: 40, wind: 8, sway: 16, rot: 0.6, col: '255,255,255', ch: [GL[0]]},
+    crystals: {k: 'glyph', n: 30, a: 9, b: 20, v1: 22, v2: 48, wind: 12, sway: 14, rot: 1.4, col: '190,225,255', ch: GL},
+    mix: {k: 'mix', n: 64, a: 1, b: 2.6, v1: 16, v2: 40, wind: 8, sway: 12, rot: 0.8, col: '255,255,255', ch: [GL[0], GL[1]]}
+}
+
+let cv = null
+let ctx = null
+let cur = null
+let fl = []
+let W = 0
+let H = 0
+let sz = 1
+let vs = 1
+let last = 0
+let chk = 0
+let blocked = false
+let raf = 0
+let timer = 0
+let rt = 0
+
+function L(){
+    return window.Lampa
+}
+
+function flag(key, def){
+    let v = L().Storage.get(key, def)
+
+    return v === true || v === 'true'
+}
+
+function rnd(a, b){
+    return a + Math.random() * (b - a)
+}
+
+function playerOpen(){
+    try{
+        let P = L().Player
+
+        if(P && typeof P.opened === 'function') return Boolean(P.opened())
+    }
+    catch(e){}
+
+    let el = document.querySelector('.player')
+
+    return Boolean(el && el.offsetWidth > 0 && el.offsetHeight > 0)
+}
+
+function ensure(){
+    if(cv) return
+
+    cv = document.createElement('canvas')
+    cv.id = 'imdbb-snow'
+    cv.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9000;display:none'
+    document.body.appendChild(cv)
+    ctx = cv.getContext('2d')
+}
+
+function resize(){
+    W = window.innerWidth || 1280
+    H = window.innerHeight || 720
+
+    let q = W > 1280 ? 1280 / W : 1
+
+    cv.width = Math.round(W * q)
+    cv.height = Math.round(H * q)
+    ctx.setTransform(q, 0, 0, q, 0, 0)
+
+    sz = Math.max(1, W / 900)
+    vs = Math.max(1, H / 300)
+}
+
+function build(){
+    let p = cur
+    let mult = Math.min(p.k === 'dot' || p.k === 'soft' ? 3 : 2, Math.max(1, W / 700))
+    let n = Math.round(p.n * mult)
+
+    fl = []
+
+    for(let i = 0; i < n; i++){
+        let r = rnd(p.a, p.b)
+        let k = (r - p.a) / (p.b - p.a + 0.001)
+        let ch = null
+        let fs = 0
+
+        if(p.k === 'glyph'){
+            ch = p.ch[i % p.ch.length]
+            fs = r
+        }
+
+        if(p.k === 'mix' && i % 5 === 0){
+            ch = p.ch[(i / 5 | 0) % p.ch.length]
+            fs = rnd(11, 17)
+        }
+
+        fl.push({x: rnd(0, W), y: rnd(0, H), r: r, v: p.v1 + (p.v2 - p.v1) * k, ph: rnd(0, 6.28), al: 0.45 + 0.5 * k, ch: ch, fs: fs, ang: rnd(0, 6.28), rs: rnd(-1, 1) * (p.rot || 0)})
+    }
+}
+
+function loop(ts){
+    raf = 0
+
+    if(!cur) return
+
+    if(ts - chk > 500){
+        chk = ts
+        blocked = document.hidden || playerOpen()
+        cv.style.display = blocked ? 'none' : 'block'
+    }
+
+    if(blocked){
+        timer = setTimeout(function(){
+            timer = 0
+            raf = requestAnimationFrame(loop)
+        }, 500)
+
+        return
+    }
+
+    raf = requestAnimationFrame(loop)
+
+    if(ts - last < 33) return
+
+    let dt = Math.min((ts - last) / 1000, 0.1)
+    let t = ts / 1000
+
+    last = ts
+
+    ctx.clearRect(0, 0, W, H)
+
+    for(let i = 0; i < fl.length; i++){
+        let f = fl[i]
+
+        f.y += f.v * vs * dt
+        f.x += (cur.wind * vs * (f.r / cur.b) + Math.sin(t * 0.9 + f.ph) * cur.sway * sz) * dt
+
+        if(f.y > H + 40) {
+            f.y = -40
+            f.x = rnd(0, W)
+        }
+
+        if(f.x > W + 40) f.x = -40
+        if(f.x < -40) f.x = W + 40
+
+        if(f.ch){
+            f.ang += f.rs * dt
+
+            ctx.save()
+            ctx.translate(f.x, f.y)
+            ctx.rotate(f.ang)
+            ctx.fillStyle = 'rgba(' + (cur.col || '255,255,255') + ',' + f.al + ')'
+            ctx.font = Math.round(f.fs * sz) + 'px sans-serif'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText(f.ch, 0, 0)
+            ctx.restore()
+        }
+        else if(cur.k === 'soft'){
+            let rr = f.r * sz
+            let g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, rr)
+
+            g.addColorStop(0, 'rgba(255,255,255,' + f.al + ')')
+            g.addColorStop(1, 'rgba(255,255,255,0)')
+
+            ctx.fillStyle = g
+            ctx.beginPath()
+            ctx.arc(f.x, f.y, rr, 0, 6.283)
+            ctx.fill()
+        }
+        else{
+            ctx.fillStyle = 'rgba(255,255,255,' + f.al + ')'
+            ctx.beginPath()
+            ctx.arc(f.x, f.y, f.r * sz, 0, 6.283)
+            ctx.fill()
+        }
+    }
+}
+
+function start(){
+    if(raf || timer) return
+
+    last = 0
+    chk = 0
+    raf = requestAnimationFrame(loop)
+}
+
+function stop(){
+    cur = null
+
+    if(raf) cancelAnimationFrame(raf)
+    if(timer) clearTimeout(timer)
+
+    raf = 0
+    timer = 0
+
+    if(cv) cv.style.display = 'none'
+}
+
+function apply(){
+    try{
+        if(!flag(KEY_ON, 'false')) return stop()
+
+        let kind = String(L().Storage.get(KEY_KIND, 'storm'))
+
+        if(!PRESETS[kind]) kind = 'storm'
+
+        ensure()
+        resize()
+
+        cur = PRESETS[kind]
+
+        build()
+
+        blocked = false
+        cv.style.display = 'block'
+
+        start()
+    }
+    catch(e){}
+}
+
+function init(){
+    let Lp = window.Lampa
+
+    if(!Lp) return
+
+    try{
+        Lp.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {name: KEY_ON, type: 'trigger', default: false},
+            field: {name: 'Снег', description: 'Падающий снег поверх интерфейса. Во время просмотра видео отключается'},
+            onChange: function(){ setTimeout(apply, 60) }
+        })
+
+        Lp.SettingsApi.addParam({
+            component: 'imdbb',
+            param: {
+                name: KEY_KIND,
+                type: 'select',
+                values: {storm: 'Метель', fluff: 'Пух', flakes: 'Хлопья', glyphs: '❄ Крупные', crystals: '❄ Кристаллы', mix: '❄ Микс'},
+                default: 'storm'
+            },
+            field: {name: 'Вид снега', description: 'Работает, когда снег включён'},
+            onChange: function(){ setTimeout(apply, 60) }
+        })
+    }
+    catch(e){}
+
+    window.addEventListener('resize', function(){
+        if(!cur) return
+
+        clearTimeout(rt)
+
+        rt = setTimeout(function(){
+            resize()
+            build()
+        }, 300)
+    })
+
+    if(window.appready) apply()
+    else Lp.Listener.follow('app', function(e){ if(e.type === 'ready') apply() })
+}
+
+export default {init}
