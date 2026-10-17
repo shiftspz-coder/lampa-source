@@ -679,11 +679,3 @@ html body .imdbb-meta.imdbb-fav{ padding:0!important; }
 /*! imdbb-hero-noshrink */
 html body .imdbb-home>.imdbb-hero > *,
 html body .imdbb-hero__d{ flex-shrink:0!important; }
-
-/*! imdbb-hero-gap */
-@media not all and (max-height: 479px) and (pointer: coarse){
-html body .imdbb-home>.imdbb-hero{
-  padding-bottom:0!important;
-  bottom:calc(var(--imdbb-row) + var(--imdbb-bot) - 1em)!important;
-}
-}
