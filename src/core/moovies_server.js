@@ -1,12 +1,12 @@
 function ready(){
-    return window.Lampa && window.Lampa.SettingsApi && window.Android && typeof window.Android.changeServerUrl === 'function'
+    return window.Lampa && window.Lampa.SettingsApi && window.AndroidJS && typeof window.AndroidJS.changeServerUrl === 'function'
 }
 
 function init(){
     let L = window.Lampa
     let url = ''
 
-    try{ url = window.Android.getServerUrl ? window.Android.getServerUrl() : '' }
+    try{ url = window.AndroidJS.getServerUrl ? window.AndroidJS.getServerUrl() : '' }
     catch(e){}
 
     L.SettingsApi.addComponent({
@@ -20,7 +20,7 @@ function init(){
         component: 'moovies_server',
         param: {name: 'moovies_server_url', type: 'button'},
         field: {name: 'Адрес сервера', description: url || 'Изменить адрес, с которого загружается приложение'},
-        onChange: function(){ window.Android.changeServerUrl() }
+        onChange: function(){ window.AndroidJS.changeServerUrl() }
     })
 }
 
